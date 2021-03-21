@@ -9,6 +9,6 @@ def clean(c):
 
 # Tarea de ejecución de 3 en raya contra IA aleatoria
 @task
-def execute_tic_tac_toe(c):
+def executeTicTacToe(c):
 	print("Ejecución de 3 en raya")
 	run("python3 src/tic_tac_toe/bot.py")
