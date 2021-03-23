@@ -15,6 +15,6 @@ def executeTicTacToe(c):
 
 # Tarea de ejecución de tests
 @task
-def testTicTacToe(c):
+def testQuestions(c):
 	print("Ejecución de tests de 3 en raya")
-	run("pytest -v --disable-pytest-warnings src/tic_tac_toe_multiplayer/test/*")
+	run("pytest -v --disable-pytest-warnings src/questions/test/*")
