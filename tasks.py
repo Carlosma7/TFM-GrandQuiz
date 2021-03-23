@@ -12,3 +12,9 @@ def clean(c):
 def executeTicTacToe(c):
 	print("Ejecución de 3 en raya")
 	run("python3 src/tic_tac_toe/bot.py")
+
+# Tarea de ejecución de tests
+@task
+def testTicTacToe(c):
+	print("Ejecución de tests de 3 en raya")
+	run("pytest -v --disable-pytest-warnings src/tic_tac_toe_multiplayer/test/*")
