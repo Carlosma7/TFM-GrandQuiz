@@ -5,19 +5,19 @@ class Estadistica():
 		self.__num_partidas = 0
 
 	# Métodos get
-	def get_num_victorias():
+	def get_num_victorias(self):
 		return self.__num_victorias
 
-	def get_num_partidas():
+	def get_num_partidas(self):
 		return self.__num_partidas
 
 	# Ganar partida
-	def add_num_victorias():
+	def add_num_victorias(self):
 		self.__num_victorias += 1
 		self.__num_partidas += 1
 
 	# Perder partida
-	def add_num_derrotas():
+	def add_num_derrotas(self):
 		self.__num_partidas += 1
 
 	# Override método equal
