@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.append(os.path.abspath('./src/tic_tac_toe_multiplayer/core/'))
+sys.path.append(os.path.abspath('./src/questions/core/'))
 
 from jugador import Jugador
 import pytest
