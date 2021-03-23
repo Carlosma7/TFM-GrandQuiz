@@ -1,9 +1,12 @@
+from estadistica import Estadistica
+
 # Clase de jugador
 class Jugador():
 	def __init__(self, nombre_usuario: str, nombre: str, edad: int):
 		self.__nombre_usuario = nombre_usuario
 		self.__nombre = nombre
 		self.__edad = edad
+		self.__estadisticas = Estadistica()
 
 	# Métodos get/set
 	def get_nombre_usuario(self):
@@ -24,6 +27,9 @@ class Jugador():
 	def set_edad(self, edad: int):
 		self.__edad = edad
 
+	def get_estadisticas(self):
+		return self.__estadisticas
+
 	# Override método equal
 	def __eq__(self, otra):
-		return (self.__nombre_usuario == otra.get_nombre_usuario()) and (self.__nombre == otra.get_nombre()) and (self.__edad == otra.get_edad())
+		return (self.__nombre_usuario == otra.get_nombre_usuario()) and (self.__nombre == otra.get_nombre()) and (self.__edad == otra.get_edad()) and (self.__estadisticas == otra.get_estadisticas())
