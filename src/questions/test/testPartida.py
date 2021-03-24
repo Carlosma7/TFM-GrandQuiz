@@ -115,3 +115,31 @@ def test_comprobar_victoria():
 	p.acertar_pregunta()
 	# Comprobar que hay un ganador
 	assert_that(p.comprobar_victoria()).is_true()
+
+# Test de terminar partida
+def test_terminar_partida():
+	# Creación de una partida
+	p = Partida()
+	# Añadir dos jugadores
+	j1 = Jugador("Carlosma7", "Carlos", 24)
+	j2 = Jugador("Pepito", "Pepe", 22)
+	p.add_jugador(j1)
+	p.add_jugador(j2)
+	# Iniciar partida
+	p.iniciar_partida()
+	# Un jugador acierta 3 preguntas
+	p.acertar_pregunta()
+	p.acertar_pregunta()
+	p.acertar_pregunta()
+	# Se comprueba victoria
+	p.comprobar_victoria()
+	# Comprobar que el numero de partidas es la misma para ambos jugadores
+	assert_that(p.get_jugadores()[0].get_estadisticas().get_num_partidas()).is_equal_to(p.get_jugadores()[1].get_estadisticas().get_num_partidas())
+	# Comprobar que el número de victorias es la misma para ambos jugadores
+	assert_that(p.get_jugadores()[0].get_estadisticas().get_num_victorias()).is_equal_to(p.get_jugadores()[1].get_estadisticas().get_num_victorias())
+	# Termina la partida
+	p.terminar_partida()
+	# Comprobar que el numero de partidas es la misma para ambos jugadores
+	assert_that(p.get_jugadores()[0].get_estadisticas().get_num_partidas()).is_equal_to(p.get_jugadores()[1].get_estadisticas().get_num_partidas())
+	# Comprobar que el número de victorias es distinta entre ambos jugadores
+	assert_that(p.get_jugadores()[0].get_estadisticas().get_num_victorias()).is_not_equal_to(p.get_jugadores()[1].get_estadisticas().get_num_victorias())
