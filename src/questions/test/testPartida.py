@@ -95,3 +95,23 @@ def test_pasar_turno():
 	p.pasar_turno()
 	# Comprobar que el turno ha cambiado al otro jugador
 	assert_that(p.get_turno()).is_equal_to(turno)
+
+# Test de comprobar victoria
+def test_comprobar_victoria():
+	# Creación de una partida
+	p = Partida()
+	# Añadir dos jugadores
+	j1 = Jugador("Carlosma7", "Carlos", 24)
+	j2 = Jugador("Pepito", "Pepe", 22)
+	p.add_jugador(j1)
+	p.add_jugador(j2)
+	# Iniciar partida
+	p.iniciar_partida()
+	# Comprobar que no hay ningún ganador
+	assert_that(p.comprobar_victoria()).is_false()
+	# Un jugador acierta 3 preguntas
+	p.acertar_pregunta()
+	p.acertar_pregunta()
+	p.acertar_pregunta()
+	# Comprobar que hay un ganador
+	assert_that(p.comprobar_victoria()).is_true()
