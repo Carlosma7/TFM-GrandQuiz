@@ -72,6 +72,18 @@ class Partida():
 
 		return True
 
+	# Terminar partida
+	def terminar_partida(self):
+		# Anotar el perdedor
+		if self.__ganador == 1:
+			perdedor = 2
+		else:
+			perdedor = 1
+
+		# Se añade como victoria y derrota respectivamente
+		self.__jugadores[self.__ganador - 1].get_estadisticas().add_num_victorias()
+		self.__jugadores[perdedor - 1].get_estadisticas().add_num_derrotas()
+
 
 	# Override método equal
 	def __eq__(self, otra):
