@@ -17,6 +17,6 @@ class Puntuacion():
 	def anotar_punto(self):
 		self.__puntos += 1
 
-	# Overrido método equal
+	# Override método equal
 	def __eq__(self, otra):
 		return (self.__puntos == otra.get_puntos()) and (self.__jugador == otra.get_jugador())

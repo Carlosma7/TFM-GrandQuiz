@@ -16,6 +16,6 @@ class Pregunta():
 	def get_correcta(self):
 		return self.__correcta
 
-	# Overrido método equal
+	# Override método equal
 	def __eq__(self, otra):
 		return (self.__enunciado == otra.get_enunciado()) and (self.__respuestas == otra.get_respuestas()) and (self.__correcta == otra.get_correcta())
