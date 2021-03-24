@@ -34,3 +34,23 @@ def test_add_jugador():
 	p.add_jugador(j1)
 	# Comprobar que la partida tiene un jugador
 	assert_that(p.get_jugadores()).is_length(1)
+
+# Test de iniciar partida
+def test_iniciar_partida():
+	# Creación de una partida
+	p = Partida()
+	# Añadir dos jugadores
+	j1 = Jugador("Carlosma7", "Carlos", 24)
+	j2 = Jugador("Pepito", "Pepe", 22)
+	p.add_jugador(j1)
+	p.add_jugador(j2)
+	# Comprobar que la partida no está iniciada
+	assert_that(p.get_iniciada()).is_false()
+	# Comprobar que el turno es cero (no iniciada)
+	assert_that(p.get_turno()).is_equal_to(0)
+	# Iniciar partida
+	p.iniciar_partida()
+	# Comprobar que la partida está iniciada
+	assert_that(p.get_iniciada()).is_true()
+	# Comprobar que el turno es cero (no iniciada)
+	assert_that(p.get_turno()).is_in(1,2)
