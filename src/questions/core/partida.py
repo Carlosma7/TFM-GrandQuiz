@@ -60,6 +60,18 @@ class Partida():
 		# Se cambia el turno al siguiente jugador
 		self.__turno = (self.__turno % 2) + 1
 
+	# Comprobar victoria
+	def comprobar_victoria(self):
+		# Comprobar si un jugador ha llegado a 3 puntos
+		if self.__puntuaciones[0].get_puntos() == 3:
+			self.__ganador = 1
+		elif self.__puntuaciones[1].get_puntos() == 3:
+			self.__jugador = 2
+		else:
+			return False
+
+		return True
+
 
 	# Override método equal
 	def __eq__(self, otra):
