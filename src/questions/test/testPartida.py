@@ -54,3 +54,22 @@ def test_iniciar_partida():
 	assert_that(p.get_iniciada()).is_true()
 	# Comprobar que el turno es cero (no iniciada)
 	assert_that(p.get_turno()).is_in(1,2)
+
+# Test de acertar pregunta
+def test_acertar_pregunta():
+	# Creación de una partida
+	p = Partida()
+	# Añadir dos jugadores
+	j1 = Jugador("Carlosma7", "Carlos", 24)
+	j2 = Jugador("Pepito", "Pepe", 22)
+	p.add_jugador(j1)
+	p.add_jugador(j2)
+	# Iniciar partida
+	p.iniciar_partida()
+	# Comprobar que ambos jugadores no tienen puntos
+	assert_that(p.get_puntuaciones()[0].get_puntos()).is_equal_to(0)
+	assert_that(p.get_puntuaciones()[1].get_puntos()).is_equal_to(0)
+	# Un jugador acierta una pregunta
+	p.acertar_pregunta()
+	# Comprobar que uno de los dos tiene un punto
+	assert_that(1).is_in(p.get_puntuaciones()[0].get_puntos(), p.get_puntuaciones()[1].get_puntos())
