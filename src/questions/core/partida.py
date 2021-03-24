@@ -32,6 +32,15 @@ class Partida():
 	def get_ganador(self):
 		return self.__ganador
 
+	# Añadir un nuevo jugador
+	def add_jugador(self, jugador: Jugador):
+		if len(self.__jugadores) < 2:
+			# Añade jugador
+			self.__jugadores.append(jugador)
+			# Inicializa y añade puntuación
+			puntuacion = Puntuacion(jugador)
+			self.__puntuaciones.append(puntuacion)
+
 	# Override método equal
 	def __eq__(self, otra):
 		return (self.__jugadores == otra.get_jugadores()) and (self.__puntuaciones == otra.get_puntuaciones()) and (self.__preguntas == otra.get_preguntas()) and (self.__turno == otra.get_turno()) and (self.__iniciada == otra.get_iniciada()) and (self.__ganador == otra.get_ganador())
