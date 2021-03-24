@@ -52,7 +52,7 @@ def test_iniciar_partida():
 	p.iniciar_partida()
 	# Comprobar que la partida está iniciada
 	assert_that(p.get_iniciada()).is_true()
-	# Comprobar que el turno es cero (no iniciada)
+	# Comprobar que el turno es de un jugador (iniciada)
 	assert_that(p.get_turno()).is_in(1,2)
 
 # Test de acertar pregunta
@@ -73,3 +73,25 @@ def test_acertar_pregunta():
 	p.acertar_pregunta()
 	# Comprobar que uno de los dos tiene un punto
 	assert_that(1).is_in(p.get_puntuaciones()[0].get_puntos(), p.get_puntuaciones()[1].get_puntos())
+
+# Test de pasar turno
+def test_pasar_turno():
+	# Creación de una partida
+	p = Partida()
+	# Añadir dos jugadores
+	j1 = Jugador("Carlosma7", "Carlos", 24)
+	j2 = Jugador("Pepito", "Pepe", 22)
+	p.add_jugador(j1)
+	p.add_jugador(j2)
+	# Iniciar partida
+	p.iniciar_partida()
+	# Obtener el turno
+	turno = p.get_turno()
+	# Comprobar que el turno es de un jugador (iniciada)
+	assert_that(p.get_turno()).is_in(1,2)
+	# Cambiar el turno
+	turno = (turno % 2) + 1
+	# Pasar turno
+	p.pasar_turno()
+	# Comprobar que el turno ha cambiado al otro jugador
+	assert_that(p.get_turno()).is_equal_to(turno)
