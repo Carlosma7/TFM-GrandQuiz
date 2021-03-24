@@ -55,6 +55,11 @@ class Partida():
 		# Se añade un punto al jugador que la ha acertado
 		self.__puntuaciones[self.__turno - 1].anotar_punto()
 
+	# Pasar turno
+	def pasar_turno(self):
+		# Se cambia el turno al siguiente jugador
+		self.__turno = (self.__turno % 2) + 1
+
 
 	# Override método equal
 	def __eq__(self, otra):
