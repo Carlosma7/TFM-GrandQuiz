@@ -41,6 +41,15 @@ class Partida():
 			puntuacion = Puntuacion(jugador)
 			self.__puntuaciones.append(puntuacion)
 
+	# Iniciar partida
+	def iniciar_partida(self):
+		if len(self.__jugadores) == 2:
+			if not self.__iniciada:
+				# Se activa la partida para evitar reinicios
+				self.__iniciada = True
+				# Se establece el turno del primer jugador de forma aleatoria
+				self.__turno = randint(1,2)
+
 	# Override método equal
 	def __eq__(self, otra):
 		return (self.__jugadores == otra.get_jugadores()) and (self.__puntuaciones == otra.get_puntuaciones()) and (self.__preguntas == otra.get_preguntas()) and (self.__turno == otra.get_turno()) and (self.__iniciada == otra.get_iniciada()) and (self.__ganador == otra.get_ganador())
