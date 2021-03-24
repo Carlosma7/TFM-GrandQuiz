@@ -50,6 +50,12 @@ class Partida():
 				# Se establece el turno del primer jugador de forma aleatoria
 				self.__turno = randint(1,2)
 
+	# Acertar pregunta
+	def acertar_pregunta(self):
+		# Se añade un punto al jugador que la ha acertado
+		self.__puntuaciones[self.__turno - 1].anotar_punto()
+
+
 	# Override método equal
 	def __eq__(self, otra):
 		return (self.__jugadores == otra.get_jugadores()) and (self.__puntuaciones == otra.get_puntuaciones()) and (self.__preguntas == otra.get_preguntas()) and (self.__turno == otra.get_turno()) and (self.__iniciada == otra.get_iniciada()) and (self.__ganador == otra.get_ganador())
