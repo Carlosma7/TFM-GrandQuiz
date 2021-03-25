@@ -2,6 +2,7 @@ from partida import Partida
 from jugador import Jugador
 from pregunta import Pregunta
 from puntuacion import Puntuacion
+from excepciones import *
 
 from typing import List
 
@@ -24,7 +25,7 @@ class Controlador():
 				# Se añade el jugador
 				self.jugadores.append(jugador)
 			else:
-				raise AgeNotValidError('La edad del jugador no es válida.')
+				raise AgeNotValidError('La edad indicada no es válida.')
 		else:
-			raise ExistingGameError('Ya existe una partida en el grupo.')
+			raise ExistingGameError('Ya estás registrado.')
 
