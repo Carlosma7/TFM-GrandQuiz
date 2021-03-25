@@ -1,13 +1,15 @@
 from partida import Partida
+from jugador import Jugador
 from pregunta import Pregunta
+from puntuacion import Puntuacion
 
 from typing import List
 
 # Clase controladora
 class Controlador():
 	# Listas de entidades
-	jugadores = List[Jugador] = []
-	partidas = List[Partida] = []
+	jugadores : List[Jugador] = []
+	partidas : List[Partida] = []
 
 	# Crear jugador
 	def crear_jugador(self, jugador: Jugador):
