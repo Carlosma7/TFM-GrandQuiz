@@ -24,5 +24,22 @@ controlador = Controlador()
 def bienvenida(message):
   bot.send_message(message.chat.id, f"¡Bienvenido {message.from_user.first_name} a GrandQuiz, el concurso donde todas las generaciones son bienvenidas! \n\nMi nombre es Tercetto y seré tu guía en el concurso.\n\nPara empezar vamos a registrarnos en el concurso, por favor dime tu edad de la forma: \n*/registro <edad>* \n\nPor ejemplo: \n*/registro 24*", parse_mode= 'Markdown')
 
+# Registro en el sistema de GrandQuiz
+@bot.message_handler(commands=['registro'])
+def registro(message):
+	# Crear un jugador con nombre de usuario, nombre y edad
+	j = Jugador(message.chat.username, message.chat.first_name, int(message.text[10:]))
+	try:
+		# Crear jugador en controlador
+		controlador.crear_jugador(j)
+		# Se guarda mensaje de éxito
+		respuesta = f"¡Enhorabuena! Ya eres un jugador oficial de GrandQuiz, es hora de la diversión."
+	except Exception as error:
+		# Se produce un error
+		respuesta = str(error)
+
+	# Informar al usuario
+	bot.send_message(message.chat.id, respuesta)
+
 # Launch bot
 bot.polling()
