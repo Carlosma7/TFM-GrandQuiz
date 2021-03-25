@@ -143,3 +143,21 @@ def test_terminar_partida():
 	assert_that(p.get_jugadores()[0].get_estadisticas().get_num_partidas()).is_equal_to(p.get_jugadores()[1].get_estadisticas().get_num_partidas())
 	# Comprobar que el número de victorias es distinta entre ambos jugadores
 	assert_that(p.get_jugadores()[0].get_estadisticas().get_num_victorias()).is_not_equal_to(p.get_jugadores()[1].get_estadisticas().get_num_victorias())
+
+# Test de añadir preguntas
+def test_add_preguntas():
+	# Creación de una partida
+	p = Partida()
+	# Añadir dos jugadores
+	j1 = Jugador("Carlosma7", "Carlos", 24)
+	j2 = Jugador("Pepito", "Pepe", 22)
+	p.add_jugador(j1)
+	p.add_jugador(j2)
+	# Iniciar partida
+	p.iniciar_partida()
+	# Comprobar que la partida no tiene preguntas
+	assert_that(p.get_preguntas()).is_empty()
+	# Añadir preguntas
+	p.add_preguntas()
+	# Comprobar que la partida tiene preguntas
+	assert_that(p.get_preguntas()).is_not_empty()
