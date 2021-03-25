@@ -7,13 +7,14 @@ from random import randint, choice
 
 # Clase de partida
 class Partida():
-	def __init__(self):
+	def __init__(self, chat: str):
 		self.__jugadores = []
 		self.__puntuaciones = []
 		self.__preguntas = []
 		self.__turno = 0
 		self.__iniciada = False
 		self.__ganador = 0
+		self.__chat = chat
 
 	# Métodos get/set
 	def get_jugadores(self):
@@ -33,6 +34,9 @@ class Partida():
 
 	def get_ganador(self):
 		return self.__ganador
+
+	def get_chat(self):
+		return self.__chat
 
 	# Añadir un nuevo jugador
 	def add_jugador(self, jugador: Jugador):
@@ -126,4 +130,4 @@ class Partida():
 
 	# Override método equal
 	def __eq__(self, otra):
-		return (self.__jugadores == otra.get_jugadores()) and (self.__puntuaciones == otra.get_puntuaciones()) and (self.__preguntas == otra.get_preguntas()) and (self.__turno == otra.get_turno()) and (self.__iniciada == otra.get_iniciada()) and (self.__ganador == otra.get_ganador())
+		return (self.__jugadores == otra.get_jugadores()) and (self.__puntuaciones == otra.get_puntuaciones()) and (self.__preguntas == otra.get_preguntas()) and (self.__turno == otra.get_turno()) and (self.__iniciada == otra.get_iniciada()) and (self.__ganador == otra.get_ganador()) and (self.__chat == otra.get_chat())
