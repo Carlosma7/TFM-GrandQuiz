@@ -73,7 +73,7 @@ class Partida():
 		if self.__puntuaciones[0].get_puntos() == 3:
 			self.__ganador = 1
 		elif self.__puntuaciones[1].get_puntos() == 3:
-			self.__jugador = 2
+			self.__ganador = 2
 		else:
 			return False
 
