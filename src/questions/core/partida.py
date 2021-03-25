@@ -84,6 +84,31 @@ class Partida():
 		self.__jugadores[self.__ganador - 1].get_estadisticas().add_num_victorias()
 		self.__jugadores[perdedor - 1].get_estadisticas().add_num_derrotas()
 
+	# Añadir preguntas
+	def add_preguntas(self):
+		p = Pregunta("¿Cuál es el continente más extenso del planeta?", ["América", "Europa", "Asia", "África"], 3)
+		self.__preguntas.append(p)
+		p = Pregunta("¿De qué estilo arquitectónico es la catedral de Barcelona?", ["Barroco", "Gótico", "Románico", "Renacentista"], 2)
+		self.__preguntas.append(p)
+		p = Pregunta("En qué ciudad se encuentra la fuente de Cibeles?", ["Sevilla", "Valencia", "Granada", "Madrid"], 4)
+		self.__preguntas.append(p)
+		p = Pregunta("De las siguientes palabras señala cuál de ellas está escrita correctamente:", ["Excarbar", "Escarvar", "Excarvar", "Escarbar"], 4)
+		self.__preguntas.append(p)
+		p = Pregunta("¿Cuál de las siguientes palabras no es un verbo?", ["Placer", "Traer", "Romper", "Perder"], 1)
+		self.__preguntas.append(p)
+		p = Pregunta("¿Qué sustancia se encuentra en el interior de un termómetro?", ["Agua", "Líquido refrigerado", "Agua con gas", "Mercurio"], 4)
+		self.__preguntas.append(p)
+		p = Pregunta("La capital de Dinamarca es:", ["Zagreb", "Liubliana", "Bratislava", "Copenhague"], 4)
+		self.__preguntas.append(p)
+		p = Pregunta("¿Cuál fue la primera civilización histórica?", ["Mesopotamia", "Romana", "Griega", "Egipcia"], 1)
+		self.__preguntas.append(p)
+		p = Pregunta("El pico de Mulhacén se encuentra en:", ["Málaga", "Almería", "Granada", "Jaén"], 3)
+		self.__preguntas.append(p)
+		p = Pregunta("La ciudad de Sevilla forma parte de la comunidad autónoma de:", ["Murcia", "Andalucía", "Asturias", "Extremadura"], 2)
+		self.__preguntas.append(p)
+		p = Pregunta("¿Que representa el elemento químico H2O?", ["Sodio", "Agua", "Sal", "Hidrógeno"], 3)
+		self.__preguntas.append(p)
+
 
 	# Override método equal
 	def __eq__(self, otra):
