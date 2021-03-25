@@ -16,5 +16,11 @@ def executeTicTacToe(c):
 # Tarea de ejecución de tests
 @task
 def testQuestions(c):
-	print("Ejecución de tests de 3 en raya")
+	print("Ejecución de tests de juego Questions")
 	run("pytest -v --disable-pytest-warnings src/questions/test/*")
+
+# Tarea de ejecución de juego de preguntas
+@task
+def executeQuestions(c):
+	print("Ejecución de juego Questions")
+	run("python3 src/questions/core/bot.py")
