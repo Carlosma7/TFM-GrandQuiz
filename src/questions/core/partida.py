@@ -109,6 +109,11 @@ class Partida():
 		p = Pregunta("¿Que representa el elemento químico H2O?", ["Sodio", "Agua", "Sal", "Hidrógeno"], 3)
 		self.__preguntas.append(p)
 
+	# Realizar pregunta
+	def realizar_pregunta(self):
+		# Escoger aleatoriamente una pregunta de la lista
+		return choice(self.__preguntas)
+
 
 	# Override método equal
 	def __eq__(self, otra):
