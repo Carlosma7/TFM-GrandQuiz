@@ -1,6 +1,8 @@
 from jugador import Jugador
 from pregunta import Pregunta
 from puntuacion import Puntuacion
+from excepciones import *
+
 from random import randint, choice
 
 # Clase de partida
@@ -40,6 +42,9 @@ class Partida():
 			# Inicializa y añade puntuación
 			puntuacion = Puntuacion(jugador)
 			self.__puntuaciones.append(puntuacion)
+		else:
+			raise GameFullError('Ya hay dos jugadores inscritos para la partida.')
+
 
 	# Iniciar partida
 	def iniciar_partida(self):
@@ -49,6 +54,8 @@ class Partida():
 				self.__iniciada = True
 				# Se establece el turno del primer jugador de forma aleatoria
 				self.__turno = randint(1,2)
+		else:
+			raise NotEnoughPlayersError('Se necesitan 2 jugadores para empezar una partida.')
 
 	# Acertar pregunta
 	def acertar_pregunta(self):
@@ -77,8 +84,10 @@ class Partida():
 		# Anotar el perdedor
 		if self.__ganador == 1:
 			perdedor = 2
-		else:
+		elif self.__ganador == 2:
 			perdedor = 1
+		else:
+			raise GameNotFinishedError('No hay ningún ganador todavía.')
 
 		# Se añade como victoria y derrota respectivamente
 		self.__jugadores[self.__ganador - 1].get_estadisticas().add_num_victorias()
