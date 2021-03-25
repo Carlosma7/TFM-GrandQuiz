@@ -12,11 +12,11 @@ from assertpy import assert_that
 # Test comparación partida
 def test_compare_partida():
 	# Creación de dos partidas idénticas
-	p1 = Partida()
-	p2 = Partida()
+	p1 = Partida('Chat')
+	p2 = Partida('Chat')
 	# Creación de una partida distinta
 	j1 = Jugador("Carlosma7", "Carlos", 24)
-	p3 = Partida()
+	p3 = Partida('Chat')
 	p3.add_jugador(j1)
 	# Comprobar que una partida es igual a otra si tienen la misma información
 	assert_that(p1).is_equal_to(p2) # Pasa test
@@ -26,7 +26,7 @@ def test_compare_partida():
 # Test de añadir jugador a partida
 def test_add_jugador():
 	# Creación de una partida
-	p = Partida()
+	p = Partida('Chat')
 	# Comprobar que la partida no tiene jugadores
 	assert_that(p.get_jugadores()).is_length(0)
 	# Se añade un jugador
@@ -38,7 +38,7 @@ def test_add_jugador():
 # Test de iniciar partida
 def test_iniciar_partida():
 	# Creación de una partida
-	p = Partida()
+	p = Partida('Chat')
 	# Añadir dos jugadores
 	j1 = Jugador("Carlosma7", "Carlos", 24)
 	j2 = Jugador("Pepito", "Pepe", 22)
@@ -58,7 +58,7 @@ def test_iniciar_partida():
 # Test de acertar pregunta
 def test_acertar_pregunta():
 	# Creación de una partida
-	p = Partida()
+	p = Partida('Chat')
 	# Añadir dos jugadores
 	j1 = Jugador("Carlosma7", "Carlos", 24)
 	j2 = Jugador("Pepito", "Pepe", 22)
@@ -77,7 +77,7 @@ def test_acertar_pregunta():
 # Test de pasar turno
 def test_pasar_turno():
 	# Creación de una partida
-	p = Partida()
+	p = Partida('Chat')
 	# Añadir dos jugadores
 	j1 = Jugador("Carlosma7", "Carlos", 24)
 	j2 = Jugador("Pepito", "Pepe", 22)
@@ -99,7 +99,7 @@ def test_pasar_turno():
 # Test de comprobar victoria
 def test_comprobar_victoria():
 	# Creación de una partida
-	p = Partida()
+	p = Partida('Chat')
 	# Añadir dos jugadores
 	j1 = Jugador("Carlosma7", "Carlos", 24)
 	j2 = Jugador("Pepito", "Pepe", 22)
@@ -119,7 +119,7 @@ def test_comprobar_victoria():
 # Test de terminar partida
 def test_terminar_partida():
 	# Creación de una partida
-	p = Partida()
+	p = Partida('Chat')
 	# Añadir dos jugadores
 	j1 = Jugador("Carlosma7", "Carlos", 24)
 	j2 = Jugador("Pepito", "Pepe", 22)
@@ -147,7 +147,7 @@ def test_terminar_partida():
 # Test de añadir preguntas
 def test_add_preguntas():
 	# Creación de una partida
-	p = Partida()
+	p = Partida('Chat')
 	# Añadir dos jugadores
 	j1 = Jugador("Carlosma7", "Carlos", 24)
 	j2 = Jugador("Pepito", "Pepe", 22)
@@ -165,7 +165,7 @@ def test_add_preguntas():
 # Test de realizar pregunta
 def test_realizar_pregunta():
 	# Creación de una partida
-	p = Partida()
+	p = Partida('Chat')
 	# Añadir dos jugadores
 	j1 = Jugador("Carlosma7", "Carlos", 24)
 	j2 = Jugador("Pepito", "Pepe", 22)
