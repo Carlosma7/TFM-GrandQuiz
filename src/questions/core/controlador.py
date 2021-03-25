@@ -29,3 +29,16 @@ class Controlador():
 		else:
 			raise ExistingGameError('Ya estás registrado.')
 
+	# Crear partida
+	def crear_partida(self, partida: Partida):
+		# Comprobar que no existe una partida en el mismo grupo
+		par = [p for p in self.partidas if p.get_chat() == partida.get_chat()]
+		no_encontrada = (len(par) == 0)
+
+		# Si no existe
+		if no_encontrada:
+			# Se añade la partida
+			self.partidas.append(partida)
+		else:
+			raise ExistingGameError('Ya existe una partida en este grupo.')
+
