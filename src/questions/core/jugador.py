@@ -33,3 +33,7 @@ class Jugador():
 	# Override método equal
 	def __eq__(self, otra):
 		return (self.__nombre_usuario == otra.get_nombre_usuario()) and (self.__nombre == otra.get_nombre()) and (self.__edad == otra.get_edad()) and (self.__estadisticas == otra.get_estadisticas())
+
+	# Método para transformar objeto en un dict
+	def to_dict(self):
+		return {'nombre_usuario': self.get_nombre_usuario(), 'nombre': self.get_nombre(), 'edad': self.get_edad(), 'estadisticas': self.get_estadisticas().to_dict()}
