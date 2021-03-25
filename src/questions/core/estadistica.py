@@ -23,3 +23,7 @@ class Estadistica():
 	# Override método equal
 	def __eq__(self, otra):
 		return (self.__num_victorias == otra.get_num_victorias()) and (self.__num_partidas == otra.get_num_partidas())
+
+	# Método para transformar objeto en un dict
+	def to_dict(self):
+		return {'num_victorias': self.get_num_victorias(), 'num_partidas': self.get_num_partidas()}
