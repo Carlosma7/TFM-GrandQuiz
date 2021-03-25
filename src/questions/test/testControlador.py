@@ -18,3 +18,16 @@ def test_crear_jugador():
 	c.crear_jugador(j1)
 	# Comprobar que existe el jugador
 	assert_that(c.jugadores).contains(j1)
+
+# Test de creación de jugador
+def test_crear_partida():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto partida
+	p = Partida('Chat')
+	# Comprobar que no existe la partida
+	assert_that(c.partidas).does_not_contain(p)
+	# Crear partida
+	c.crear_partida(p)
+	# Comprobar que existe la partida
+	assert_that(c.partidas).contains(p)
