@@ -22,7 +22,7 @@ controlador = Controlador()
 # Bienvenida al bot
 @bot.message_handler(commands=['start'])
 def bienvenida(message):
-  bot.send_message(message.chat.id, f"¡Bienvenido {message.from_user.first_name} a GrandQuiz, el concurso donde todas las generaciones son bienvenidas! \n\nMi nombre es Tercetto y seré tu guía en el concurso.\n\nPara empezar vamos a registrarnos en el concurso, por favor dime tu edad de la forma: \n*/registro <edad>* \n\nPor ejemplo: \n*/registro 24*", parse_mode= 'Markdown')
+  bot.send_message(message.chat.id, f"¡Bienvenido {message.from_user.first_name} a GrandQuiz, el concurso donde todas las generaciones son bienvenidas! \n\nMi nombre es Tercetto y seré tu guía en el concurso.\n\nPara empezar vamos a registrarnos en el concurso, por favor dime tu edad de la forma: \n*/registro <edad>* \n\nPor ejemplo: \n*/registro 24*", parse_mode = 'Markdown')
 
 # Registro en el sistema de GrandQuiz
 @bot.message_handler(commands=['registro'])
@@ -40,6 +40,28 @@ def registro(message):
 
 	# Informar al usuario
 	bot.send_message(message.chat.id, respuesta)
+
+# Crear partida de GrandQuiz
+@bot.message_handler(commands=['nueva_partida'])
+def nueva_partida(message):
+	# Comprobar que la conversación es en un grupo
+	if message.chat.type == 'group':
+		# Crear una partida con el id del chat del grupo
+		p = Partida(message.chat.id)
+		try:
+			# Crear partida en controlador
+			controlador.crear_partida(p)
+			# Se guarda mensaje de éxito
+			respuesta = f"¡Allá vamos! {message.from_user.first_name} ha creado una partida. Para unirte indícamelo con */unirme*."
+		except Exception as error:
+			# Se produce un error
+			respuesta = str(error)
+	else:
+		# No es un grupo
+		respuesta = f"Para crear una partida tienes que estar en un grupo."
+
+	# Informar al usuario
+	bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
 
 # Launch bot
 bot.polling()
