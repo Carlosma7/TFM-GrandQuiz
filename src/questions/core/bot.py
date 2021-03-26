@@ -29,7 +29,7 @@ def bienvenida(message):
 @bot.message_handler(commands=['registro'])
 def registro(message):
 	# Crear un jugador con nombre de usuario, nombre y edad
-	j = Jugador(message.chat.username, message.chat.first_name, int(message.text[10:]))
+	j = Jugador(message.from_user.username, message.from_user.first_name, int(message.text[10:]))
 	try:
 		# Crear jugador en controlador
 		controlador.crear_jugador(j)
@@ -71,7 +71,7 @@ def unirse_partida(message):
 	if message.chat.type == 'group':
 		try:
 			# Unirse a partida
-			controlador.add_jugador(message.chat.id, message.chat.username)
+			controlador.add_jugador(message.chat.id, message.from_user.username)
 			respuesta = f"¡Bien! {message.from_user.first_name} se ha unido a la partida."
 		except Exception as error:
 			# Se produce un error
