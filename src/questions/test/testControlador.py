@@ -52,3 +52,27 @@ def test_add_jugador_partida():
 	c.add_jugador('Chat2', 'Carlosma8')
 	# Comprobar que la partida tiene un jugador
 	assert_that(c.partidas[-1].get_jugadores()).is_length(1)
+
+# Test de listar jugadores de una partida
+def test_listar_jugadores():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Carlosma9", "Carlos", 24)
+	# Crear jugador
+	c.crear_jugador(j1)
+
+	# Crear objeto partida
+	p = Partida('Chat3')
+	# Crear partida
+	c.crear_partida(p)
+
+	# Añadir jugador a la partida
+	c.add_jugador('Chat3', 'Carlosma9')
+
+	# Obtener lista de jugadores de la partida
+	lista_jugadores = c.listar_jugadores('Chat3')
+	# Comprobar que el objeto es una lista
+	assert_that(lista_jugadores).is_type_of(list)
+	# Comprobar que el contenido son objetos de tipo jugador
+	assert_that(lista_jugadores[0]).is_type_of(Jugador)
