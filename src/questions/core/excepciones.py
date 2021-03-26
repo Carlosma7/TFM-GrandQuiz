@@ -22,3 +22,18 @@ class AgeNotValidError(Exception):
 class ExistingGameError(Exception):
 	"""Raised when theres already a game in the group chat"""
 	pass
+
+# Player has already joined the game
+class PlayerInGameError(Exception):
+	"""Raised when the player tries to join a game that has previously joined"""
+	pass
+
+# Tries to join a game that doesnt exist
+class GameNotFoundError(Exception):
+	"""Raised when the player tries to join a game that doesnt exist"""
+	pass
+
+# Player is not registered
+class PlayerNotRegisteredError(Exception):
+	"""Raised when a player tries to do something without being registered"""
+	pass
