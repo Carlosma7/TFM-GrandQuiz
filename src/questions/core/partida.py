@@ -120,6 +120,9 @@ class Partida():
 		# Escoger aleatoriamente una pregunta de la lista
 		return choice(self.__preguntas)
 
+	# Obtener el jugador del turno
+	def get_jugador_turno(self):
+		return self.__jugadores[self.__turno - 1].get_nombre()
 
 	# Override método equal
 	def __eq__(self, otra):
