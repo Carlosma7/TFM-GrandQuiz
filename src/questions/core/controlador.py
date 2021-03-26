@@ -101,7 +101,8 @@ class Controlador():
 				# Comprobar que la partida no está iniciada
 				if not par.get_iniciada():
 					par.iniciar_partida()
-					return par.get_jugador_turno()
+					par.add_preguntas()
+					return par.get_jugador_turno(), par.realizar_pregunta()
 				else:
 					raise GameStartedError('Ya hay una partida iniciada en este grupo.')
 			else:
