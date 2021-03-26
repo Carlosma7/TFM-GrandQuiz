@@ -5,6 +5,7 @@ from puntuacion import Puntuacion
 from excepciones import *
 
 from typing import List
+import emoji
 
 # Clase controladora
 class Controlador():
@@ -73,3 +74,16 @@ class Controlador():
 				raise GameNotFoundError('No existe ninguna partida creada.')
 		else:
 			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
+
+	# Listar jugadores de la partida
+	def listar_jugadores(self, partida: str):
+		# Comprobar que existe una partida en el grupo
+		par = [p for p in self.partidas if p.get_chat() == partida]
+		partida_encontrada = (len(par) == 1)
+
+		# Si existe una partida
+		if partida_encontrada:
+			par = par[0]
+			return par.get_jugadores()
+		else:
+			raise GameNotFoundError('No existe ninguna partida creada.')
