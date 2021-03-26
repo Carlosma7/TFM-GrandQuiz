@@ -107,3 +107,31 @@ class Controlador():
 					raise GameStartedError('Ya hay una partida iniciada en este grupo.')
 			else:
 				raise NotEnoughPlayersError('Se necesitan 2 jugadores para empezar una partida.')
+
+	# Responder pregunta
+	def responder_pregunta(self, partida: str, jugador: str, respuesta: int):
+		# Comprobar que el jugador ya se ha registrado
+		jug = [j for j in self.jugadores if j.get_nombre_usuario() == jugador]
+		jugador_encontrado = (len(jug) == 1)
+
+		# Si está registrado
+		if jugador_encontrado:
+			# Comprobar que existe una partida en el grupo
+			par = [p for p in self.partidas if p.get_chat() == partida]
+			partida_encontrada = (len(par) == 1)
+
+			# Si existe una partida
+			if partida_encontrada:
+				jug = jug[0]
+				par = par[0]
+
+				# Responder la pregunta
+				if par.responder_pregunta(respuesta):
+					par.get_puntuaciones()[par.get_turno() - 1].anotar_punto()
+					return True
+				else:
+					return False
+			else:
+				raise GameNotFoundError('No existe ninguna partida creada.')
+		else:
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
