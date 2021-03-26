@@ -6,6 +6,7 @@ import numpy as np
 from random import randint
 from dotenv import load_dotenv
 import os
+import emoji
 
 # Telegram Bot Token from BotFather
 # Obtener información de .env
@@ -82,6 +83,31 @@ def unirse_partida(message):
 
 	# Informar al usuario
 	bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+
+# Listar jugadores de una partida
+@bot.message_handler(commands=['lista'])
+def listar_jugadores(message):
+	# Comprobar que la conversación es en un grupo
+	if message.chat.type == 'group':
+		try:
+			# Obtener lista de jugadores
+			lista = controlador.listar_jugadores(message.chat.id)
+			if len(lista) == 0:
+				respuesta = f"Aún no hay jugadores en la partida. ¡Anímate en ser el primero!"
+			else:
+				respuesta = f"Jugadores en la partida:\n\n"
+				for jug in lista:
+					respuesta += f"{emoji.emojize(':boy:')}  {jug.get_nombre()}\n"
+		except Exception as error:
+			# Se produce un error
+			respuesta = str(error)
+	else:
+		# No es un grupo
+		respuesta = f"Para unirte a una partida tienes que estar en un grupo."
+
+	# Informar al usuario
+	bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+
 
 # Launch bot
 bot.polling()
