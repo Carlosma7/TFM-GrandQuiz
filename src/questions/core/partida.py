@@ -46,8 +46,6 @@ class Partida():
 			# Inicializa y añade puntuación
 			puntuacion = Puntuacion(jugador)
 			self.__puntuaciones.append(puntuacion)
-		else:
-			raise GameFullError('Ya hay dos jugadores inscritos para la partida.')
 
 
 	# Iniciar partida
