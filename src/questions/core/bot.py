@@ -6,6 +6,7 @@ import numpy as np
 from random import randint
 from dotenv import load_dotenv
 import os
+import re
 
 # Telegram Bot Token from BotFather
 # Obtener información de .env
@@ -140,7 +141,29 @@ def iniciar_partida(message):
 		# Informar al usuario
 		bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
 
-	
+# Responder pregunta
+@bot.callback_query_handler(func=lambda call: True)
+def responder_pregunta(call):
+	if bool(re.match("[1-4]", call.data)):
+		try:
+			# Responder pregunta
+			resultado = controlador.responder_pregunta(call.message.chat.id, call.from_user.username, int(call.data))
+			# Pregunta acertada
+			if resultado:
+				respuesta = f"\u2705 ¡SÍ, HAS ACERTADO! Efectivamente era:\n\n*{controlador.obtener_respuesta(call.message.chat.id)}*"
+			# Pregunta fallada
+			else:
+				respuesta = f"\u274C Noooooo, esa no era la respuesta correcta, la respuesta correcta era:\n\n*{controlador.obtener_respuesta(call.message.chat.id)}*"
+			
+			# Editar texto con respuesta
+			respuesta = f"{call.message.text}\n\n{respuesta}"
+			bot.edit_message_text(respuesta, call.message.chat.id, call.message.id, parse_mode = 'Markdown')
+		except Exception as error:
+			# Se produce un error
+			respuesta = f"{call.from_user.first_name}: {str(error)}"
+			# Informar al usuario
+			bot.send_message(call.message.chat.id, respuesta, parse_mode = 'Markdown')
+
 
 
 # Launch bot
