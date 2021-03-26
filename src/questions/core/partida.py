@@ -129,6 +129,11 @@ class Partida():
 	def get_jugador_turno(self):
 		return self.__jugadores[self.__turno - 1].get_nombre()
 
+	# Responder una pregunta
+	def responder_pregunta(self, respuesta: int):
+		return respuesta == self.__pregunta_actual.get_correcta()
+
+
 	# Override método equal
 	def __eq__(self, otra):
 		return (self.__jugadores == otra.get_jugadores()) and (self.__puntuaciones == otra.get_puntuaciones()) and (self.__preguntas == otra.get_preguntas()) and (self.__turno == otra.get_turno()) and (self.__iniciada == otra.get_iniciada()) and (self.__ganador == otra.get_ganador()) and (self.__chat == otra.get_chat())
