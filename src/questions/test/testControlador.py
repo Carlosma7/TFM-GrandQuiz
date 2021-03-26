@@ -129,11 +129,43 @@ def test_responder_pregunta_controlador():
 	# Se inicia la partida
 	jug, pregunta = c.iniciar_partida('Chat5')
 
+	# Obtener jugador actual
+	turno = c.partidas[-1].get_turno()
+	jugador_turno = c.partidas[-1].get_jugadores()[turno - 1].get_nombre_usuario()
+
 	# Responder pregunta
-	resultado = c.responder_pregunta('Chat5', 'Carlosma01', 1)
+	resultado = c.responder_pregunta('Chat5', jugador_turno, 1)
 	# Comprobar que si la respuesta es correcta el resultado es True
 	if c.partidas[-1].get_pregunta_actual().get_correcta() == 1:
 		assert_that(resultado).is_true()
 	# Comprobar que si la respuesta es incorrecta el resultado es False
 	else:
 		assert_that(resultado).is_false()
+
+# Test de obtener respuesta de una pregunta
+def test_obtener_respuesta_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Carlosma02", "Carlos", 24)
+	j2 = Jugador("Pepito02", "Pepe", 23)
+	# Crear jugador
+	c.crear_jugador(j1)
+	c.crear_jugador(j2)
+
+	# Crear objeto partida
+	p = Partida('Chat6')
+	# Crear partida
+	c.crear_partida(p)
+
+	# Añadir jugador a la partida
+	c.add_jugador('Chat6', 'Carlosma02')
+	c.add_jugador('Chat6', 'Pepito02')
+
+	# Se inicia la partida
+	jug, pregunta = c.iniciar_partida('Chat6')
+
+	# Se obtiene la respuesta de la pregunta
+	respuesta = c.obtener_respuesta('Chat6')
+	# Se comprueba que la respuesta y la correcta de la pregunta coinciden
+	assert_that(pregunta.get_respuesta()).is_equal_to(respuesta)
