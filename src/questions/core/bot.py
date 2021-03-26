@@ -64,5 +64,24 @@ def nueva_partida(message):
 	# Informar al usuario
 	bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
 
+# Unirse a partida
+@bot.message_handler(commands=['unirme'])
+def unirse_partida(message):
+	# Comprobar que la conversación es en un grupo
+	if message.chat.type == 'group':
+		try:
+			# Unirse a partida
+			controlador.add_jugador(message.chat.id, message.chat.username)
+			respuesta = f"¡Bien! {message.from_user.first_name} se ha unido a la partida."
+		except Exception as error:
+			# Se produce un error
+			respuesta = str(error)
+	else:
+		# No es un grupo
+		respuesta = f"Para unirte a una partida tienes que estar en un grupo."
+
+	# Informar al usuario
+	bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+
 # Launch bot
 bot.polling()
