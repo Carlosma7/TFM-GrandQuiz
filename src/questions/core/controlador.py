@@ -61,7 +61,7 @@ class Controlador():
 
 				# Comprobar que hay huecos disponibles
 				if len(par.get_jugadores()) < 2:
-					# Cpmprobar que el jugador no está en la partida
+					# Comprobar que el jugador no está en la partida
 					if jug not in par.get_jugadores():
 						# Hay huecos disponibles
 						par.add_jugador(jug)

@@ -40,12 +40,11 @@ class Partida():
 
 	# Añadir un nuevo jugador
 	def add_jugador(self, jugador: Jugador):
-		if len(self.__jugadores) < 2:
-			# Añade jugador
-			self.__jugadores.append(jugador)
-			# Inicializa y añade puntuación
-			puntuacion = Puntuacion(jugador)
-			self.__puntuaciones.append(puntuacion)
+		# Añade jugador
+		self.__jugadores.append(jugador)
+		# Inicializa y añade puntuación
+		puntuacion = Puntuacion(jugador)
+		self.__puntuaciones.append(puntuacion)
 
 
 	# Iniciar partida
