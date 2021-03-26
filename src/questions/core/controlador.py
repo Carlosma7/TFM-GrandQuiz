@@ -125,13 +125,29 @@ class Controlador():
 				jug = jug[0]
 				par = par[0]
 
-				# Responder la pregunta
-				if par.responder_pregunta(respuesta):
-					par.get_puntuaciones()[par.get_turno() - 1].anotar_punto()
-					return True
+				# Comprobar que responde el jugador del turno actual
+				if par.get_jugadores()[par.get_turno() - 1].get_nombre_usuario() == jugador:
+					# Responder la pregunta
+					if par.responder_pregunta(respuesta):
+						par.get_puntuaciones()[par.get_turno() - 1].anotar_punto()
+						return True
+					else:
+						return False
 				else:
-					return False
+					raise WrongTurnError('Es el turno de ', par.get_jugadores()[par.get_turno() - 1].get_nombre())
 			else:
 				raise GameNotFoundError('No existe ninguna partida creada.')
 		else:
 			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
+
+	# Obtener respuesta de la pregunta actual de una partida
+	def obtener_respuesta(self, partida: str):
+		# Comprobar que existe una partida en el grupo
+		par = [p for p in self.partidas if p.get_chat() == partida]
+		partida_encontrada = (len(par) == 1)
+
+		if partida_encontrada:
+			par = par[0]
+			return par.get_pregunta_actual().get_respuesta()
+		else:
+			raise GameNotFoundError('No existe ninguna partida creada.')
