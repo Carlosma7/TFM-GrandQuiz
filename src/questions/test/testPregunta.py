@@ -9,10 +9,10 @@ from assertpy import assert_that
 # Test comparación pregunta
 def test_compare_pregunta():
 	# Creación de dos preguntas idénticas
-	p1 = Pregunta(1, "Enunciado", ["Respuesta1", "Respuesta2", "Respuesta3", "Respuesta4"], 3)
-	p2 = Pregunta(1, "Enunciado", ["Respuesta1", "Respuesta2", "Respuesta3", "Respuesta4"], 3)
+	p1 = Pregunta("Enunciado", ["Respuesta1", "Respuesta2", "Respuesta3", "Respuesta4"], 3)
+	p2 = Pregunta("Enunciado", ["Respuesta1", "Respuesta2", "Respuesta3", "Respuesta4"], 3)
 	# Creación de una pregunta distinta
-	p3 = Pregunta(2, "Enunciado", ["Respuesta1", "Respuesta2", "Respuesta3", "Respuesta4"], 1)
+	p3 = Pregunta("Enunciado", ["Respuesta1", "Respuesta2", "Respuesta3", "Respuesta4"], 1)
 	# Comprobar que una pregunta es igual a otro si tienen la misma información
 	assert_that(p1).is_equal_to(p2) # Pasa test
 	# Comprobar que una pregunta es distinta de otra si tienen alguna información distinta
