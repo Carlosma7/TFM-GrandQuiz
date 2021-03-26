@@ -42,3 +42,8 @@ class PlayerNotRegisteredError(Exception):
 class GameStartedError(Exception):
 	"""Raised when a player tries to start a game that is already started"""
 	pass
+
+# A player tries to answer but it isnt his turn
+class WrongTurnError(Exception):
+	"""Raised when a player tries to answer a question but it isnt hist turn"""
+	pass
