@@ -179,3 +179,19 @@ def test_realizar_pregunta():
 	pr = p.realizar_pregunta()
 	# Comprobar que pr es una pregunta
 	assert_that(pr).is_type_of(Pregunta)
+
+# Test de obtener jugador del turno
+def test_get_jugador_turno():
+	# Creación de una partida
+	p = Partida('Chat')
+	# Añadir dos jugadores
+	j1 = Jugador("Carlosma7", "Carlos", 24)
+	j2 = Jugador("Pepito", "Pepe", 22)
+	p.add_jugador(j1)
+	p.add_jugador(j2)
+	# Iniciar partida
+	p.iniciar_partida()
+	# Obtener el jugador con el turno
+	jug = p.get_jugador_turno()
+	# Comprobar que se obtiene el nombre de un jugador
+	assert_that(jug).is_type_of(str)
