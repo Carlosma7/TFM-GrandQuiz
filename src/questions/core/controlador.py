@@ -42,3 +42,34 @@ class Controlador():
 		else:
 			raise ExistingGameError('Ya existe una partida en este grupo.')
 
+	# Añadir jugador a partida
+	def add_jugador(self, partida: str, jugador: str):
+		# Comprobar que el jugador ya se ha registrado
+		jug = [j for j in self.jugadores if j.get_nombre_usuario() == jugador]
+		jugador_encontrado = (len(jug) == 1)
+
+		# Si está registrado
+		if jugador_encontrado:
+			# Comprobar que existe una partida en el grupo
+			par = [p for p in self.partidas if p.get_chat() == partida]
+			partida_encontrada = (len(par) == 1)
+
+			# Si existe una partida
+			if partida_encontrada:
+				jug = jug[0]
+				par = par[0]
+
+				# Comprobar que hay huecos disponibles
+				if len(par.get_jugadores()) < 2:
+					# Cpmprobar que el jugador no está en la partida
+					if jug not in par.get_jugadores():
+						# Hay huecos disponibles
+						par.add_jugador(jug)
+					else:
+						raise PlayerInGameError('Ya estás apuntado en la partida.')
+				else:
+					raise GameFullError('Ya hay dos jugadores inscritos para la partida.')
+			else:
+				raise GameNotFoundError('No existe ninguna partida creada.')
+		else:
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
