@@ -86,3 +86,22 @@ class Controlador():
 			return par.get_jugadores()
 		else:
 			raise GameNotFoundError('No existe ninguna partida creada.')
+
+	# Iniciar partida
+	def iniciar_partida(self, partida: str):
+		# Comprobar que existe una partida en el grupo
+		par = [p for p in self.partidas if p.get_chat() == partida]
+		partida_encontrada = (len(par) == 1)
+
+		# Si existe una partida
+		if partida_encontrada:
+			par = par[0]
+			# Comprobar que la partida tiene dos jugadores
+			if len(par.get_jugadores()) == 2:
+				# Comprobar que la partida no está iniciada
+				if not par.get_iniciada():
+					par.iniciar_partida()
+				else:
+					raise GameStartedError('Ya hay una partida iniciada en este grupo.')
+			else:
+				raise NotEnoughPlayersError('Se necesitan 2 jugadores para empezar una partida.')
