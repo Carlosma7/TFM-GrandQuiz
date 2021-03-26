@@ -15,6 +15,7 @@ class Partida():
 		self.__iniciada = False
 		self.__ganador = 0
 		self.__chat = chat
+		self.__pregunta_actual = 0
 
 	# Métodos get/set
 	def get_jugadores(self):
@@ -37,6 +38,9 @@ class Partida():
 
 	def get_chat(self):
 		return self.__chat
+
+	def get_pregunta_actual(self):
+		return self.__pregunta_actual
 
 	# Añadir un nuevo jugador
 	def add_jugador(self, jugador: Jugador):
@@ -118,7 +122,8 @@ class Partida():
 	# Realizar pregunta
 	def realizar_pregunta(self):
 		# Escoger aleatoriamente una pregunta de la lista
-		return choice(self.__preguntas)
+		self.__pregunta_actual = choice(self.__preguntas)
+		return self.__pregunta_actual
 
 	# Obtener el jugador del turno
 	def get_jugador_turno(self):
