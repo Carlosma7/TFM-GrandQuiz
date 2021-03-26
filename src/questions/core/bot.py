@@ -116,9 +116,19 @@ def iniciar_partida(message):
 	if message.chat.type == 'group':
 		try:
 			# Iniciar partida
-			jug_turno = controlador.iniciar_partida(message.chat.id)
+			jug_turno, pregunta = controlador.iniciar_partida(message.chat.id)
 			# Informar al usuario
 			bot.send_photo(message.chat.id, photo="https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/game/nueva_partida.jpg?raw=true", caption=f"¡Por fin es la hora de jugar a GrandQuiz!\n\nY el afortunado en responder primero es \U0001f389 {jug_turno} \U0001f389", parse_mode = 'Markdown')
+			# Keyboard
+			markup = types.InlineKeyboardMarkup(row_width = 1)
+			# Buttons
+			bt1 = (types.InlineKeyboardButton(pregunta.get_respuestas()[0], callback_data="1"))
+			bt2 = (types.InlineKeyboardButton(pregunta.get_respuestas()[1], callback_data="2"))
+			bt3 = (types.InlineKeyboardButton(pregunta.get_respuestas()[2], callback_data="3"))
+			bt4 = (types.InlineKeyboardButton(pregunta.get_respuestas()[3], callback_data="4"))
+			markup.add(bt1, bt2, bt3, bt4)
+			enunciado = f"Turno de: {jug_turno}.\n\n{pregunta.get_enunciado()}"
+			bot.send_message(message.chat.id, enunciado, reply_markup=markup)
 		except Exception as error:
 			# Se produce un error
 			respuesta = str(error)
