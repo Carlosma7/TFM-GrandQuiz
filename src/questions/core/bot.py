@@ -22,7 +22,8 @@ controlador = Controlador()
 # Bienvenida al bot
 @bot.message_handler(commands=['start'])
 def bienvenida(message):
-  bot.send_message(message.chat.id, f"¡Bienvenido {message.from_user.first_name} a GrandQuiz, el concurso donde todas las generaciones son bienvenidas! \n\nMi nombre es Tercetto y seré tu guía en el concurso.\n\nPara empezar vamos a registrarnos en el concurso, por favor dime tu edad de la forma: \n*/registro <edad>* \n\nPor ejemplo: \n*/registro 24*", parse_mode = 'Markdown')
+	bot.send_photo(message.chat.id, photo="https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/game/saludo.jpg?raw=true", caption=f"¡Bienvenido {message.from_user.first_name} a GrandQuiz, el concurso donde todas las generaciones son bienvenidas! \n\nMi nombre es Tercetto y seré tu guía en el concurso.", parse_mode = 'Markdown')
+	bot.send_message(message.chat.id, f"Para empezar vamos a registrarnos en el concurso, por favor dime tu edad de la forma: \n*/registro <edad>* \n\nPor ejemplo: \n*/registro 24*", parse_mode = 'Markdown')
 
 # Registro en el sistema de GrandQuiz
 @bot.message_handler(commands=['registro'])
