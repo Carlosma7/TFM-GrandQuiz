@@ -195,3 +195,27 @@ def test_get_jugador_turno():
 	jug = p.get_jugador_turno()
 	# Comprobar que se obtiene el nombre de un jugador
 	assert_that(jug).is_type_of(str)
+
+# Test de responder una pregunta
+def test_responder_pregunta():
+	# Creación de una partida
+	p = Partida('Chat')
+	# Añadir dos jugadores
+	j1 = Jugador("Carlosma7", "Carlos", 24)
+	j2 = Jugador("Pepito", "Pepe", 22)
+	p.add_jugador(j1)
+	p.add_jugador(j2)
+	# Iniciar partida
+	p.iniciar_partida()
+	# Añadir las preguntas
+	p.add_preguntas()
+	# Realizar pregunta
+	p.realizar_pregunta()
+	# Responder pregunta
+	resultado = p.responder_pregunta(1)
+	# Comprobar que si la respuesta es correcta el resultado es True
+	if p.get_pregunta_actual().get_correcta() == 1:
+		assert_that(resultado).is_true()
+	# Comprobar que si la respuesta es incorrecta el resultado es False
+	else:
+		assert_that(resultado).is_false()
