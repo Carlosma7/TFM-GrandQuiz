@@ -7,7 +7,7 @@ import pytest
 from assertpy import assert_that
 
 # Test de creación de jugador
-def test_crear_jugador():
+def test_crear_jugador_controlador():
 	# Crear controlador
 	c = Controlador()
 	# Crear objeto jugador
@@ -20,7 +20,7 @@ def test_crear_jugador():
 	assert_that(c.jugadores).contains(j1)
 
 # Test de creación de jugador
-def test_crear_partida():
+def test_crear_partida_controlador():
 	# Crear controlador
 	c = Controlador()
 	# Crear objeto partida
@@ -33,7 +33,7 @@ def test_crear_partida():
 	assert_that(c.partidas).contains(p)
 
 # Test de añadir jugador a partida
-def test_add_jugador_partida():
+def test_add_jugador_partida_controlador():
 	# Crear controlador
 	c = Controlador()
 	# Crear objeto jugador
@@ -54,7 +54,7 @@ def test_add_jugador_partida():
 	assert_that(c.partidas[-1].get_jugadores()).is_length(1)
 
 # Test de listar jugadores de una partida
-def test_listar_jugadores():
+def test_listar_jugadores_controlador():
 	# Crear controlador
 	c = Controlador()
 	# Crear objeto jugador
@@ -76,3 +76,32 @@ def test_listar_jugadores():
 	assert_that(lista_jugadores).is_type_of(list)
 	# Comprobar que el contenido son objetos de tipo jugador
 	assert_that(lista_jugadores[0]).is_type_of(Jugador)
+
+# Test de iniciar una partida
+def test_iniciar_partida_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Carlosma0", "Carlos", 24)
+	j2 = Jugador("Pepito0", "Pepe", 23)
+	# Crear jugador
+	c.crear_jugador(j1)
+	c.crear_jugador(j2)
+
+	# Crear objeto partida
+	p = Partida('Chat4')
+	# Crear partida
+	c.crear_partida(p)
+
+	# Añadir jugador a la partida
+	c.add_jugador('Chat4', 'Carlosma0')
+	c.add_jugador('Chat4', 'Pepito0')
+
+	# Comprobar que la partida no está iniciada
+	assert_that(c.partidas[-1].get_turno()).is_equal_to(0)
+	assert_that(c.partidas[-1].get_iniciada()).is_false()
+	# Se inicia la partida
+	c.iniciar_partida('Chat4')
+	# Comprobar que la partida está iniciada
+	assert_that(c.partidas[-1].get_turno()).is_in(1,2)
+	assert_that(c.partidas[-1].get_iniciada()).is_true()
