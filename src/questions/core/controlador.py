@@ -5,7 +5,6 @@ from puntuacion import Puntuacion
 from excepciones import *
 
 from typing import List
-import emoji
 
 # Clase controladora
 class Controlador():
