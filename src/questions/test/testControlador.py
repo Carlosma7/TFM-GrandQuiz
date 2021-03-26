@@ -105,3 +105,35 @@ def test_iniciar_partida_controlador():
 	# Comprobar que la partida está iniciada
 	assert_that(c.partidas[-1].get_turno()).is_in(1,2)
 	assert_that(c.partidas[-1].get_iniciada()).is_true()
+
+# Test de responder pregunta
+def test_responder_pregunta_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Carlosma01", "Carlos", 24)
+	j2 = Jugador("Pepito01", "Pepe", 23)
+	# Crear jugador
+	c.crear_jugador(j1)
+	c.crear_jugador(j2)
+
+	# Crear objeto partida
+	p = Partida('Chat5')
+	# Crear partida
+	c.crear_partida(p)
+
+	# Añadir jugador a la partida
+	c.add_jugador('Chat5', 'Carlosma01')
+	c.add_jugador('Chat5', 'Pepito01')
+
+	# Se inicia la partida
+	jug, pregunta = c.iniciar_partida('Chat5')
+
+	# Responder pregunta
+	resultado = c.responder_pregunta('Chat5', 'Carlosma01', 1)
+	# Comprobar que si la respuesta es correcta el resultado es True
+	if c.partidas[-1].get_pregunta_actual().get_correcta() == 1:
+		assert_that(resultado).is_true()
+	# Comprobar que si la respuesta es incorrecta el resultado es False
+	else:
+		assert_that(resultado).is_false()
