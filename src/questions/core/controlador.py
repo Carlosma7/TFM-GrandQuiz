@@ -134,7 +134,7 @@ class Controlador():
 					else:
 						return False
 				else:
-					raise WrongTurnError('Es el turno de ', par.get_jugadores()[par.get_turno() - 1].get_nombre())
+					raise WrongTurnError(f'Es el turno de {par.get_jugadores()[par.get_turno() - 1].get_nombre()}')
 			else:
 				raise GameNotFoundError('No existe ninguna partida creada.')
 		else:
