@@ -49,14 +49,10 @@ class Partida():
 
 	# Iniciar partida
 	def iniciar_partida(self):
-		if len(self.__jugadores) == 2:
-			if not self.__iniciada:
-				# Se activa la partida para evitar reinicios
-				self.__iniciada = True
-				# Se establece el turno del primer jugador de forma aleatoria
-				self.__turno = randint(1,2)
-		else:
-			raise NotEnoughPlayersError('Se necesitan 2 jugadores para empezar una partida.')
+		# Se activa la partida para evitar reinicios
+		self.__iniciada = True
+		# Se establece el turno del primer jugador de forma aleatoria
+		self.__turno = randint(1,2)
 
 	# Acertar pregunta
 	def acertar_pregunta(self):
