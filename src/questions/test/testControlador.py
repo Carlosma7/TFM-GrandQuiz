@@ -31,3 +31,24 @@ def test_crear_partida():
 	c.crear_partida(p)
 	# Comprobar que existe la partida
 	assert_that(c.partidas).contains(p)
+
+# Test de añadir jugador a partida
+def test_add_jugador_partida():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Carlosma8", "Carlos", 24)
+	# Crear jugador
+	c.crear_jugador(j1)
+
+	# Crear objeto partida
+	p = Partida('Chat2')
+	# Crear partida
+	c.crear_partida(p)
+
+	# Comprobar que la partida no tiene ningún jugador
+	assert_that(c.partidas[-1].get_jugadores()).is_length(0)
+	# Añadir jugador a la partida
+	c.add_jugador('Chat2', 'Carlosma8')
+	# Comprobar que la partida tiene un jugador
+	assert_that(c.partidas[-1].get_jugadores()).is_length(1)
