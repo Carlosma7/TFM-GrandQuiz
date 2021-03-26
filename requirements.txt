@@ -1,3 +1,5 @@
 invoke
 pytest
 assertpy
+telebot
+emoji
