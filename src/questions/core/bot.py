@@ -44,6 +44,21 @@ def registro(message):
 	# Informar al usuario
 	bot.send_message(message.chat.id, respuesta)
 
+# Obtener estadisticas de un jugador
+@bot.message_handler(commands=['estadisticas'])
+def estadisticas(message):
+	try:
+		# Obtener estadisticas
+		est = controlador.obtener_estadisticas(message.from_user.username)
+		# Se guarda mensaje de éxito
+		respuesta = f"Las estadísticas de {message.from_user.first_name} son:\n\n\U0001f3c6 {est.get_num_victorias()} victorias.\n\n\U0001f3ae {est.get_num_partidas()} partidas."
+	except Exception as error:
+		# Se produce un error
+		respuesta = str(error)
+
+	# Informar al usuario
+	bot.send_message(message.chat.id, respuesta)
+
 # Crear partida de GrandQuiz
 @bot.message_handler(commands=['nueva_partida'])
 def nueva_partida(message):
