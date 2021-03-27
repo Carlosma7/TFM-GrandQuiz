@@ -267,3 +267,19 @@ def test_terminar_partida_controlado():
 	ganador = c.terminar_partida('Chat9')
 	# Comprobar que se recibe el nombre del ganador como str
 	assert_that(ganador).is_type_of(str)
+
+# Test de obtener estadisticas de jugador
+def test_obtener_estadisticas_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Carlosma06", "Carlos", 24)
+	
+	# Crear jugador
+	c.crear_jugador(j1)
+
+	# Obtener estadisticas del jugador
+	est = c.obtener_estadisticas("Carlosma06")
+
+	# Comprobar que se recibe un objeto de tipo estadisticas
+	assert_that(est).is_type_of(Estadistica)
