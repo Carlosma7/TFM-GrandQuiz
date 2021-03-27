@@ -196,6 +196,6 @@ def test_cambiar_turno_controlador():
 	# Obtener el turno actual
 	turno = c.partidas[-1].get_turno()
 	# Pasar turno
-	c.cambiar_turno('Chat7')
+	jug, pregunta = c.cambiar_turno('Chat7')
 	# Comprobar que no es el mismo turno
 	assert_that(turno).is_not_equal_to(c.partidas[-1].get_turno())

@@ -161,5 +161,7 @@ class Controlador():
 		if partida_encontrada:
 			par = par[0]
 			par.pasar_turno()
+			# Devolver siguiente pregunta
+			return par.get_jugador_turno(), par.realizar_pregunta()
 		else:
 			raise GameNotFoundError('No existe ninguna partida creada.')
