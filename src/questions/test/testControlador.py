@@ -199,3 +199,31 @@ def test_cambiar_turno_controlador():
 	jug, pregunta = c.cambiar_turno('Chat7')
 	# Comprobar que no es el mismo turno
 	assert_that(turno).is_not_equal_to(c.partidas[-1].get_turno())
+
+# Test de cambiar turno de una partida
+def test_comprobar_victoria_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Carlosma04", "Carlos", 24)
+	j2 = Jugador("Pepito04", "Pepe", 23)
+	# Crear jugador
+	c.crear_jugador(j1)
+	c.crear_jugador(j2)
+
+	# Crear objeto partida
+	p = Partida('Chat8')
+	# Crear partida
+	c.crear_partida(p)
+
+	# Añadir jugador a la partida
+	c.add_jugador('Chat8', 'Carlosma04')
+	c.add_jugador('Chat8', 'Pepito04')
+
+	# Se inicia la partida
+	jug, pregunta = c.iniciar_partida('Chat8')
+
+	# Comprobar la victoria
+	victoria = c.comprobar_victoria('Chat8')
+	# Comprobar que aún no ha ganado nadie ya que se acaba de iniciar la partida
+	assert_that(victoria).is_false()
