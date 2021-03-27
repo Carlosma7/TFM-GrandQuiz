@@ -31,17 +31,24 @@ class Controlador():
 			raise PlayerRegisteredError('Ya estás registrado.')
 
 	# Crear partida
-	def crear_partida(self, partida: Partida):
-		# Comprobar que no existe una partida en el mismo grupo
-		par = [p for p in self.partidas if p.get_chat() == partida.get_chat()]
-		no_encontrada = (len(par) == 0)
+	def crear_partida(self, partida: Partida, jugador: str):
+		# Comprobar que el jugador ya se ha registrado
+		jug = [j for j in self.jugadores if j.get_nombre_usuario() == jugador]
+		jugador_encontrado = (len(jug) == 1)
 
-		# Si no existe
-		if no_encontrada:
-			# Se añade la partida
-			self.partidas.append(partida)
+		if jugador_encontrado:
+			# Comprobar que no existe una partida en el mismo grupo
+			par = [p for p in self.partidas if p.get_chat() == partida.get_chat()]
+			no_encontrada = (len(par) == 0)
+
+			# Si no existe
+			if no_encontrada:
+				# Se añade la partida
+				self.partidas.append(partida)
+			else:
+				raise ExistingGameError('Ya existe una partida en este grupo.')
 		else:
-			raise ExistingGameError('Ya existe una partida en este grupo.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Añadir jugador a partida
 	def add_jugador(self, partida: str, jugador: str):

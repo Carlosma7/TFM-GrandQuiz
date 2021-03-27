@@ -68,7 +68,7 @@ def nueva_partida(message):
 		p = Partida(message.chat.id)
 		try:
 			# Crear partida en controlador
-			controlador.crear_partida(p)
+			controlador.crear_partida(p, message.from_user.username)
 			# Se guarda mensaje de éxito
 			respuesta = f"¡Allá vamos! {message.from_user.first_name} ha creado una partida. Para unirte indícamelo con */unirme*."
 		except Exception as error:

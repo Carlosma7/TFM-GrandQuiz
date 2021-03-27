@@ -23,12 +23,17 @@ def test_crear_jugador_controlador():
 def test_crear_partida_controlador():
 	# Crear controlador
 	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Carlosma11", "Carlos", 24)
+	# Crear jugador
+	c.crear_jugador(j1)
+
 	# Crear objeto partida
 	p = Partida('Chat')
 	# Comprobar que no existe la partida
 	assert_that(c.partidas).does_not_contain(p)
 	# Crear partida
-	c.crear_partida(p)
+	c.crear_partida(p, j1.get_nombre_usuario())
 	# Comprobar que existe la partida
 	assert_that(c.partidas).contains(p)
 
@@ -44,7 +49,7 @@ def test_add_jugador_partida_controlador():
 	# Crear objeto partida
 	p = Partida('Chat2')
 	# Crear partida
-	c.crear_partida(p)
+	c.crear_partida(p, j1.get_nombre_usuario())
 
 	# Comprobar que la partida no tiene ningún jugador
 	assert_that(c.partidas[-1].get_jugadores()).is_length(0)
@@ -65,7 +70,7 @@ def test_listar_jugadores_controlador():
 	# Crear objeto partida
 	p = Partida('Chat3')
 	# Crear partida
-	c.crear_partida(p)
+	c.crear_partida(p, j1.get_nombre_usuario())
 
 	# Añadir jugador a la partida
 	c.add_jugador('Chat3', 'Carlosma9')
@@ -91,7 +96,7 @@ def test_iniciar_partida_controlador():
 	# Crear objeto partida
 	p = Partida('Chat4')
 	# Crear partida
-	c.crear_partida(p)
+	c.crear_partida(p, j1.get_nombre_usuario())
 
 	# Añadir jugador a la partida
 	c.add_jugador('Chat4', 'Carlosma0')
@@ -120,7 +125,7 @@ def test_responder_pregunta_controlador():
 	# Crear objeto partida
 	p = Partida('Chat5')
 	# Crear partida
-	c.crear_partida(p)
+	c.crear_partida(p, j1.get_nombre_usuario())
 
 	# Añadir jugador a la partida
 	c.add_jugador('Chat5', 'Carlosma01')
@@ -156,7 +161,7 @@ def test_obtener_respuesta_controlador():
 	# Crear objeto partida
 	p = Partida('Chat6')
 	# Crear partida
-	c.crear_partida(p)
+	c.crear_partida(p, j1.get_nombre_usuario())
 
 	# Añadir jugador a la partida
 	c.add_jugador('Chat6', 'Carlosma02')
@@ -184,7 +189,7 @@ def test_cambiar_turno_controlador():
 	# Crear objeto partida
 	p = Partida('Chat7')
 	# Crear partida
-	c.crear_partida(p)
+	c.crear_partida(p, j1.get_nombre_usuario())
 
 	# Añadir jugador a la partida
 	c.add_jugador('Chat7', 'Carlosma03')
@@ -214,7 +219,7 @@ def test_comprobar_victoria_controlador():
 	# Crear objeto partida
 	p = Partida('Chat8')
 	# Crear partida
-	c.crear_partida(p)
+	c.crear_partida(p, j1.get_nombre_usuario())
 
 	# Añadir jugador a la partida
 	c.add_jugador('Chat8', 'Carlosma04')
@@ -242,7 +247,7 @@ def test_terminar_partida_controlado():
 	# Crear objeto partida
 	p = Partida('Chat9')
 	# Crear partida
-	c.crear_partida(p)
+	c.crear_partida(p, j1.get_nombre_usuario())
 
 	# Añadir jugador a la partida
 	c.add_jugador('Chat9', 'Carlosma05')
