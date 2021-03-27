@@ -165,3 +165,16 @@ class Controlador():
 			return par.get_jugador_turno(), par.realizar_pregunta()
 		else:
 			raise GameNotFoundError('No existe ninguna partida creada.')
+
+	# Comprobar victoria en una partida
+	def comprobar_victoria(self, partida: str):
+		# Comprobar que existe una partida en el grupo
+		par = [p for p in self.partidas if p.get_chat() == partida]
+		partida_encontrada = (len(par) == 1)
+
+		if partida_encontrada:
+			par = par[0]
+			# Comprobar si algún jugador ha ganado
+			return par.comprobar_victoria()
+		else:
+			raise GameNotFoundError('No existe ninguna partida creada.')
