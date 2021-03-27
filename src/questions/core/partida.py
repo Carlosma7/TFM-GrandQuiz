@@ -88,11 +88,12 @@ class Partida():
 		elif self.__ganador == 2:
 			perdedor = 1
 		else:
-			raise GameNotFinishedError('No hay ningún ganador todavía.')
+			return False
 
 		# Se añade como victoria y derrota respectivamente
 		self.__jugadores[self.__ganador - 1].get_estadisticas().add_num_victorias()
 		self.__jugadores[perdedor - 1].get_estadisticas().add_num_derrotas()
+		return True
 
 	# Añadir preguntas
 	def add_preguntas(self):
