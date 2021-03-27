@@ -169,3 +169,33 @@ def test_obtener_respuesta_controlador():
 	respuesta = c.obtener_respuesta('Chat6')
 	# Se comprueba que la respuesta y la correcta de la pregunta coinciden
 	assert_that(pregunta.get_respuesta()).is_equal_to(respuesta)
+
+# Test de cambiar turno de una partida
+def test_cambiar_turno_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Carlosma03", "Carlos", 24)
+	j2 = Jugador("Pepito03", "Pepe", 23)
+	# Crear jugador
+	c.crear_jugador(j1)
+	c.crear_jugador(j2)
+
+	# Crear objeto partida
+	p = Partida('Chat7')
+	# Crear partida
+	c.crear_partida(p)
+
+	# Añadir jugador a la partida
+	c.add_jugador('Chat7', 'Carlosma03')
+	c.add_jugador('Chat7', 'Pepito03')
+
+	# Se inicia la partida
+	jug, pregunta = c.iniciar_partida('Chat7')
+
+	# Obtener el turno actual
+	turno = c.partidas[-1].get_turno()
+	# Pasar turno
+	c.cambiar_turno('Chat7')
+	# Comprobar que no es el mismo turno
+	assert_that(turno).is_not_equal_to(c.partidas[-1].get_turno())
