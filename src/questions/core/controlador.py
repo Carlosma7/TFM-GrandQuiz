@@ -151,3 +151,15 @@ class Controlador():
 			return par.get_pregunta_actual().get_respuesta()
 		else:
 			raise GameNotFoundError('No existe ninguna partida creada.')
+
+	# Cambiar turno de una partida
+	def cambiar_turno(self, partida: str):
+		# Comprobar que existe una partida en el grupo
+		par = [p for p in self.partidas if p.get_chat() == partida]
+		partida_encontrada = (len(par) == 1)
+
+		if partida_encontrada:
+			par = par[0]
+			par.pasar_turno()
+		else:
+			raise GameNotFoundError('No existe ninguna partida creada.')
