@@ -188,6 +188,9 @@ class Controlador():
 		if partida_encontrada:
 			par = par[0]
 			if par.terminar_partida():
+				# Eliminar partida del grupo al estar finalizada
+				self.partidas = [p for p in self.partidas if p.get_chat() != partida]
+				# Obtener el nombre del ganador
 				return par.get_jugadores()[par.get_ganador() - 1].get_nombre()
 			else:
 				raise GameNotFinishedError('No hay ningún ganador todavía.')
