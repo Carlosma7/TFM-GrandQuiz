@@ -117,7 +117,7 @@ class Partida():
 		self.__preguntas.append(p)
 		p = Pregunta("La ciudad de Sevilla forma parte de la comunidad autónoma de:", ["Murcia", "Andalucía", "Asturias", "Extremadura"], 2)
 		self.__preguntas.append(p)
-		p = Pregunta("¿Que representa el elemento químico H2O?", ["Sodio", "Agua", "Sal", "Hidrógeno"], 3)
+		p = Pregunta("¿Que representa el elemento químico H2O?", ["Sodio", "Agua", "Sal", "Hidrógeno"], 2)
 		self.__preguntas.append(p)
 
 	# Realizar pregunta
