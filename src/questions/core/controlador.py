@@ -178,3 +178,18 @@ class Controlador():
 			return par.comprobar_victoria()
 		else:
 			raise GameNotFoundError('No existe ninguna partida creada.')
+
+	# Terminar partida y obtener ganador
+	def terminar_partida(self, partida: str):
+		# Comprobar que existe una partida en el grupo
+		par = [p for p in self.partidas if p.get_chat() == partida]
+		partida_encontrada = (len(par) == 1)
+
+		if partida_encontrada:
+			par = par[0]
+			if par.terminar_partida():
+				return par.get_jugadores()[par.get_ganador() - 1].get_nombre()
+			else:
+				raise GameNotFinishedError('No hay ningún ganador todavía.')
+		else:
+			raise GameNotFoundError('No existe ninguna partida creada.')
