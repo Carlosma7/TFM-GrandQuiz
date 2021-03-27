@@ -2,6 +2,7 @@ from partida import Partida
 from jugador import Jugador
 from pregunta import Pregunta
 from puntuacion import Puntuacion
+from estadistica import Estadistica
 from excepciones import *
 
 from typing import List
@@ -27,7 +28,7 @@ class Controlador():
 			else:
 				raise AgeNotValidError('La edad indicada no es válida.')
 		else:
-			raise ExistingGameError('Ya estás registrado.')
+			raise PlayerRegisteredError('Ya estás registrado.')
 
 	# Crear partida
 	def crear_partida(self, partida: Partida):
@@ -196,3 +197,17 @@ class Controlador():
 				raise GameNotFinishedError('No hay ningún ganador todavía.')
 		else:
 			raise GameNotFoundError('No existe ninguna partida creada.')
+
+	# Obtener estadísticas de un jugador
+	def obtener_estadisticas(self, jugador: str):
+		# Comprobar que no existe un jugador con el mismo nick de Telegram
+		jug = [j for j in self.jugadores if j.get_nombre_usuario() == jugador]
+		encontrado = (len(jug) == 1)
+
+		# Si existe
+		if encontrado:
+			jug = jug[0]
+			# Se obtienen las estadisticas
+			return jug.get_estadisticas()
+		else:
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
