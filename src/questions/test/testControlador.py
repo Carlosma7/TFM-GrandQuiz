@@ -200,7 +200,7 @@ def test_cambiar_turno_controlador():
 	# Comprobar que no es el mismo turno
 	assert_that(turno).is_not_equal_to(c.partidas[-1].get_turno())
 
-# Test de cambiar turno de una partida
+# Test de comprobar victoria en una partida
 def test_comprobar_victoria_controlador():
 	# Crear controlador
 	c = Controlador()
@@ -227,3 +227,43 @@ def test_comprobar_victoria_controlador():
 	victoria = c.comprobar_victoria('Chat8')
 	# Comprobar que aún no ha ganado nadie ya que se acaba de iniciar la partida
 	assert_that(victoria).is_false()
+
+# Test de terminar una partida
+def test_terminar_partida_controlado():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Carlosma05", "Carlos", 24)
+	j2 = Jugador("Pepito05", "Pepe", 23)
+	# Crear jugador
+	c.crear_jugador(j1)
+	c.crear_jugador(j2)
+
+	# Crear objeto partida
+	p = Partida('Chat9')
+	# Crear partida
+	c.crear_partida(p)
+
+	# Añadir jugador a la partida
+	c.add_jugador('Chat9', 'Carlosma05')
+	c.add_jugador('Chat9', 'Pepito05')
+
+	# Se inicia la partida
+	jug, pregunta = c.iniciar_partida('Chat9')
+
+	# Obtener jugador actual
+	turno = c.partidas[-1].get_turno()
+	jugador_turno = c.partidas[-1].get_jugadores()[turno - 1].get_nombre_usuario()
+
+	# Se responde 3 veces a la misma pregunta correctamente
+	resultado = c.responder_pregunta('Chat9', jugador_turno, c.partidas[-1].get_pregunta_actual().get_correcta())
+	resultado = c.responder_pregunta('Chat9', jugador_turno, c.partidas[-1].get_pregunta_actual().get_correcta())
+	resultado = c.responder_pregunta('Chat9', jugador_turno, c.partidas[-1].get_pregunta_actual().get_correcta())
+
+	# Comprobar la victoria
+	victoria = c.comprobar_victoria('Chat9')
+
+	# Terminar partida
+	ganador = c.terminar_partida('Chat9')
+	# Comprobar que se recibe el nombre del ganador como str
+	assert_that(ganador).is_type_of(str)
