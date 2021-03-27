@@ -38,6 +38,11 @@ class PlayerNotRegisteredError(Exception):
 	"""Raised when a player tries to do something without being registered"""
 	pass
 
+# Player is already registered
+class PlayerRegisteredError(Exception):
+	"""Raised when a player tries to register again"""
+	pass
+
 # The game is already started
 class GameStartedError(Exception):
 	"""Raised when a player tries to start a game that is already started"""
