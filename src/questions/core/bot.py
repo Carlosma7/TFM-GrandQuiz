@@ -153,6 +153,20 @@ def responder_pregunta(call):
 			# Editar texto con respuesta
 			respuesta = f"{call.message.text}\n\n{respuesta}"
 			bot.edit_message_text(respuesta, call.message.chat.id, call.message.id, parse_mode = 'Markdown')
+
+			# Comprobar si ha ganado un jugador
+			if not controlador.comprobar_victoria(call.message.chat.id):
+				# Cambiar turno
+				jug_turno, pregunta = controlador.cambiar_turno(call.message.chat.id)
+				# Definir markup
+				markup = markup_respuestas(pregunta)
+				enunciado = f"Turno de: {jug_turno}.\n\n{pregunta.get_enunciado()}"
+				bot.send_message(call.message.chat.id, enunciado, reply_markup=markup)
+			else:
+				# Si ha ganado un jugador
+				ganador = controlador.terminar_partida(call.message.chat.id)
+				# Informar al usuario
+				bot.send_photo(call.message.chat.id, photo="https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/game/ganador.jpg?raw=true", caption=f"\u2B50\U0001f3c6 ¡ENHORABUENA! {ganador.upper()} ES EL CAMPEÓN DE GRANDQUIZ. \U0001f3c6\u2B50", parse_mode = 'Markdown')
 		except Exception as error:
 			# Se produce un error
 			respuesta = f"{call.from_user.first_name}: {str(error)}"
