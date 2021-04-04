@@ -30,3 +30,9 @@ def executeQuestions(c):
 def test(c):
 	print("Ejecución de tests de GrandQuiz")
 	run("pytest -v --disable-pytest-warnings src/grandquiz/test/*")
+
+# Tarea de ejecución de GrandQuiz
+@task
+def execute(c):
+	print("Ejecución de GrandQuiz")
+	run("python3 src/grandquiz/core/bot.py")
