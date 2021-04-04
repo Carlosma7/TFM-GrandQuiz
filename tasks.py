@@ -24,3 +24,9 @@ def testQuestions(c):
 def executeQuestions(c):
 	print("Ejecución de juego Questions")
 	run("python3 src/questions/core/bot.py")
+
+# Tarea de ejecución de tests
+@task
+def test(c):
+	print("Ejecución de tests de GrandQuiz")
+	run("pytest -v --disable-pytest-warnings src/grandquiz/test/*")
