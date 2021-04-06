@@ -32,3 +32,20 @@ class Controlador():
 			self.mongo.jugadores.insert_one(jugador.to_dict())
 		else:
 			raise ValueError('Ya estás registrado.')
+
+	# Cambiar avatar jugador
+	def cambiar_avatar(self, jugador: str, avatar: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (usr != None)
+
+		# Si no existe
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Se cambia el avatar
+			jug.set_avatar(avatar)
+			# Se actualiza en BD
+			self.mongo.jugadores.update({'nombre_usuario': jugador}, {'$set': jug.to_dict()})
+		else:
+			raise ValueError('No estás registrado.')
