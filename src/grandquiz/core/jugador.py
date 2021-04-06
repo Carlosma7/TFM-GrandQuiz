@@ -7,6 +7,15 @@ class Jugador():
 		self.__email = ""
 		self.__avatar = ""
 
+	# Constructor from_dict
+	@classmethod
+	def from_dict(cls, data: dict):
+		j = cls(data.get('nombre_usuario'), data.get('nombre'))
+		j.set_edad(data.get('edad'))
+		j.set_email(data.get('email'))
+		j.set_avatar(data.get('avatar'))
+		return j
+
 
 	# Métodos get/set
 	def get_nombre_usuario(self):
