@@ -4,3 +4,4 @@ assertpy
 telebot
 python-dotenv
 pymongo
+dnspython
