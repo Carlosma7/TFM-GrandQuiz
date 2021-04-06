@@ -1,9 +1,12 @@
 from controlador import *
+from markups import *
+from avatar import avatar
 
 import telebot
 from telebot import types
 from dotenv import load_dotenv
 import os
+import re
 
 # Telegram Bot Token from BotFather
 # Obtener información de .env
@@ -40,15 +43,36 @@ def registrar_jugador(message):
 			# Crear jugador en controlador
 			controlador.registrar_jugador(j)
 			# Se guarda mensaje de éxito
-			respuesta = f"¡Enhorabuena! Ya eres un jugador oficial de GrandQuiz, es hora de la diversión."
+			respuesta = f"¡Enhorabuena! Ya eres un jugador oficial de GrandQuiz, es hora de la diversión.\n\n Ahora vamos con el avatar, escoge el que quieras."
+			markup = markup_avatar()
+			# Informar al usuario
+			bot.send_message(message.chat.id, respuesta, reply_markup=markup)
 		except Exception as error:
 			# Se produce un error
 			respuesta = str(error)
+			# Informar al usuario
+			bot.send_message(message.chat.id, respuesta)
 	else:
 		respuesta = f"No puedes registrarte en un grupo, por favor escríbeme en privado en @GrandQuizBot."
+		# Informar al usuario
+		bot.send_message(message.chat.id, respuesta)
 
-	# Informar al usuario
-	bot.send_message(message.chat.id, respuesta)
+# Definir avatar
+@bot.callback_query_handler(func=lambda call: True)
+def definir_avatar(call):
+	if bool(re.match("av[0-9]", call.data)):
+		try:
+			# Cambiar avatar del jugador
+			controlador.cambiar_avatar(call.from_user.username, call.data)
+			respuesta1 = f"¡Bien! Tu avatar será {avatar.get(call.data)}"
+			respuesta2 = f"Ahora vamos con la edad."
+		except Exception as error:
+			# Se produce un error
+			respuesta = str(error)
 
+		# Informar al usuario
+		bot.edit_message_text(respuesta1, call.message.chat.id, call.message.id)
+		# Informar al usuario
+		bot.send_message(call.message.chat.id, respuesta2)
 # Launch bot
 bot.polling()
