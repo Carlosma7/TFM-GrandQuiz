@@ -3,3 +3,4 @@ pytest
 assertpy
 telebot
 python-dotenv
+pymongo
