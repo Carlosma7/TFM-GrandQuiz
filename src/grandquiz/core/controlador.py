@@ -37,7 +37,7 @@ class Controlador():
 	def cambiar_avatar(self, jugador: str, avatar: str):
 		# Comprobar que existe un jugador con el mismo nick de Telegram
 		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
-		encontrado = (usr != None)
+		encontrado = (jug != None)
 
 		# Si no existe
 		if encontrado:
