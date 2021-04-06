@@ -2,4 +2,4 @@ invoke
 pytest
 assertpy
 telebot
-dotenv
+python-dotenv
