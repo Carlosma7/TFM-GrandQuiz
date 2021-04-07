@@ -58,3 +58,22 @@ def test_cambiar_edad_controlador():
 	assert_that(j2.get('edad')).is_not_equal_to("")
 	# Borrar jugador de test
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+
+# Test de cambiar correo electrónico de jugador
+def test_cambiar_email_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Test4", "Test")
+	# Crear administrador
+	c.registrar_jugador(j1)
+	# Comprobar que el jugador no tiene email
+	assert_that(j1.get_edad()).is_equal_to("")
+	# Cambiar email usuario
+	c.cambiar_email(j1.get_nombre_usuario(), "email@gmail.com")
+	# Obtener el jugador de la BD
+	j2 = c.mongo.jugadores.find_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Comprobar que el email ha cambiado
+	assert_that(j2.get('email')).is_not_equal_to("")
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
