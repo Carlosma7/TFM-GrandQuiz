@@ -91,5 +91,26 @@ def definir_edad(call):
 	bot.edit_message_text(respuesta1, call.message.chat.id, call.message.id)
 	# Informar al usuario
 	bot.send_message(call.message.chat.id, respuesta2)
+
+@bot.message_handler(func = lambda message: bool(re.match("([a-zA-Z0-9\.]+@[a-zA-Z\.]+\.)(com|es)", message.text)))
+def definir_correo(message):
+	# Comprobar que la conversación es en privado
+	if message.chat.type == 'private':
+		try:
+			# Cambiar correo electrónico del jugador
+			controlador.cambiar_email(message.from_user.username, message.text)
+			respuesta1 = f"¡Bien! Se ha registrado {message.text} como tu correo."
+			respuesta2 = f"¡POR FIN! Ya hemos terminado con el registro, es hora de jugar a GrandQuiz.\n\nPara jugar ve a un grupo con amigos e inicia una partida."
+		except Exception as error:
+			# Se produce un error
+			respuesta1 = str(error)
+
+		# Eliminar mensaje informativo previo
+		bot.delete_message(message.chat.id, message.id - 1)
+		# Informar al usuario
+		bot.send_message(message.chat.id, respuesta1)
+		# Informar al usuario
+		bot.send_message(message.chat.id, respuesta2)
+
 # Launch bot
 bot.polling()
