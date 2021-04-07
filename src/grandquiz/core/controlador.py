@@ -49,3 +49,20 @@ class Controlador():
 			self.mongo.jugadores.update({'nombre_usuario': jugador}, {'$set': jug.to_dict()})
 		else:
 			raise ValueError('No estás registrado.')
+
+	# Cambiar grupo edad jugador
+	def cambiar_edad(self, jugador: str, edad: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		# Si no existe
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Se cambia la edad
+			jug.set_edad(edad)
+			# Se actualiza en BD
+			self.mongo.jugadores.update({'nombre_usuario': jugador}, {'$set': jug.to_dict()})
+		else:
+			raise ValueError('No estás registrado.')
