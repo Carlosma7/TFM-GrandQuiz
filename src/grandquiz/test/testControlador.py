@@ -39,3 +39,22 @@ def test_cambiar_avatar_controlador():
 	assert_that(j2.get('avatar')).is_not_equal_to("")
 	# Borrar jugador de test
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+
+# Test de cambiar edad de jugador
+def test_cambiar_edad_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Test3", "Test")
+	# Crear administrador
+	c.registrar_jugador(j1)
+	# Comprobar que el jugador no tiene edad
+	assert_that(j1.get_edad()).is_equal_to("")
+	# Cambiar edad usuario
+	c.cambiar_edad(j1.get_nombre_usuario(), "edad")
+	# Obtener el jugador de la BD
+	j2 = c.mongo.jugadores.find_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Comprobar que la edad ha cambiado
+	assert_that(j2.get('edad')).is_not_equal_to("")
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
