@@ -1,7 +1,7 @@
 import telebot
 from telebot import types
 
-# Markups Bot API
+# Markups Bot API para elegir avatar
 def markup_avatar():
 	# Keyboard
 	markup = types.InlineKeyboardMarkup(row_width = 5)
@@ -17,5 +17,17 @@ def markup_avatar():
 	bt9 = (types.InlineKeyboardButton("\U0001f920", callback_data="av8"))
 	bt10 = (types.InlineKeyboardButton("\U0001f60e", callback_data="av9"))
 	markup.add(bt1, bt2, bt3, bt4, bt5, bt6, bt7, bt8, bt9, bt10)
+
+	return markup
+
+# Markups Bot API para elegir rango de edad
+def markup_edad():
+	# Keyboard
+	markup = types.InlineKeyboardMarkup(row_width = 1)
+	# Buttons
+	bt1 = (types.InlineKeyboardButton("Menor de 30 años", callback_data="edad0"))
+	bt2 = (types.InlineKeyboardButton("Entre 30 y 60 años", callback_data="edad1"))
+	bt3 = (types.InlineKeyboardButton("Mayor de 60 años", callback_data="edad2"))
+	markup.add(bt1, bt2, bt3)
 
 	return markup

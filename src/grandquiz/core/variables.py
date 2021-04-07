@@ -10,3 +10,9 @@ avatar = {
 	'av8': "\U0001f920",
 	'av9': "\U0001f60e"
 }
+
+edad = {
+	'edad0': "joven",
+	'edad1': "adulto",
+	'edad2': "veterano"
+}

@@ -1,6 +1,6 @@
 from controlador import *
 from markups import *
-from avatar import avatar
+from variables import *
 
 import telebot
 from telebot import types
@@ -58,21 +58,38 @@ def registrar_jugador(message):
 		bot.send_message(message.chat.id, respuesta)
 
 # Definir avatar
-@bot.callback_query_handler(func=lambda call: True)
+@bot.callback_query_handler(lambda call: bool(re.match("av[0-9]", call.data)))
 def definir_avatar(call):
-	if bool(re.match("av[0-9]", call.data)):
-		try:
-			# Cambiar avatar del jugador
-			controlador.cambiar_avatar(call.from_user.username, call.data)
-			respuesta1 = f"¡Bien! Tu avatar será {avatar.get(call.data)}"
-			respuesta2 = f"Ahora vamos con la edad."
-		except Exception as error:
-			# Se produce un error
-			respuesta = str(error)
+	try:
+		# Cambiar avatar del jugador
+		controlador.cambiar_avatar(call.from_user.username, call.data)
+		respuesta1 = f"¡Bien! Tu avatar será {avatar.get(call.data)}"
+		respuesta2 = f"Ahora vamos con la edad. Por favor, indica a que grupo perteneces:"
+		markup = markup_edad()
+	except Exception as error:
+		# Se produce un error
+		respuesta = str(error)
 
-		# Informar al usuario
-		bot.edit_message_text(respuesta1, call.message.chat.id, call.message.id)
-		# Informar al usuario
-		bot.send_message(call.message.chat.id, respuesta2)
+	# Informar al usuario
+	bot.edit_message_text(respuesta1, call.message.chat.id, call.message.id)
+	# Informar al usuario
+	bot.send_message(call.message.chat.id, respuesta2, reply_markup=markup)
+
+# Definir avatar
+@bot.callback_query_handler(lambda call: bool(re.match("edad[0-2]", call.data)))
+def definir_edad(call):
+	try:
+		# Cambiar edad del jugador
+		controlador.cambiar_edad(call.from_user.username, call.data)
+		respuesta1 = f"¡Bien! Estamos ante un {edad.get(call.data)}."
+		respuesta2 = f"Ahora vamos con el correo electrónico. Por favor, escríbeme tu email."
+	except Exception as error:
+		# Se produce un error
+		respuesta = str(error)
+
+	# Informar al usuario
+	bot.edit_message_text(respuesta1, call.message.chat.id, call.message.id)
+	# Informar al usuario
+	bot.send_message(call.message.chat.id, respuesta2)
 # Launch bot
 bot.polling()
