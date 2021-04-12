@@ -92,3 +92,33 @@ class Controlador():
 			self.mongo.jugadores.update({'nombre_usuario': jugador}, {'$set': jug.to_dict()})
 		else:
 			raise ValueError('No estás registrado.')
+
+	# Obtener jugador
+	def obtener_jugador(self, jugador: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		# Si existe
+		if encontrado:
+			# Se construyen el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Se obtienen las estadisticas
+			return jug
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Obtener estadísticas de un jugador
+	def obtener_estadisticas(self, jugador: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		est = self.mongo.estadisticas.find_one({'nombre_usuario': jugador})
+		encontrado = (est != None)
+
+		# Si existe
+		if encontrado:
+			# Se construyen las estadísticas desde el objeto JSON
+			est = Estadistica.from_dict(est)
+			# Se obtienen las estadisticas
+			return est
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
