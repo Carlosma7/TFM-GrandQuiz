@@ -89,3 +89,37 @@ def test_cambiar_email_controlador():
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+
+# Test de obtener jugador
+def test_obtener_estadisticas_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Test5", "Test")
+	# Crear administrador
+	c.registrar_jugador(j1)
+	# Obtener las estadisticas
+	j2 = c.obtener_jugador("Test5")
+	# Comprobar que e1 es un objeto de Estadistica
+	assert_that(j2).is_type_of(Jugador)
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+
+# Test de obtener estadisticas de jugador
+def test_obtener_estadisticas_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Test6", "Test")
+	# Crear administrador
+	c.registrar_jugador(j1)
+	# Obtener las estadisticas
+	e1 = c.obtener_estadisticas("Test6")
+	# Comprobar que e1 es un objeto de Estadistica
+	assert_that(e1).is_type_of(Estadistica)
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
