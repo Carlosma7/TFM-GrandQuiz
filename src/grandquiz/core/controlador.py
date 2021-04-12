@@ -1,4 +1,5 @@
 from jugador import Jugador
+from estadistica import Estadistica
 
 import os
 from dotenv import load_dotenv
@@ -31,6 +32,10 @@ class Controlador():
 		if no_encontrado:
 			# Se añade el jugador
 			self.mongo.jugadores.insert_one(jugador.to_dict())
+			# Se crean las estadisticas del jugador
+			estadistica = Estadistica(jugador.get_nombre_usuario())
+			# Se añade la estadistica
+			self.mongo.estadisticas.insert_one(estadistica.to_dict())
 		else:
 			raise ValueError('Ya estás registrado.')
 
