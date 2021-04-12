@@ -16,3 +16,16 @@ edad = {
 	'edad1': "adulto",
 	'edad2': "veterano"
 }
+
+emojis_estadisticas = {
+	'victorias': "\U0001f3c6",
+	'partidas': "\U0001f3ae",
+	'amigo': "\U0001f46b",
+	'Arte': "\U0001f3a8",
+	'Geografía': "\U0001f30d",
+	'Ciencia': "\U0001f9ea",
+	'Historia': "\U0001f4f0",
+	'Deporte': "\U0001f3c0",
+	'Entretenimiento': "\u265F\uFE0F",
+	'porcentaje': "\u2705"
+}
