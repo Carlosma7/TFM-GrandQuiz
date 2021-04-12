@@ -45,6 +45,8 @@ def test_cambiar_avatar_controlador():
 	assert_that(j2.get('avatar')).is_not_equal_to("")
 	# Borrar jugador de test
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 
 # Test de cambiar edad de jugador
 def test_cambiar_edad_controlador():
@@ -64,6 +66,8 @@ def test_cambiar_edad_controlador():
 	assert_that(j2.get('edad')).is_not_equal_to("")
 	# Borrar jugador de test
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 
 # Test de cambiar correo electrónico de jugador
 def test_cambiar_email_controlador():
@@ -83,3 +87,5 @@ def test_cambiar_email_controlador():
 	assert_that(j2.get('email')).is_not_equal_to("")
 	# Borrar jugador de test
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
