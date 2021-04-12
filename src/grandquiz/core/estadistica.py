@@ -9,31 +9,64 @@ class Estadistica():
 		self.__preguntas_acertadas = 0
 		self.__preguntas_falladas = 0
 
-	# Métodos get
+	# Constructor from_dict
+	@classmethod
+	def from_dict(cls, data: dict):
+		e = cls(data.get('nombre_usuario'))
+		e.set_num_victorias(data.get('num_victorias'))
+		e.set_num_partidas(data.get('num_partidas'))
+		e.set_amigos(data.get('amigos'))
+		e.set_categorias(data.get('categorias'))
+		e.set_preguntas_acertadas(data.get('preguntas_acertadas'))
+		e.set_preguntas_falladas(data.get('preguntas_falladas'))
+		return e
+
+	# Métodos get/set
 	def get_nombre_usuario(self):
 		return self.__nombre_usuario
 
 	def get_num_victorias(self):
 		return self.__num_victorias
 
+	def set_num_victorias(self, num_victorias):
+		self.__num_victorias = num_victorias
+
 	def get_num_partidas(self):
 		return self.__num_partidas
+
+	def set_num_partidas(self, num_partidas):
+		self.__num_partidas = num_partidas
 
 	def get_amigos(self):
 		return self.__amigos
 
+	def set_amigos(self, amigos):
+		self.__amigos = amigos
+
 	def get_categorias(self):
 		return self.__categorias
+
+	def set_categorias(self, categorias):
+		self.__categorias = categorias
 
 	def get_preguntas_acertadas(self):
 		return self.__preguntas_acertadas
 
+	def set_preguntas_acertadas(self, preguntas_acertadas):
+		self.__preguntas_acertadas = preguntas_acertadas
+
 	def get_preguntas_falladas(self):
 		return self.__preguntas_falladas
 
+	def set_preguntas_falladas(self, preguntas_falladas):
+		self.__preguntas_falladas = preguntas_falladas
+
 	# Obtener mejor amigo
 	def get_mejor_amigo(self):
-		return max(self.__amigos, key=self.__amigos.get)
+		try:
+			return max(self.__amigos, key=self.__amigos.get)
+		except:
+			return "Por descubrir"
 
 	# Obtener categoría favorita
 	def get_categoria_fav(self):
