@@ -14,12 +14,18 @@ def test_registrar_jugador_controlador():
 	j1 = Jugador("Test", "Test")
 	# Comprobar que no existe el usuario en BD
 	assert_that(c.mongo.jugadores.find({'nombre_usuario':j1.get_nombre_usuario()}).count()).is_equal_to(0)
+	# Comprobar que no existe estadística del usuario en BD
+	assert_that(c.mongo.estadisticas.find({'nombre_usuario':j1.get_nombre_usuario()}).count()).is_equal_to(0)
 	# Crear administrador
 	c.registrar_jugador(j1)
 	# Comprobar que existe el usuario en BD
 	assert_that(c.mongo.jugadores.find({'nombre_usuario':j1.get_nombre_usuario()}).count()).is_equal_to(1)
+	# Comprobar que existe el usuario en BD
+	assert_that(c.mongo.estadisticas.find({'nombre_usuario':j1.get_nombre_usuario()}).count()).is_equal_to(1)
 	# Borrar jugador de test
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 
 # Test de cambiar avatar de jugador
 def test_cambiar_avatar_controlador():
