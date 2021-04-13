@@ -29,3 +29,8 @@ emojis_estadisticas = {
 	'Entretenimiento': "\u265F\uFE0F",
 	'porcentaje': "\u2705"
 }
+
+equipos = {
+	'rojo': "\U0001f534",
+	'azul': "\U0001f535"
+}
