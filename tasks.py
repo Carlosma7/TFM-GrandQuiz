@@ -36,3 +36,9 @@ def test(c):
 def execute(c):
 	print("Ejecución de GrandQuiz")
 	run("python3 src/grandquiz/core/bot.py")
+
+# Tarea de ejecución de utilidad de almacenar preguntas
+@task
+def almacenPreguntas(c):
+	print("Ejecución de Almacenar Preguntas")
+	run("python3 src/grandquiz/utils/almacenPreguntas.py")
