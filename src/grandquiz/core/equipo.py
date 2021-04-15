@@ -15,8 +15,7 @@ class Equipo():
 	@classmethod
 	def from_dict(cls, data: dict):
 		e = cls(data.get('color'))
-		jugadores = [Jugador.from_dict(jug) for jug in data.get('jugadores')]
-		e.set_jugadores(jugadores)
+		e.set_jugadores(data.get('jugadores'))
 		e.set_turno(data.get('turno'))
 		e.set_medallas(data.get('medallas'))
 		e.set_puntuaciones(data.get('puntuaciones'))
@@ -26,7 +25,7 @@ class Equipo():
 	def get_jugadores(self):
 		return self.__jugadores
 
-	def set_jugadores(self, jugadores: List):
+	def set_jugadores(self, jugadores: List[str]):
 		self.__jugadores = jugadores
 
 	def get_color(self):
@@ -51,7 +50,7 @@ class Equipo():
 		self.__puntuaciones = puntuaciones
 
 	# Añadir jugador al equipo
-	def add_jugador(self, jugador: Jugador):
+	def add_jugador(self, jugador: str):
 		self.__jugadores.append(jugador)
 
 	# Pasar turno del equipo
@@ -96,5 +95,4 @@ class Equipo():
 
 	# Método para transformar objeto en un dict
 	def to_dict(self):
-		jugadores = [jug_dict.to_dict() for jug_dict in self.get_jugadores()]
-		return {'jugadores': jugadores, 'color': self.get_color(), 'turno': self.get_turno(), 'medallas': self.get_medallas(), 'puntuaciones': self.get_puntuaciones()}
+		return {'jugadores': self.get_jugadores(), 'color': self.get_color(), 'turno': self.get_turno(), 'medallas': self.get_medallas(), 'puntuaciones': self.get_puntuaciones()}

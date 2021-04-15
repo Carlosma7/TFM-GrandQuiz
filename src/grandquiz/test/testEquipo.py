@@ -28,7 +28,7 @@ def test_add_jugador_equipo():
 	# Crear jugador
 	j = Jugador("Test", "Test")
 	# Añadir jugador a equipo
-	e.add_jugador(j)
+	e.add_jugador(j.get_nombre_usuario())
 	# Comprobar que posee un jugador
 	assert_that(len(e.get_jugadores())).is_equal_to(1)
 
