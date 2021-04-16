@@ -129,5 +129,27 @@ def obtener_estadisticas(message):
 	# Informar al usuario
 	bot.send_message(message.chat.id, respuesta)
 
+# Crear partida de GrandQuiz
+@bot.message_handler(commands=['nueva_partida'])
+def nueva_partida(message):
+	# Comprobar que la conversación es en un grupo
+	if message.chat.type == 'group':
+		# Crear una partida con el id del chat del grupo
+		p = Partida(message.chat.id)
+		try:
+			# Crear partida en controlador
+			controlador.crear_partida(p, message.from_user.username)
+			# Se guarda mensaje de éxito
+			respuesta = f"¡Allá vamos! {message.from_user.first_name} ha creado una partida."
+		except Exception as error:
+			# Se produce un error
+			respuesta = str(error)
+	else:
+		# No es un grupo
+		respuesta = f"Para crear una partida tienes que estar en un grupo."
+
+	# Informar al usuario
+	bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+
 # Launch bot
 bot.polling()
