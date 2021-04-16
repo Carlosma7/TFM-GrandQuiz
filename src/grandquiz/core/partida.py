@@ -23,7 +23,9 @@ class Partida():
 		p.set_turno(data.get('turno'))
 		p.set_iniciada(data.get('iniciada'))
 		p.set_ganador(data.get('ganador'))
-		pregunta_actual = Pregunta.from_dict(data.get('pregunta_actual'))
+		pregunta_actual = data.get('pregunta_actual')
+		if not isinstance(pregunta_actual, int):
+			pregunta_actual = Pregunta.from_dict()
 		p.set_pregunta_actual(pregunta_actual)
 		return p
 
