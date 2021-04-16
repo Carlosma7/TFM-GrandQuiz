@@ -132,7 +132,7 @@ class Controlador():
 		encontrado = (jug != None)
 
 		if encontrado:
-			# Se construyen el jugador desde el objeto JSON
+			# Se construye el jugador desde el objeto JSON
 			jug = Jugador.from_dict(jug)
 			# Comprobar que existe un jugador con el mismo nick de Telegram
 			par = self.mongo.partidas.find_one({'chat': partida.get_chat()})
@@ -144,5 +144,65 @@ class Controlador():
 				self.mongo.partidas.insert_one(partida.to_dict())
 			else:
 				raise ValueError('Ya existe una partida en este grupo.')
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Añadir jugador a partida
+	def add_jugador(self, partida: str, jugador: str, equipo: int):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		# Si está registrado
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Comprobar que existe un jugador con el mismo nick de Telegram
+			par = self.mongo.partidas.find_one({'chat': partida})
+			encontrada = (par != None)
+
+			# Si no existe
+			if encontrada:
+				# Se construye la partida desde el objeto JSON
+				par = Partida.from_dict(par)
+
+				# Comprobar que el jugador no está en la partida
+				jugadores_partida = par.get_equipos()[equipo - 1].get_jugadores() + par.get_equipos()[equipo % 2].get_jugadores()
+				if jug not in jugadores_partida:
+
+					# Comprobar que hay huecos disponibles
+					if len(par.get_equipos()[equipo - 1].get_jugadores()) < 2:
+
+						# Comprobar que tiene un compañero
+						if len(par.get_equipos()[equipo - 1].get_jugadores()) == 1:
+							# Tiene compañero, se comprueba que no tengan la misma edad
+
+							# Se obtiene el jugador de BD
+							jug2 = self.mongo.jugadores.find_one({'nombre_usuario': par.get_equipos()[equipo - 1].get_jugadores()[0]})
+							# Se construye el jugador desde el objeto JSON
+							jug2 = Jugador.from_dict(jug2)
+							# Se comprueba que no tengan la misma edad
+							if jug.get_edad() == jug2.get_edad():
+								distinta_edad = False
+							else:
+								distinta_edad = True
+						else:
+							# No tiene compañero
+							distinta_edad = True
+
+						# Si tienen distinta edad los compañeros se añade, sino se notifica
+						if distinta_edad:
+							# Se añade el jugador y se actualiza la partida
+							par.add_jugador(jugador, equipo)
+							# Se actualiza la partida en BD
+							self.mongo.partidas.update({'chat': par.get_chat()}, {'$set': par.to_dict()})
+						else:
+							raise ValueError('Existe otro jugador de tu grupo de edad en el equipo indicado.')
+					else:
+						raise ValueError('Ya hay dos jugadores inscritos en el equipo para la partida.')
+				else:
+					raise ValueError('Ya estás apuntado en la partida.')
+			else:
+				raise ValueError('No existe ninguna partida creada.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
