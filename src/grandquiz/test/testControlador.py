@@ -16,7 +16,7 @@ def test_registrar_jugador_controlador():
 	assert_that(c.mongo.jugadores.find({'nombre_usuario':j1.get_nombre_usuario()}).count()).is_equal_to(0)
 	# Comprobar que no existe estadística del usuario en BD
 	assert_that(c.mongo.estadisticas.find({'nombre_usuario':j1.get_nombre_usuario()}).count()).is_equal_to(0)
-	# Crear administrador
+	# Crear jugador
 	c.registrar_jugador(j1)
 	# Comprobar que existe el usuario en BD
 	assert_that(c.mongo.jugadores.find({'nombre_usuario':j1.get_nombre_usuario()}).count()).is_equal_to(1)
@@ -33,7 +33,7 @@ def test_cambiar_avatar_controlador():
 	c = Controlador()
 	# Crear objeto jugador
 	j1 = Jugador("Test2", "Test")
-	# Crear administrador
+	# Crear jugador
 	c.registrar_jugador(j1)
 	# Comprobar que el jugador no tiene avatar
 	assert_that(j1.get_avatar()).is_equal_to("")
@@ -54,7 +54,7 @@ def test_cambiar_edad_controlador():
 	c = Controlador()
 	# Crear objeto jugador
 	j1 = Jugador("Test3", "Test")
-	# Crear administrador
+	# Crear jugador
 	c.registrar_jugador(j1)
 	# Comprobar que el jugador no tiene edad
 	assert_that(j1.get_edad()).is_equal_to("")
@@ -75,7 +75,7 @@ def test_cambiar_email_controlador():
 	c = Controlador()
 	# Crear objeto jugador
 	j1 = Jugador("Test4", "Test")
-	# Crear administrador
+	# Crear jugador
 	c.registrar_jugador(j1)
 	# Comprobar que el jugador no tiene email
 	assert_that(j1.get_edad()).is_equal_to("")
@@ -96,7 +96,7 @@ def test_obtener_estadisticas_controlador():
 	c = Controlador()
 	# Crear objeto jugador
 	j1 = Jugador("Test5", "Test")
-	# Crear administrador
+	# Crear jugador
 	c.registrar_jugador(j1)
 	# Obtener las estadisticas
 	j2 = c.obtener_jugador("Test5")
@@ -113,7 +113,7 @@ def test_obtener_estadisticas_controlador():
 	c = Controlador()
 	# Crear objeto jugador
 	j1 = Jugador("Test6", "Test")
-	# Crear administrador
+	# Crear jugador
 	c.registrar_jugador(j1)
 	# Obtener las estadisticas
 	e1 = c.obtener_estadisticas("Test6")
@@ -123,3 +123,26 @@ def test_obtener_estadisticas_controlador():
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+
+# Test de crear partida en GrandQuiz
+def test_crear_partida_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Test7", "Test")
+	# Crear jugador
+	c.registrar_jugador(j1)
+	# Crear objeto partida
+	p = Partida("Test")
+	# Comprobar que no existe la partida en BD
+	assert_that(c.mongo.partidas.find({'chat':p.get_chat()}).count()).is_equal_to(0)
+	# Crear partida
+	c.crear_partida(p, j1.get_nombre_usuario())
+	# Comprobar que existe la partida en BD
+	assert_that(c.mongo.partidas.find({'chat':p.get_chat()}).count()).is_equal_to(1)
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar partida de test
+	c.mongo.partidas.delete_one({'chat':p.get_chat()})
