@@ -3,6 +3,7 @@ from equipo import Equipo
 from pregunta import Pregunta
 
 from random import randint, choice
+from typing import List
 
 # Clase de partida
 class Partida():
@@ -34,31 +35,31 @@ class Partida():
 	def get_equipos(self):
 		return self.__equipos
 
-	def set_equipos(self, equipos):
+	def set_equipos(self, equipos: List[Equipo]):
 		self.__equipos = equipos
 
 	def get_turno(self):
 		return self.__turno
 
-	def set_turno(self, turno):
+	def set_turno(self, turno: int):
 		self.__turno = turno
 
 	def get_iniciada(self):
 		return self.__iniciada
 
-	def set_iniciada(self, iniciada):
+	def set_iniciada(self, iniciada: bool):
 		self.__iniciada = iniciada
 
 	def get_ganador(self):
 		return self.__ganador
 
-	def set_ganador(self, ganador):
+	def set_ganador(self, ganador: int):
 		self.__ganador = ganador
 
 	def get_pregunta_actual(self):
 		return self.__pregunta_actual
 
-	def set_pregunta_actual(self, pregunta_actual):
+	def set_pregunta_actual(self, pregunta_actual: Pregunta):
 		self.__pregunta_actual = pregunta_actual
 
 	# Añadir un nuevo jugador
