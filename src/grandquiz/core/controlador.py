@@ -143,6 +143,6 @@ class Controlador():
 				# Se almacena la partida
 				self.mongo.partidas.insert_one(partida.to_dict())
 			else:
-				raise ExistingGameError('Ya existe una partida en este grupo.')
+				raise ValueError('Ya existe una partida en este grupo.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
