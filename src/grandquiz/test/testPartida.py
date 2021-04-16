@@ -8,7 +8,6 @@ from equipo import Equipo
 from pregunta import Pregunta
 import pytest
 from assertpy import assert_that
-from loguru import logger
 
 # Test comparación partida
 def test_compare_partida():
