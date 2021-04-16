@@ -1,5 +1,7 @@
 from jugador import Jugador
 from estadistica import Estadistica
+from equipo import Equipo
+from partida import Partida
 
 import os
 from dotenv import load_dotenv
@@ -120,5 +122,27 @@ class Controlador():
 			est = Estadistica.from_dict(est)
 			# Se obtienen las estadisticas
 			return est
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Crear partida
+	def crear_partida(self, partida: Partida, jugador: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		if encontrado:
+			# Se construyen el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Comprobar que existe un jugador con el mismo nick de Telegram
+			par = self.mongo.partidas.find_one({'chat': partida.get_chat()})
+			no_encontrada = (par == None)
+
+			# Si no existe
+			if no_encontrada:
+				# Se almacena la partida
+				self.mongo.partidas.insert_one(partida.to_dict())
+			else:
+				raise ExistingGameError('Ya existe una partida en este grupo.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
