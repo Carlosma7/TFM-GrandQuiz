@@ -28,37 +28,37 @@ class Estadistica():
 	def get_num_victorias(self):
 		return self.__num_victorias
 
-	def set_num_victorias(self, num_victorias):
+	def set_num_victorias(self, num_victorias: int):
 		self.__num_victorias = num_victorias
 
 	def get_num_partidas(self):
 		return self.__num_partidas
 
-	def set_num_partidas(self, num_partidas):
+	def set_num_partidas(self, num_partidas: int):
 		self.__num_partidas = num_partidas
 
 	def get_amigos(self):
 		return self.__amigos
 
-	def set_amigos(self, amigos):
+	def set_amigos(self, amigos: dict):
 		self.__amigos = amigos
 
 	def get_categorias(self):
 		return self.__categorias
 
-	def set_categorias(self, categorias):
+	def set_categorias(self, categorias: dict):
 		self.__categorias = categorias
 
 	def get_preguntas_acertadas(self):
 		return self.__preguntas_acertadas
 
-	def set_preguntas_acertadas(self, preguntas_acertadas):
+	def set_preguntas_acertadas(self, preguntas_acertadas: int):
 		self.__preguntas_acertadas = preguntas_acertadas
 
 	def get_preguntas_falladas(self):
 		return self.__preguntas_falladas
 
-	def set_preguntas_falladas(self, preguntas_falladas):
+	def set_preguntas_falladas(self, preguntas_falladas: int):
 		self.__preguntas_falladas = preguntas_falladas
 
 	# Obtener mejor amigo
