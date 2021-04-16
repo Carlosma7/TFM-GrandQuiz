@@ -89,6 +89,10 @@ class Equipo():
 		else:
 			return False
 
+	# Obtener el jugador del turno actual
+	def get_jugador_turno(self):
+		return self.__jugadores[self.__turno - 1]
+
 	# Override método equal
 	def __eq__(self, otra):
 		return (self.__jugadores == otra.get_jugadores()) and (self.__color == otra.get_color()) and (self.__turno == otra.get_turno()) and (self.__medallas == otra.get_medallas()) and (self.__puntuaciones == otra.get_puntuaciones())
