@@ -110,5 +110,9 @@ class Partida():
 
 	# Método para transformar objeto en un dict
 	def to_dict(self):
+		if isinstance(self.__pregunta_actual, int):
+			pregunta_actual = self.__pregunta_actual
+		else:
+			pregunta_actual = self.__pregunta_actual.to_dict()
 		equipos = [equipo.to_dict() for equipo in self.get_equipos()]
-		return {'chat': self.get_chat(), 'equipos': equipos, 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': self.get_pregunta_actual().to_dict()}
+		return {'chat': self.get_chat(), 'equipos': equipos, 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': pregunta_actual}
