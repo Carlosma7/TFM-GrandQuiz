@@ -12,7 +12,7 @@ class Partida():
 		self.__turno = 0
 		self.__iniciada = False
 		self.__ganador = 0
-		self.__pregunta_actual = 0
+		self.__pregunta_actual = Pregunta("","",[""],0)
 
 	# Constructor from_dict
 	@classmethod
@@ -23,9 +23,7 @@ class Partida():
 		p.set_turno(data.get('turno'))
 		p.set_iniciada(data.get('iniciada'))
 		p.set_ganador(data.get('ganador'))
-		pregunta_actual = data.get('pregunta_actual')
-		if not isinstance(pregunta_actual, int):
-			pregunta_actual = Pregunta.from_dict()
+		pregunta_actual = Pregunta.from_dict(data.get('pregunta_actual'))
 		p.set_pregunta_actual(pregunta_actual)
 		return p
 
@@ -112,9 +110,5 @@ class Partida():
 
 	# Método para transformar objeto en un dict
 	def to_dict(self):
-		if isinstance(self.__pregunta_actual, int):
-			pregunta_actual = self.__pregunta_actual
-		else:
-			pregunta_actual = self.__pregunta_actual.to_dict()
 		equipos = [equipo.to_dict() for equipo in self.get_equipos()]
-		return {'chat': self.get_chat(), 'equipos': equipos, 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': pregunta_actual}
+		return {'chat': self.get_chat(), 'equipos': equipos, 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': self.get_pregunta_actual().to_dict()}
