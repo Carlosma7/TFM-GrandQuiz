@@ -90,3 +90,16 @@ def test_comprobar_victoria_equipo():
 	e.set_medallas({"Arte":1, "Geografía":1, "Ciencia":1, "Historia":1, "Deporte":1, "Entretenimiento":1})
 	# Comprobar que al crearse un equipo es ganador
 	assert_that(e.comprobar_victoria()).is_true()
+
+# Test obtener jugador turno actual
+def test_get_jugador_turno_equipo():
+	# Creación de un equipo
+	e = Equipo(1)
+	# Crear jugador
+	j1 = Jugador("Test", "Test")
+	j2 = Jugador("Test2", "Test2")
+	# Añadir jugador a equipo
+	e.add_jugador(j1.get_nombre_usuario())
+	e.add_jugador(j2.get_nombre_usuario())
+	# Comprobar que el jugador del turno es el jugador 1
+	assert_that(e.get_jugador_turno()).is_equal_to(j1.get_nombre_usuario())
