@@ -146,3 +146,36 @@ def test_crear_partida_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
+
+# Test de añadir jugador a partida en GrandQuiz
+def test_add_jugador_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Test8", "Test")
+	# Crear jugador
+	c.registrar_jugador(j1)
+	# Crear objeto partida
+	p = Partida("Test2")
+	# Crear partida
+	c.crear_partida(p, j1.get_nombre_usuario())
+	# Obtener partida creada
+	partida = c.mongo.partidas.find_one({'chat': p.get_chat()})
+	# Construir objeto Partida a partir de JSON
+	partida = Partida.from_dict(partida)
+	# Comprobar que no existe ningún jugador en el equipo 1 de la partida
+	assert_that(partida.get_equipos()[0].get_jugadores()).is_length(0)
+	# Añadir jugador 1 al equipo 1 en la partida
+	c.add_jugador(p.get_chat(), j1.get_nombre_usuario(), 1)
+	# Obtener nuevamente partida creada
+	partida = c.mongo.partidas.find_one({'chat': p.get_chat()})
+	# Construir objeto Partida a partir de JSON
+	partida = Partida.from_dict(partida)
+	# Comprobar que existe un jugador en el equipo 1 de la partida
+	assert_that(partida.get_equipos()[0].get_jugadores()).is_length(1)
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar partida de test
+	c.mongo.partidas.delete_one({'chat':p.get_chat()})
