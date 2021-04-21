@@ -207,6 +207,30 @@ class Controlador():
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
 
+	# Obtener equipos de una partida
+	def obtener_equipos(self, partida: str, jugador: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Comprobar que existe una partida en el chat indicado
+			par = self.mongo.partidas.find_one({'chat': partida})
+			encontrada = (par != None)
+
+			# Si existe
+			if encontrada:
+				# Se construye la partida desde el objeto JSON
+				par = Partida.from_dict(par)
+				# Se obtienen los equipos
+				return par.get_equipos()
+			else:
+				raise ValueError('Ya existe una partida en este grupo.')
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
+
 	# Obtener equipos con plazas disponibles
 	def obtener_equipos_disponibles(self, partida: str, jugador: str):
 		# Comprobar que existe un jugador con el mismo nick de Telegram
