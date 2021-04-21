@@ -179,3 +179,42 @@ def test_add_jugador_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
+
+# Test de obtener equipos disponibles en GrandQuiz
+def test_obtener_equipos_disponibles_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objetos jugador
+	j1 = Jugador("Test9", "Test")
+	j1.set_edad("edad0")
+	j2 = Jugador("Test10", "Test")
+	j2.set_edad("edad1")
+	# Crear jugadores
+	c.registrar_jugador(j1)
+	c.registrar_jugador(j2)
+	# Crear objeto partida
+	p = Partida("Test3")
+	# Crear partida
+	c.crear_partida(p, j1.get_nombre_usuario())
+	# Obtener equipos disponibles
+	equipos_disponibles = c.obtener_equipos_disponibles(p.get_chat(), j1.get_nombre_usuario())
+	# Comprobar que existen dos equipos disponibles
+	assert_that(equipos_disponibles).is_length(2)
+	# Añadir jugador 1 al equipo 1 en la partida
+	c.add_jugador(p.get_chat(), j1.get_nombre_usuario(), 1)
+	# Añadir jugador 2 al equipo 1 en la partida
+	c.add_jugador(p.get_chat(), j2.get_nombre_usuario(), 1)
+	# Obtener equipos disponibles
+	equipos_disponibles = c.obtener_equipos_disponibles(p.get_chat(), j1.get_nombre_usuario())
+	# Comprobar que no existen dos equipos disponibles
+	assert_that(equipos_disponibles).is_length(1)
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar partida de test
+	c.mongo.partidas.delete_one({'chat':p.get_chat()})
