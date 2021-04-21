@@ -134,7 +134,7 @@ class Controlador():
 		if encontrado:
 			# Se construye el jugador desde el objeto JSON
 			jug = Jugador.from_dict(jug)
-			# Comprobar que existe un jugador con el mismo nick de Telegram
+			# Comprobar que existe una partida en el chat indicado
 			par = self.mongo.partidas.find_one({'chat': partida.get_chat()})
 			no_encontrada = (par == None)
 
@@ -157,7 +157,7 @@ class Controlador():
 		if encontrado:
 			# Se construye el jugador desde el objeto JSON
 			jug = Jugador.from_dict(jug)
-			# Comprobar que existe un jugador con el mismo nick de Telegram
+			# Comprobar que existe una partida en el chat indicado
 			par = self.mongo.partidas.find_one({'chat': partida})
 			encontrada = (par != None)
 
@@ -168,7 +168,7 @@ class Controlador():
 
 				# Comprobar que el jugador no está en la partida
 				jugadores_partida = par.get_equipos()[equipo - 1].get_jugadores() + par.get_equipos()[equipo % 2].get_jugadores()
-				if jug not in jugadores_partida:
+				if jug.get_nombre_usuario() not in jugadores_partida:
 
 					# Comprobar que hay huecos disponibles
 					if len(par.get_equipos()[equipo - 1].get_jugadores()) < 2:
@@ -204,5 +204,33 @@ class Controlador():
 					raise ValueError('Ya estás apuntado en la partida.')
 			else:
 				raise ValueError('No existe ninguna partida creada.')
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Obtener equipos con plazas disponibles
+	def obtener_equipos_disponibles(self, partida: str, jugador: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Comprobar que existe una partida en el chat indicado
+			par = self.mongo.partidas.find_one({'chat': partida})
+			encontrada = (par != None)
+
+			# Si existe
+			if encontrada:
+				# Se construye la partida desde el objeto JSON
+				par = Partida.from_dict(par)
+				# Se obtienen los equipos
+				equipos = par.get_equipos()
+				# Se comprueban los equipos con plazas disponibles
+				equipos_disponibles = [equipo for equipo in equipos if len(equipo.get_jugadores()) < 2]
+				
+				return equipos_disponibles
+			else:
+				raise ValueError('Ya existe una partida en este grupo.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
