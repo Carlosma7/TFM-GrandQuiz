@@ -177,3 +177,25 @@ def test_get_jugador_turno_partida():
 	assert_that(jug).is_type_of(str)
 	# Comprobar que el jugador es el jugador 1 del equipo 1 o 2 (j1 o j3)
 	assert_that([j1.get_nombre_usuario(), j3.get_nombre_usuario()]).contains(jug)
+
+# Test de obtener equipo del turno
+def test_get_equipo_turno_partida():
+	# Creación de una partida
+	p = Partida('Test')
+	# Añadir cuatro jugadores
+	j1 = Jugador("Test", "Test")
+	j2 = Jugador("Test2", "Test2")
+	j3 = Jugador("Test3", "Test3")
+	j4 = Jugador("Test4", "Test4")
+	p.add_jugador(j1.get_nombre_usuario(), 1)
+	p.add_jugador(j2.get_nombre_usuario(), 1)
+	p.add_jugador(j3.get_nombre_usuario(), 2)
+	p.add_jugador(j4.get_nombre_usuario(), 2)
+	# Iniciar partida
+	p.iniciar_partida()
+	# Obtener el jugador con el turno
+	equi = p.get_equipo_turno()
+	# Comprobar que se obtiene el nombre de un jugador
+	assert_that(equi).is_type_of(Equipo)
+	# Comprobar que el jugador es el jugador 1 del equipo 1 o 2 (j1 o j3)
+	assert_that(p.get_equipos()).contains(equi)
