@@ -93,6 +93,10 @@ class Partida():
 		equipo = self.__equipos[self.__turno - 1]
 		return equipo.get_jugador_turno()
 
+	# Obtener el equipo del turno actual
+	def get_equipo_turno(self):
+		return self.__equipos[self.__turno - 1]
+
 	# Comprobar victoria
 	def comprobar_victoria(self):
 		# Comprobar si un jugador ha llegado a 3 puntos
