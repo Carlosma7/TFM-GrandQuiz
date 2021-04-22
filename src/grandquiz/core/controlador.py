@@ -2,6 +2,7 @@ from jugador import Jugador
 from estadistica import Estadistica
 from equipo import Equipo
 from partida import Partida
+from variables import *
 
 import os
 from dotenv import load_dotenv
@@ -227,7 +228,7 @@ class Controlador():
 				# Se obtienen los equipos
 				return par.get_equipos()
 			else:
-				raise ValueError('Ya existe una partida en este grupo.')
+				raise ValueError('No existe ninguna partida en este grupo.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
 
@@ -255,6 +256,51 @@ class Controlador():
 				
 				return equipos_disponibles
 			else:
-				raise ValueError('Ya existe una partida en este grupo.')
+				raise ValueError('No existe ninguna partida en este grupo.')
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Obtener una lista de los equipos con los jugadores que los conforman
+	def listar_equipos(self, partida:str, jugador: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Comprobar que existe una partida en el chat indicado
+			par = self.mongo.partidas.find_one({'chat': partida})
+			encontrada = (par != None)
+
+			# Si existe
+			if encontrada:
+				# Se construye la partida desde el objeto JSON
+				par = Partida.from_dict(par)
+
+				# Obtener equipos de la partida
+				equipos_partida = self.obtener_equipos(partida, jugador)
+				# Mensajes de cabecera de equipos
+				cabecera_rojo = f"*EQUIPO* {colores_equipos.get('rojo')}\n"
+				cabecera_azul = f"\n*EQUIPO* {colores_equipos.get('azul')}\n"
+				# Lista de jugadores de ambos equipos
+				jugadores_rojo = [self.obtener_jugador(jugador) for jugador in equipos_partida[0].get_jugadores()]
+				jugadores_azul = [self.obtener_jugador(jugador) for jugador in equipos_partida[1].get_jugadores()]
+				# Conformar lista de jugadores
+				for jug_rojo in jugadores_rojo:
+					cabecera_rojo += f"- {avatar.get(jug_rojo.get_avatar())} {jug_rojo.get_nombre()}\n"
+				for jug_azul in jugadores_azul:
+					cabecera_azul += f"- {avatar.get(jug_azul.get_avatar())} {jug_azul.get_nombre()}\n"
+				# Conformar lista de jugadores
+				lista = cabecera_rojo + cabecera_azul
+				# Comprobar si la partida está completa
+				if len(jugadores_rojo) == len(jugadores_azul) and len(jugadores_rojo) == 2:
+					completa = True
+				else:
+					completa = False
+
+				return lista, completa
+			else:
+				raise ValueError('No existe ninguna partida en este grupo.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
