@@ -241,3 +241,28 @@ def test_obtener_equipos_disponibles_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
+
+# Test de listar equipos en una partida de GrandQuiz
+def test_listar_equipos_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objetos jugador
+	j1 = Jugador("Test12", "Test")
+	# Crear jugadores
+	c.registrar_jugador(j1)
+	# Crear objeto partida
+	p = Partida("Test5")
+	# Crear partida
+	c.crear_partida(p, j1.get_nombre_usuario())
+	# Obtener lista de equipos y sus jugadores, junto a si esta completa o no
+	lista, completa = c.listar_equipos(p.get_chat(), j1.get_nombre_usuario())
+	# Comprobar que la lista es un String
+	assert_that(lista).is_type_of(str)
+	# Comprobar que no está completa la partida
+	assert_that(completa).is_false()
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar partida de test
+	c.mongo.partidas.delete_one({'chat':p.get_chat()})
