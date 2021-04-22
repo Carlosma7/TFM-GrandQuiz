@@ -30,7 +30,12 @@ emojis_estadisticas = {
 	'porcentaje': "\u2705"
 }
 
-equipos = {
+colores_equipos = {
 	'rojo': "\U0001f534",
 	'azul': "\U0001f535"
+}
+
+equipos = {
+	'eq0': 1,
+	'eq1': 2
 }

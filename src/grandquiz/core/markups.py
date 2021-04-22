@@ -1,4 +1,5 @@
 import telebot
+from variables import *
 from telebot import types
 
 # Markups Bot API para elegir avatar
@@ -29,5 +30,30 @@ def markup_edad():
 	bt2 = (types.InlineKeyboardButton("Entre 30 y 60 años", callback_data="edad1"))
 	bt3 = (types.InlineKeyboardButton("Mayor de 60 años", callback_data="edad2"))
 	markup.add(bt1, bt2, bt3)
+
+	return markup
+
+# Markups Bot API para elegir equipo al que unirse
+def markup_equipos(equipos_disponibles):
+	# Keyboard
+	markup = types.InlineKeyboardMarkup(row_width = 1)
+	# Buttons
+	bt1 = (types.InlineKeyboardButton(f"Equipo {colores_equipos.get('rojo')}", callback_data="eq0"))
+	bt2 = (types.InlineKeyboardButton(f"Equipo {colores_equipos.get('azul')}", callback_data="eq1"))
+	# Comprobar equipos disponibles
+	if len(equipos_disponibles) == 2:
+		# Se añaden botones para los dos equipos
+		markup.add(bt1, bt2)
+	elif len(equipos_disponibles) == 1:
+		# Se añade el único equipo disponible
+		if equipos_disponibles[0] == 1:
+			# Es el equipo rojo
+			markup.add(bt1)
+		else:
+			# Es el equipo azul
+			markup.add(bt2)
+	else:
+		# No hay equipos disponibles, no se añaden botones
+		markup = None
 
 	return markup

@@ -151,5 +151,81 @@ def nueva_partida(message):
 	# Informar al usuario
 	bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
 
+# Solicitar equipos disponibles de GrandQuiz
+@bot.message_handler(commands=['unirme'])
+def obtener_equipos_disponibles(message):
+	# Comprobar que la conversación es en un grupo
+	if message.chat.type == 'group':
+		try:
+			# Obtener equipos disponibles de la partida
+			equipos_disponibles = controlador.obtener_equipos_disponibles(message.chat.id, message.from_user.username)
+			# Se obtienen los índices de los equipos disponibles
+			equipos_disponibles_i = [equipo.get_color() for equipo in equipos_disponibles]
+			# Se obtiene el markup
+			markup = markup_equipos(equipos_disponibles_i)
+			# Obtener lista de equipos y jugadores
+			lista, completa = controlador.listar_equipos(message.chat.id, message.from_user.username)
+			respuesta = lista
+			# Comprobar número de equipos disponibles
+			if completa:
+				respuesta += f"\n\nYa hay suficientes jugadores. ¡Así que pon /jugar para que comience el juego!"
+				# Informar al usuario
+				bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+			else:
+				# Queda algún equipo disponible
+				respuesta += f"\n\nPor favor, indica a que equipo quieres unirte."
+				# Informar al usuario
+				bot.send_message(message.chat.id, respuesta, reply_markup=markup, parse_mode = 'Markdown')
+		except Exception as error:
+			# Se produce un error
+			respuesta = str(error)
+			# Informar al usuario
+			bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+	else:
+		# No es un grupo
+		respuesta = f"Para unirte a una partida tienes que estar en un grupo."
+		# Informar al usuario
+		bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+
+# Unirse a un equipo en una partida de GrandQuiz
+@bot.callback_query_handler(lambda call: bool(re.match("eq[0-1]", call.data)))
+def unirse_partida(call):
+	try:
+		# Añadir jugador al equipo en la partida
+		controlador.add_jugador(call.message.chat.id, call.from_user.username, equipos.get(call.data))
+		# Obtener equipo solicitado
+		if equipos.get(call.data) == 1:
+			equipo_solicitado = 'rojo'
+		else:
+			equipo_solicitado = 'azul'
+
+		respuesta = f"¡Enhorabuena! Te has unido al equipo {colores_equipos.get(equipo_solicitado)}."
+	except Exception as error:
+		# Se produce un error
+		respuesta = str(error)
+
+	# Informar al usuario
+	bot.edit_message_text(respuesta, call.message.chat.id, call.message.id)
+
+# Listar jugadores de una partida de GrandQuiz
+@bot.message_handler(commands=['lista'])
+def lista_jugadores(message):
+	# Comprobar que la conversación es en un grupo
+	if message.chat.type == 'group':
+		try:
+			lista, completa = controlador.listar_equipos(message.chat.id, message.from_user.username)
+			respuesta = lista
+			if completa:
+				respuesta += f"\n\nYa hay suficientes jugadores. ¡Así que pon /jugar para que comience el juego!"
+		except Exception as error:
+			# Se produce un error
+			respuesta = str(error)
+	else:
+		# No es un grupo
+		respuesta = f"Para ver la lista de jugadores de una partida tienes que estar en un grupo."
+	
+	# Informar al usuario
+	bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+
 # Launch bot
 bot.polling()
