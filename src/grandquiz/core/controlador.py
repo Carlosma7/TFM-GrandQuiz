@@ -339,8 +339,12 @@ class Controlador():
 						par.set_pregunta_actual(pregunta_actual)
 						# Se actualiza la partida en BD
 						self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
+						# Obtengo el jugador con el nombre de usuario
+						jug_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
+						# Obtengo el nombre de la consulta
+						jug_turno = jug_turno.get('nombre')
 						# Se devuelve el jugador con el turno actual y la pregunta
-						return par.get_jugador_turno(), pregunta_actual
+						return jug_turno, pregunta_actual
 					else:
 						raise GameStartedError('Ya hay una partida iniciada en este grupo.')
 				else:
