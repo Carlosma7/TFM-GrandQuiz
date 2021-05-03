@@ -300,7 +300,7 @@ def test_iniciar_partida_controlador():
 	# Comprobar que la partida no está iniciada
 	assert_that(p.get_iniciada()).is_false()
 	# Iniciar partida
-	turno, pregunta = c.iniciar_partida(p.get_chat(), j1.get_nombre_usuario())
+	turno, ava_turno, equipo, pregunta, categoria = c.iniciar_partida(p.get_chat(), j1.get_nombre_usuario())
 	# Obtener partida de la BD
 	partida = c.mongo.partidas.find_one({'chat': p.get_chat()})
 	# Convertir en objeto partida
