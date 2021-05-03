@@ -1,6 +1,7 @@
 import telebot
 from variables import *
 from telebot import types
+from pregunta import Pregunta
 
 # Markups Bot API para elegir avatar
 def markup_avatar():
@@ -57,3 +58,17 @@ def markup_equipos(equipos_disponibles):
 		markup = None
 
 	return markup
+
+# Markups Bot API para responder a una pregunta
+def markup_respuestas(pregunta: Pregunta):
+	# Keyboard
+	markup = types.InlineKeyboardMarkup(row_width = 1)
+	# Buttons
+	bt1 = (types.InlineKeyboardButton(pregunta.get_respuestas()[0], callback_data="pr1"))
+	bt2 = (types.InlineKeyboardButton(pregunta.get_respuestas()[1], callback_data="pr2"))
+	bt3 = (types.InlineKeyboardButton(pregunta.get_respuestas()[2], callback_data="pr3"))
+	bt4 = (types.InlineKeyboardButton(pregunta.get_respuestas()[3], callback_data="pr4"))
+	markup.add(bt1, bt2, bt3, bt4)
+
+	return markup
+

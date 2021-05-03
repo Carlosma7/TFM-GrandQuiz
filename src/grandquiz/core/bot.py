@@ -7,6 +7,7 @@ from telebot import types
 from dotenv import load_dotenv
 import os
 import re
+from loguru import logger
 
 # Telegram Bot Token from BotFather
 # Obtener información de .env
@@ -226,6 +227,31 @@ def lista_jugadores(message):
 	
 	# Informar al usuario
 	bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+
+# Iniciar una partida
+@bot.message_handler(commands=['jugar'])
+def iniciar_partida(message):
+	# Comprobar que la conversación es en un grupo
+	if message.chat.type == 'group':
+		try:
+			# Iniciar partida
+			jug_turno, pregunta = controlador.iniciar_partida(message.chat.id, message.from_user.username)
+			# Informar al usuario
+			bot.send_photo(message.chat.id, photo="https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/game/nueva_partida.jpg?raw=true", caption=f"\U0001f389 ¡Por fin es la hora de jugar a GrandQuiz! \U0001f389", parse_mode = 'Markdown')
+			# Definir markup
+			markup = markup_respuestas(pregunta)
+			enunciado = f"Turno de: {jug_turno}.\n\n{pregunta.get_enunciado()}"
+			bot.send_message(message.chat.id, enunciado, reply_markup=markup)
+		except Exception as error:
+			# Se produce un error
+			respuesta = str(error)
+			# Informar al usuario
+			bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+	else:
+		# No es un grupo
+		respuesta = f"Para iniciar una partida tienes que estar en un grupo."
+		# Informar al usuario
+		bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
 
 # Launch bot
 bot.polling()
