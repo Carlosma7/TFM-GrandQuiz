@@ -2,12 +2,14 @@ from jugador import Jugador
 from estadistica import Estadistica
 from equipo import Equipo
 from partida import Partida
+from pregunta import Pregunta
 from variables import *
 
 import os
 from dotenv import load_dotenv
 import pymongo
 import re
+from random import choice, randint
 
 # Obtener información de .env
 load_dotenv(dotenv_path = '.env')
@@ -302,5 +304,46 @@ class Controlador():
 				return lista, completa
 			else:
 				raise ValueError('No existe ninguna partida en este grupo.')
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Iniciar una partida existente comprobando que los equipos esten completos
+	def iniciar_partida(self, partida: str, jugador: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Comprobar que existe una partida en el chat indicado
+			par = self.mongo.partidas.find_one({'chat': partida})
+			encontrada = (par != None)
+
+			# Si existe una partida
+			if encontrada:
+				par = Partida.from_dict(par)
+				# Comprobar que la partida tiene dos equipos completos (con 2 jugadores)
+				if len(par.get_equipos()[0].get_jugadores()) == 2 and len(par.get_equipos()[1].get_jugadores()) == 2:
+					# Comprobar que la partida no está iniciada
+					if not par.get_iniciada():
+						# Se inicia la partida
+						par.iniciar_partida()
+						# Se obtienen una de las categorías disponibles del jugador
+						categoria_pregunta = par.get_equipo_turno().obtener_categoria()
+						#pregunta_actual = self.mongo.preguntas.aggregate([{ $sample: {size: 1} }, { $match:  {"categoria": categoria_pregunta} }])
+						pregunta_actual = self.mongo.preguntas.aggregate([{'$match':{'categoria': categoria_pregunta}}, {'$sample':{'size': 1}}])
+						pregunta_actual = list(pregunta_actual)
+						pregunta_actual = Pregunta.from_dict(pregunta_actual[0])
+						# Se almacena la pregunta como actual
+						par.set_pregunta_actual(pregunta_actual)
+						# Se actualiza la partida en BD
+						self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
+						# Se devuelve el jugador con el turno actual y la pregunta
+						return par.get_jugador_turno(), pregunta_actual
+					else:
+						raise GameStartedError('Ya hay una partida iniciada en este grupo.')
+				else:
+					raise NotEnoughPlayersError('Uno de los dos equipos aún no está completo.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
