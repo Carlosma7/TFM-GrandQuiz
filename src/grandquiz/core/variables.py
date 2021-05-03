@@ -32,10 +32,21 @@ emojis_estadisticas = {
 
 colores_equipos = {
 	'rojo': "\U0001f534",
-	'azul': "\U0001f535"
+	'azul': "\U0001f535",
+	1: "\U0001f534",
+	2: "\U0001f535"
 }
 
 equipos = {
 	'eq0': 1,
 	'eq1': 2
+}
+
+emojis_categorias = {
+	'Deporte': "\U0001f3c0",
+	'Geografía': "\U0001f30d",
+	'Arte': "\U0001f3a8",
+	'Historia': "\U0001f4f0",
+	'Ciencia': "\U0001f9ea",
+	'Entretenimiento': "\u265F\uFE0F"
 }

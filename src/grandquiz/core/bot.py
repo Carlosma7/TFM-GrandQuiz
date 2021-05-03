@@ -235,13 +235,14 @@ def iniciar_partida(message):
 	if message.chat.type == 'group':
 		try:
 			# Iniciar partida
-			jug_turno, pregunta = controlador.iniciar_partida(message.chat.id, message.from_user.username)
+			jug_turno, avatar_jug, equipo_turno, pregunta, categoria = controlador.iniciar_partida(message.chat.id, message.from_user.username)
 			# Informar al usuario
 			bot.send_photo(message.chat.id, photo="https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/game/nueva_partida.jpg?raw=true", caption=f"\U0001f389 ¡Por fin es la hora de jugar a GrandQuiz! \U0001f389", parse_mode = 'Markdown')
 			# Definir markup
 			markup = markup_respuestas(pregunta)
-			enunciado = f"Turno de: {jug_turno}.\n\n{pregunta.get_enunciado()}"
-			bot.send_message(message.chat.id, enunciado, reply_markup=markup)
+			aviso = f"Turno del equipo {colores_equipos.get(equipo_turno)} responde {jug_turno.upper()} {avatar.get(avatar_jug)}\n\nPregunta sobre {categoria.upper()} {emojis_categorias.get(categoria)}:"
+			enunciado = f"\n\n\n\n{pregunta.get_enunciado()}"
+			bot.send_message(message.chat.id, aviso + enunciado, reply_markup=markup)
 		except Exception as error:
 			# Se produce un error
 			respuesta = str(error)
