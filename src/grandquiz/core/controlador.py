@@ -350,8 +350,39 @@ class Controlador():
 						# Se devuelve el jugador con el turno actual, su avatar, su equipo, la pregunta actual y la categoría 
 						return jug_turno, ava_jug_turno, equipo_turno, pregunta_actual, categoria_pregunta
 					else:
-						raise GameStartedError('Ya hay una partida iniciada en este grupo.')
+						raise ValueError('Ya hay una partida iniciada en este grupo.')
 				else:
-					raise NotEnoughPlayersError('Uno de los dos equipos aún no está completo.')
+					raise ValueError('Uno de los dos equipos aún no está completo.')
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Responder pregunta
+	def responder_pregunta(self, partida: str, jugador: str, respuesta: int):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Comprobar que existe una partida en el chat indicado
+			par = self.mongo.partidas.find_one({'chat': partida})
+			encontrada = (par != None)
+
+			# Si existe una partida
+			if encontrada:
+				par = Partida.from_dict(par)
+				# Comprobar que responde el jugador del turno actual
+				if par.get_jugador_turno() == jugador:
+					# Responder la pregunta
+					if par.responder_pregunta(respuesta):
+						par.acertar_pregunta(par.get_pregunta_actual().get_categoria())
+						return True
+					else:
+						par.fallar_pregunta(par.get_pregunta_actual().get_categoria())
+				else:
+					raise ValueError(f'Es el turno de {par.get_jugador_turno()}.')
+			else:
+				raise ValueError('No existe ninguna partida creada.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
