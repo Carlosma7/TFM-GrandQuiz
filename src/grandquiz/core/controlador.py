@@ -398,3 +398,40 @@ class Controlador():
 			return par.get_pregunta_actual().get_respuesta()
 		else:
 			raise ValueError('No existe ninguna partida creada.')
+
+	# Pasar el turno de una partida al siguiente jugador
+	def cambiar_turno(self, partida: str):
+		# Comprobar que existe una partida en el chat indicado
+		par = self.mongo.partidas.find_one({'chat': partida})
+		encontrada = (par != None)
+
+		if encontrada:
+			par = Partida.from_dict(par)
+			
+			# Cambiar de turno para el equipo
+			par.get_equipo_turno().pasar_turno()
+			# Cambiar de turno de la partida
+			par.pasar_turno()
+
+			# Se obtienen una de las categorías disponibles del jugador
+			categoria_pregunta = par.get_equipo_turno().obtener_categoria()
+			#pregunta_actual = self.mongo.preguntas.aggregate([{ $sample: {size: 1} }, { $match:  {"categoria": categoria_pregunta} }])
+			pregunta_actual = self.mongo.preguntas.aggregate([{'$match':{'categoria': categoria_pregunta}}, {'$sample':{'size': 1}}])
+			pregunta_actual = list(pregunta_actual)
+			pregunta_actual = Pregunta.from_dict(pregunta_actual[0])
+			# Se almacena la pregunta como actual
+			par.set_pregunta_actual(pregunta_actual)
+			# Se actualiza la partida en BD
+			self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
+			# Se obtiene el jugador con el nombre de usuario
+			jug_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
+			# Se obtiene el avatar del jugador
+			ava_jug_turno = jug_turno.get('avatar')
+			# Se obtiene el nombre del jugador
+			jug_turno = jug_turno.get('nombre')
+			# Se obtiene el equipo del turno
+			equipo_turno = par.get_equipo_turno().get_color()
+			# Se devuelve el jugador con el turno actual, su avatar, su equipo, la pregunta actual y la categoría 
+			return jug_turno, ava_jug_turno, equipo_turno, pregunta_actual, categoria_pregunta
+		else:
+			raise ValueError('No existe ninguna partida creada.')
