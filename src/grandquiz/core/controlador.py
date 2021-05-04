@@ -386,3 +386,15 @@ class Controlador():
 				raise ValueError('No existe ninguna partida creada.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Obtener la respuesta de la pregunta actual de la partida
+	def obtener_respuesta(self, partida: str):
+		# Comprobar que existe una partida en el chat indicado
+		par = self.mongo.partidas.find_one({'chat': partida})
+		encontrada = (par != None)
+
+		if encontrada:
+			par = Partida.from_dict(par)
+			return par.get_pregunta_actual().get_respuesta()
+		else:
+			raise ValueError('No existe ninguna partida creada.')
