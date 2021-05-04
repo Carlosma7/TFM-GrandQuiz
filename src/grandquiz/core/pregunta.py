@@ -27,7 +27,7 @@ class Pregunta():
 		return self.__correcta
 
 	def get_respuesta(self):
-		return self.__respuestas[self.__correcta - 1]
+		return self.__respuestas[int(self.__correcta) - 1]
 
 	# Override método equal
 	def __eq__(self, otra):
