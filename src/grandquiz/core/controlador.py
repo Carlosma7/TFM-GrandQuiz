@@ -435,3 +435,22 @@ class Controlador():
 			return jug_turno, ava_jug_turno, equipo_turno, pregunta_actual, categoria_pregunta
 		else:
 			raise ValueError('No existe ninguna partida creada.')
+
+	# Comprobar si un equipo ha ganado la partida y en caso positivo devolver el equipo ganador
+	def comprobar_victoria(self, partida: str):
+		# Comprobar que existe una partida en el chat indicado
+		par = self.mongo.partidas.find_one({'chat': partida})
+		encontrada = (par != None)
+
+		if encontrada:
+			par = Partida.from_dict(par)
+			
+			if par.comprobar_victoria():
+				# Obtener equipo ganador
+				equipo_ganador = par.get_equipos()[par.get_ganador() - 1]
+
+				return True, equipo_ganador
+			else:
+				return False, None
+		else:
+			raise ValueError('No existe ninguna partida creada.')
