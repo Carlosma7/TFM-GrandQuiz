@@ -97,6 +97,10 @@ class Partida():
 	def get_equipo_turno(self):
 		return self.__equipos[self.__turno - 1]
 
+	# Responder una pregunta
+	def responder_pregunta(self, respuesta: int):
+		return respuesta == self.__pregunta_actual.get_correcta()
+
 	# Comprobar victoria
 	def comprobar_victoria(self):
 		# Comprobar si un jugador ha llegado a 3 puntos
