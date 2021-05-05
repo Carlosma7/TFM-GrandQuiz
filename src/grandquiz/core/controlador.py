@@ -455,3 +455,23 @@ class Controlador():
 				return False, None
 		else:
 			raise ValueError('No existe ninguna partida creada.')
+
+	# Obtener nombres de jugadores de un equipo indicado
+	def obtener_jugadores_equipo(self, equipo: Equipo):
+		# Comprobar que existe el jugador 1
+		jug1 = self.mongo.jugadores.find_one({'nombre_usuario': equipo.get_jugadores()[0]})
+		encontrado1 = (jug1 != None)
+
+		# Comprobar que existe el jugador 2
+		jug2 = self.mongo.jugadores.find_one({'nombre_usuario': equipo.get_jugadores()[1]})
+		encontrado2 = (jug2 != None)
+
+		if encontrado1 and encontrado2:
+			# Ambos existen, se obtienen sus nombres
+			return jug1.get('nombre'), jug2.get('nombre')
+		elif not encontrado1:
+			# Se notifica que no existe el jugador 1
+			raise ValueError(f'El jugador con nick {equipo.get_jugadores()[0]} no existe.')
+		else:
+			# Se notifica que no existe el jugador 2
+			raise ValueError(f'El jugador con nick {equipo.get_jugadores()[1]} no existe.')
