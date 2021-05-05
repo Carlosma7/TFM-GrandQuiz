@@ -354,6 +354,8 @@ class Controlador():
 						raise ValueError('Ya hay una partida iniciada en este grupo.')
 				else:
 					raise ValueError('Uno de los dos equipos aún no está completo.')
+			else:
+				raise ValueError('No existe ninguna partida en este grupo.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
 
@@ -387,7 +389,9 @@ class Controlador():
 						self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
 						return False
 				else:
-					raise ValueError(f'Es el turno de {par.get_jugador_turno()}.')
+					nombre_jugador_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
+					nombre_jugador_turno = nombre_jugador_turno.get('nombre')
+					raise ValueError(f'Es el turno de {nombre_jugador_turno}.')
 			else:
 				raise ValueError('No existe ninguna partida creada.')
 		else:
