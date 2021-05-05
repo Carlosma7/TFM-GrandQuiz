@@ -561,3 +561,61 @@ def test_comprobar_victoria_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
+
+# Test de obtener el nombre de los jugadores de un equipo
+def test_obtener_jugadores_equipo_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objetos jugador
+	j1 = Jugador("Test33", "Test")
+	j1.set_edad("edad0")
+	j2 = Jugador("Test34", "Test")
+	j2.set_edad("edad1")
+	j3 = Jugador("Test35", "Test")
+	j3.set_edad("edad0")
+	j4 = Jugador("Test36", "Test")
+	j4.set_edad("edad1")
+	# Crear jugadores
+	c.registrar_jugador(j1)
+	c.registrar_jugador(j2)
+	c.registrar_jugador(j3)
+	c.registrar_jugador(j4)
+	# Crear objeto partida
+	p = Partida("Test11")
+	# Crear partida
+	c.crear_partida(p, j1.get_nombre_usuario())
+	# Añadir jugador 1 al equipo 1 en la partida
+	c.add_jugador(p.get_chat(), j1.get_nombre_usuario(), 1)
+	# Añadir jugador 2 al equipo 1 en la partida
+	c.add_jugador(p.get_chat(), j2.get_nombre_usuario(), 1)
+	# Añadir jugador 3 al equipo 2 en la partida
+	c.add_jugador(p.get_chat(), j3.get_nombre_usuario(), 2)
+	# Añadir jugador 4 al equipo 2 en la partida
+	c.add_jugador(p.get_chat(), j4.get_nombre_usuario(), 2)
+	# Iniciar partida
+	turno, ava_turno, equipo, pregunta, categoria = c.iniciar_partida(p.get_chat(), j1.get_nombre_usuario())
+	# Obtener equipos de la partida
+	equipos = c.obtener_equipos(p.get_chat(), j1.get_nombre_usuario())
+	# Obtener el nombre de los jugadores del equipo 1
+	jug1, jug2 = c.obtener_jugadores_equipo(equipos[0])
+	# Comprobar que ambos son str
+	assert_that(jug1).is_type_of(str)
+	assert_that(jug2).is_type_of(str)
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
+	# Borrar partida de test
+	c.mongo.partidas.delete_one({'chat':p.get_chat()})
