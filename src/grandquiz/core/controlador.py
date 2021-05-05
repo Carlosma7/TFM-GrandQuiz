@@ -506,3 +506,15 @@ class Controlador():
 				return False, categoria, equipo.get_color()
 		else:
 			raise ValueError('No existe ninguna partida creada.')
+
+	# Terminar partida eliminándola de BD
+	def terminar_partida(self, partida: str):
+		# Comprobar que existe una partida en el chat indicado
+		par = self.mongo.partidas.find_one({'chat': partida})
+		encontrada = (par != None)
+
+		if encontrada:
+			# Eliminar partida de BD
+			self.mongo.partidas.remove({'chat': partida})
+		else:
+			raise ValueError('No existe ninguna partida creada.')
