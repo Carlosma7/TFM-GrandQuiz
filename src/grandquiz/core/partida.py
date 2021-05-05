@@ -4,7 +4,6 @@ from pregunta import Pregunta
 
 from random import randint, choice
 from typing import List
-from loguru import logger
 
 # Clase de partida
 class Partida():
