@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 import pymongo
 import re
 from random import choice, randint
-from loguru import logger
 
 # Obtener información de .env
 load_dotenv(dotenv_path = '.env')
