@@ -475,3 +475,28 @@ class Controlador():
 		else:
 			# Se notifica que no existe el jugador 2
 			raise ValueError(f'El jugador con nick {equipo.get_jugadores()[1]} no existe.')
+
+	# Comprobar si un equipo posee una medalla tras responder a la categoría
+	def comprobar_medalla(self, partida: str):
+		# Comprobar que existe una partida en el chat indicado
+		par = self.mongo.partidas.find_one({'chat': partida})
+		encontrada = (par != None)
+
+		if encontrada:
+			par = Partida.from_dict(par)
+			
+			# Obtener el equipo actual
+			equipo = par.get_equipo_turno()
+			# Obtener categoría de la pregunta actual
+			categoria = par.get_pregunta_actual().get_categoria()
+
+			# Comprobar si el equipo tiene la medalla de la categoria
+			medalla = equipo.get_medallas().get(categoria)
+
+			# Si la tiene
+			if medalla == 1:
+				return True
+			else:
+				return False
+		else:
+			raise ValueError('No existe ninguna partida creada.')
