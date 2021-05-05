@@ -495,8 +495,8 @@ class Controlador():
 
 			# Si la tiene
 			if medalla == 1:
-				return True
+				return True, categoria
 			else:
-				return False
+				return False, categoria
 		else:
 			raise ValueError('No existe ninguna partida creada.')

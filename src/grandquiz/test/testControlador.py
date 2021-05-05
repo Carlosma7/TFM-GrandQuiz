@@ -653,7 +653,7 @@ def test_comprobar_medalla_controlador():
 	# Iniciar partida
 	turno, ava_turno, equipo, pregunta, categoria = c.iniciar_partida(p.get_chat(), j1.get_nombre_usuario())
 	# Comprobar que el equipo no tiene la medalla de la categoria actual
-	medalla = c.comprobar_medalla(p.get_chat())
+	medalla, categoria = c.comprobar_medalla(p.get_chat())
 	# Comprobar que es falso
 	assert_that(medalla).is_false()
 	# Borrar jugador de test
