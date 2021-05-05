@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 import pymongo
 import re
 from random import choice, randint
+from loguru import logger
 
 # Obtener información de .env
 load_dotenv(dotenv_path = '.env')
@@ -377,9 +378,13 @@ class Controlador():
 					# Responder la pregunta
 					if par.responder_pregunta(respuesta):
 						par.acertar_pregunta(par.get_pregunta_actual().get_categoria())
+						# Se actualiza la partida en BD
+						self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
 						return True
 					else:
 						par.fallar_pregunta(par.get_pregunta_actual().get_categoria())
+						# Se actualiza la partida en BD
+						self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
 						return False
 				else:
 					raise ValueError(f'Es el turno de {par.get_jugador_turno()}.')
@@ -449,7 +454,8 @@ class Controlador():
 			if par.comprobar_victoria():
 				# Obtener equipo ganador
 				equipo_ganador = par.get_equipos()[par.get_ganador() - 1]
-
+				# Se actualiza la partida en BD
+				self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
 				return True, equipo_ganador
 			else:
 				return False, None
@@ -495,8 +501,8 @@ class Controlador():
 
 			# Si la tiene
 			if medalla == 1:
-				return True, categoria
+				return True, categoria, equipo.get_color()
 			else:
-				return False, categoria
+				return False, categoria, equipo.get_color()
 		else:
 			raise ValueError('No existe ninguna partida creada.')
