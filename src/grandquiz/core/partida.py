@@ -4,6 +4,7 @@ from pregunta import Pregunta
 
 from random import randint, choice
 from typing import List
+from loguru import logger
 
 # Clase de partida
 class Partida():
@@ -99,7 +100,7 @@ class Partida():
 
 	# Responder una pregunta
 	def responder_pregunta(self, respuesta: int):
-		return respuesta == self.__pregunta_actual.get_correcta()
+		return respuesta == int(self.__pregunta_actual.get_correcta())
 
 	# Comprobar victoria
 	def comprobar_victoria(self):
