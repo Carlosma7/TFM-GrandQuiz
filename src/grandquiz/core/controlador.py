@@ -380,6 +380,7 @@ class Controlador():
 						return True
 					else:
 						par.fallar_pregunta(par.get_pregunta_actual().get_categoria())
+						return False
 				else:
 					raise ValueError(f'Es el turno de {par.get_jugador_turno()}.')
 			else:
