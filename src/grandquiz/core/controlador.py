@@ -380,6 +380,11 @@ class Controlador():
 			# Si existe una partida
 			if encontrada:
 				par = Partida.from_dict(par)
+
+				# Se obtienen las estadisticas del jugador
+				est = self.mongo.estadisticas.find_one({'nombre_usuario': jugador})
+				est = Estadistica.from_dict(est)
+
 				# Comprobar que responde el jugador del turno actual
 				if par.get_jugador_turno() == jugador:
 					# Responder la pregunta
@@ -387,11 +392,23 @@ class Controlador():
 						par.acertar_pregunta(par.get_pregunta_actual().get_categoria())
 						# Se actualiza la partida en BD
 						self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
+
+						# Se actualizan las estadisticas de categoria y numero de preguntas acertadas del jugador
+						est.add_actierto(par.get_pregunta_actual().get_categoria())
+						# Se actualizan las estadisticas en BD
+						self.mongo.estadisticas.update({'nombre_usuario': jugador}, {'$set': est.to_dict()})
+
 						return True
 					else:
 						par.fallar_pregunta(par.get_pregunta_actual().get_categoria())
 						# Se actualiza la partida en BD
 						self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
+
+						# Se actualiza la estadistica de numero de preguntas falladas del jugador
+						est.add_fallo()
+						# Se actualizan las estadisticas en BD
+						self.mongo.estadisticas.update({'nombre_usuario': jugador}, {'$set': est.to_dict()})
+
 						return False
 				else:
 					nombre_jugador_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
