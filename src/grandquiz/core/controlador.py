@@ -459,6 +459,13 @@ class Controlador():
 				equipo_ganador = par.get_equipos()[par.get_ganador() - 1]
 				# Se actualiza la partida en BD
 				self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
+
+				# Se añade una partida y una victoria al equipo ganador
+				self.add_estadisticas_partida(par.get_equipos()[0].get_jugadores()[0], True)
+				self.add_estadisticas_partida(par.get_equipos()[0].get_jugadores()[1], True)
+				# Se añade una partida al equipo perdedor
+				self.add_estadisticas_partida(par.get_equipos()[1].get_jugadores()[0], False)
+				self.add_estadisticas_partida(par.get_equipos()[1].get_jugadores()[1], False)
 				return True, equipo_ganador
 			else:
 				return False, None
@@ -521,3 +528,23 @@ class Controlador():
 			self.mongo.partidas.remove({'chat': partida})
 		else:
 			raise ValueError('No existe ninguna partida creada.')
+
+	# Añadir estadisticas de partida a un jugador
+	def add_estadisticas_partida(self, jugador: str, ganador: True):
+		# Comprobar que existe el jugador 1
+		est = self.mongo.estadisticas.find_one({'nombre_usuario': jugador})
+		encontrado = (est != None)
+
+		if encontrado:
+			est = Estadistica.from_dict(est)
+
+			# Se comprueba si ha ganado
+			if ganador:
+				est.add_num_victorias()
+			else:
+				est.add_num_derrotas()
+
+			# Se actualiza la partida en BD
+			self.mongo.estadisticas.update({'nombre_usuario': jugador}, {'$set': est.to_dict()})
+		else:
+			raise ValueError(f'El jugador con nick {jugador} no existe.')
