@@ -394,7 +394,7 @@ class Controlador():
 						self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
 
 						# Se actualizan las estadisticas de categoria y numero de preguntas acertadas del jugador
-						est.add_actierto(par.get_pregunta_actual().get_categoria())
+						est.add_acierto(par.get_pregunta_actual().get_categoria())
 						# Se actualizan las estadisticas en BD
 						self.mongo.estadisticas.update({'nombre_usuario': jugador}, {'$set': est.to_dict()})
 
