@@ -121,7 +121,7 @@ def obtener_estadisticas(message):
 		# Obtener jugador
 		jug = controlador.obtener_jugador(message.from_user.username)
 		# Se guarda mensaje de éxito
-		respuesta = f"Las estadísticas de {message.from_user.first_name} {avatar.get(jug.get_avatar())} son:\n\n{emojis_estadisticas.get('victorias')} {est.get_num_victorias()} victorias.\n\n{emojis_estadisticas.get('partidas')} {est.get_num_partidas()} partidas. \n\n{emojis_estadisticas.get('amigo')} Mejor amigo: {est.get_mejor_amigo()}. \n\n{emojis_estadisticas.get(est.get_categoria_fav())} Categoría favorita: {est.get_categoria_fav()}. \n\n{emojis_estadisticas.get('porcentaje')} {est.get_porcentaje_acierto()}% preguntas acertadas."
+		respuesta = f"Las estadísticas de {message.from_user.first_name} {avatar.get(jug.get_avatar())} son:\n\n{emojis_estadisticas.get('victorias')} {est.get_num_victorias()} victorias.\n\n{emojis_estadisticas.get('partidas')} {est.get_num_partidas()} partidas. \n\n{emojis_estadisticas.get('amigo')} Mejor amigo: {est.get_mejor_amigo()}. \n\n{emojis_estadisticas.get(est.get_categoria_fav())} Categoría favorita: {est.get_categoria_fav()}. \n\n{emojis_estadisticas.get('porcentaje')} {round(est.get_porcentaje_acierto(), 2)}% preguntas acertadas."
 	except Exception as error:
 		# Se produce un error
 		respuesta = str(error)
