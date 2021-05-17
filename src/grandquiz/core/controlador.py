@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 import pymongo
 import re
 from random import choice, randint
+from typing import List
 
 # Obtener información de .env
 load_dotenv(dotenv_path = '.env')
@@ -347,6 +348,11 @@ class Controlador():
 						jug_turno = jug_turno.get('nombre')
 						# Se obtiene el equipo del turno
 						equipo_turno = par.get_equipo_turno().get_color()
+
+						# Se añaden los jugadores de los mismos equipos como amigos
+						self.add_amigos(par.get_equipos()[0].get_jugadores())
+						self.add_amigos(par.get_equipos()[1].get_jugadores())
+
 						# Se devuelve el jugador con el turno actual, su avatar, su equipo, la pregunta actual y la categoría 
 						return jug_turno, ava_jug_turno, equipo_turno, pregunta_actual, categoria_pregunta
 					else:
@@ -544,7 +550,35 @@ class Controlador():
 			else:
 				est.add_num_derrotas()
 
-			# Se actualiza la partida en BD
+			# Se actualizan la estadisticas en BD
 			self.mongo.estadisticas.update({'nombre_usuario': jugador}, {'$set': est.to_dict()})
 		else:
 			raise ValueError(f'El jugador con nick {jugador} no existe.')
+
+	# Añadir a un jugador como amigo
+	def add_amigos(self, jugadores: List[str]):
+		# Comprobar que existe el jugador 1
+		est1 = self.mongo.estadisticas.find_one({'nombre_usuario': jugadores[0]})
+		encontrado1 = (est1 != None)
+
+		if encontrado1:
+			est1 = Estadistica.from_dict(est1)
+
+			# Comprobar que existe el jugador 2
+			est2 = self.mongo.estadisticas.find_one({'nombre_usuario': jugadores[1]})
+			encontrado2 = (est2 != None)
+
+			if encontrado2:
+				est2 = Estadistica.from_dict(est2)
+
+				# Se añaden los jugadores como amigos
+				est1.add_amigo(jugadores[1])
+				est2.add_amigo(jugadores[0])
+
+				# Se actualizan la estadisticas en BD
+				self.mongo.estadisticas.update({'nombre_usuario': jugadores[0]}, {'$set': est1.to_dict()})
+				self.mongo.estadisticas.update({'nombre_usuario': jugadores[1]}, {'$set': est2.to_dict()})
+			else:
+				raise ValueError(f'El jugador con nick {jugadores[1]} no existe.')
+		else:
+			raise ValueError(f'El jugador con nick {jugadores[0]} no existe.')
