@@ -7,6 +7,12 @@ def clean(c):
 	run("find . -maxdepth 5 -type d -name  .pytest_cache -exec rm -r {} +")
 	run("find . -maxdepth 5 -type d -name __pycache__ -exec rm -r {} +")
 
+# Tarea de ejecución de tutorial de Telebot
+@task
+def executeTutorial(c):
+	print("Ejecución de GrandQuiz")
+	run("python3 src/tutorial/bot.py")
+
 # Tarea de ejecución de 3 en raya contra IA aleatoria
 @task
 def executeTicTacToe(c):
