@@ -553,7 +553,7 @@ class Controlador():
 			raise ValueError('No existe ninguna partida creada.')
 
 	# Añadir estadisticas de partida a un jugador
-	def add_estadisticas_partida(self, jugador: str, ganador: True):
+	def add_estadisticas_partida(self, jugador: str, ganador: bool):
 		# Comprobar que existe el jugador 1
 		est = self.mongo.estadisticas.find_one({'nombre_usuario': jugador})
 		encontrado = (est != None)
