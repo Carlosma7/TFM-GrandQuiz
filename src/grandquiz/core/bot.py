@@ -337,5 +337,46 @@ def obtener_top3(message):
 	# Informar al usuario
 	bot.send_message(message.chat.id, respuesta)
 
+# Obtener logros de un jugador
+@bot.message_handler(commands=['logros'])
+def obtener_logros(message):
+	try:
+		# Comprobar si es el usuario propio u otro
+		if len(message.text.split()) == 2:
+			jugador = message.text.split()[1]
+		else:
+			jugador = message.from_user.username
+		# Obtener logros
+		log = controlador.obtener_logros(jugador)
+		# Obtener jugador
+		jug = controlador.obtener_jugador(jugador)
+		# Se guarda mensaje de éxito
+		respuesta = f"Las logros de {jugador} {avatar.get(jug.get_avatar())} son:\n\n"
+		# Comprobar logros de victorias
+		if log.get_logro_victorias() != 0:
+			respuesta += f"\U0001f3c6 {logros_victorias.get(log.get_logro_victorias())}\n\n"
+		# Comprobar logros de amigos
+		if log.get_logro_amigos() != 0:
+			respuesta += f"\U0001f46b {logros_amigos.get(log.get_logro_amigos())}\n\n"
+		# Comprobar logros de categorías
+		if log.get_logro_categorias().get('Deporte') != 0:
+			respuesta += f"{emojis_categorias.get('Deporte')} {logros_categorias.get('Deporte').get(log.get_logro_categorias().get('Deporte'))}"
+		if log.get_logro_categorias().get('Geografía') != 0:
+			respuesta += f"{emojis_categorias.get('Geografía')} {logros_categorias.get('Geografía').get(log.get_logro_categorias().get('Geografía'))}"
+		if log.get_logro_categorias().get('Arte') != 0:
+			respuesta += f"{emojis_categorias.get('Arte')} {logros_categorias.get('Arte').get(log.get_logro_categorias().get('Arte'))}"
+		if log.get_logro_categorias().get('Historia') != 0:
+			respuesta += f"{emojis_categorias.get('Historia')} {logros_categorias.get('Historia').get(log.get_logro_categorias().get('Historia'))}"
+		if log.get_logro_categorias().get('Ciencia') != 0:
+			respuesta += f"{emojis_categorias.get('Ciencia')} {logros_categorias.get('Ciencia').get(log.get_logro_categorias().get('Ciencia'))}"
+		if log.get_logro_categorias().get('Entretenimiento') != 0:
+			respuesta += f"{emojis_categorias.get('Entretenimiento')} {logros_categorias.get('Entretenimiento').get(log.get_logro_categorias().get('Entretenimiento'))}"
+	except Exception as error:
+		# Se produce un error
+		respuesta = str(error)
+
+	# Informar al usuario
+	bot.send_message(message.chat.id, respuesta)
+
 # Launch bot
 bot.polling()
