@@ -116,12 +116,17 @@ def definir_correo(message):
 @bot.message_handler(commands=['estadisticas'])
 def obtener_estadisticas(message):
 	try:
+		# Comprobar si es el usuario propio u otro
+		if len(message.text.split()) == 2:
+			jugador = message.text.split()[1]
+		else:
+			jugador = message.from_user.username
 		# Obtener estadisticas
-		est = controlador.obtener_estadisticas(message.from_user.username)
+		est = controlador.obtener_estadisticas(jugador)
 		# Obtener jugador
-		jug = controlador.obtener_jugador(message.from_user.username)
+		jug = controlador.obtener_jugador(jugador)
 		# Se guarda mensaje de éxito
-		respuesta = f"Las estadísticas de {message.from_user.first_name} {avatar.get(jug.get_avatar())} son:\n\n{emojis_estadisticas.get('victorias')} {est.get_num_victorias()} victorias.\n\n{emojis_estadisticas.get('partidas')} {est.get_num_partidas()} partidas. \n\n{emojis_estadisticas.get('amigo')} Mejor amigo: {est.get_mejor_amigo()}. \n\n{emojis_estadisticas.get(est.get_categoria_fav())} Categoría favorita: {est.get_categoria_fav()}. \n\n{emojis_estadisticas.get('porcentaje')} {round(est.get_porcentaje_acierto(), 2)}% preguntas acertadas."
+		respuesta = f"Las estadísticas de {jugador} {avatar.get(jug.get_avatar())} son:\n\n{emojis_estadisticas.get('victorias')} {est.get_num_victorias()} victorias.\n\n{emojis_estadisticas.get('partidas')} {est.get_num_partidas()} partidas. \n\n{emojis_estadisticas.get('amigo')} Mejor amigo: {est.get_mejor_amigo()}. \n\n{emojis_estadisticas.get(est.get_categoria_fav())} Categoría favorita: {est.get_categoria_fav()}. \n\n{emojis_estadisticas.get('porcentaje')} {round(est.get_porcentaje_acierto(), 2)}% preguntas acertadas."
 	except Exception as error:
 		# Se produce un error
 		respuesta = str(error)
