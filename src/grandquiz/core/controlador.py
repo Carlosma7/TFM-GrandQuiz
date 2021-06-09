@@ -599,3 +599,17 @@ class Controlador():
 				raise ValueError(f'El jugador con nick {jugadores[1]} no existe.')
 		else:
 			raise ValueError(f'El jugador con nick {jugadores[0]} no existe.')
+
+	# Definir top 3 de características estadística
+	def obtener_top3(self, jugador: str):
+		# Comprobar que existe el jugador 1
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		if encontrado:
+			top3_victorias = self.mongo.estadisticas.aggregate([{'$sort':{'num_victorias': -1}}, {'$limit': 3}])
+			top3_amigos = self.mongo.estadisticas.aggregate([{'$project': {'nombre_usuario': 1, 'num_amigos': {'$size': {"$objectToArray": "$amigos"}}}}, {'$sort':{'num_amigos': -1}}, {'$limit': 4}])
+			top3_aciertos = self.mongo.estadisticas.aggregate([{'$sort':{'preguntas_acertadas': -1}}, {'$limit': 3}])
+			return [list(top3_victorias), list(top3_amigos), list(top3_aciertos)]
+		else:
+			raise ValueError(f'No estás registrado en GrandQuiz.')
