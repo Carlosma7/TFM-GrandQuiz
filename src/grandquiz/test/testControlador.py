@@ -369,7 +369,7 @@ def test_responder_pregunta_controlador():
 	# Responder pregunta
 	resultado = c.responder_pregunta(p.get_chat(), jug_turno, 1)
 	# Comprobar que si la respuesta es correcta el resultado es True
-	if partida.get_pregunta_actual().get_correcta() == 1:
+	if partida.get_pregunta_actual().get_correcta() == "1":
 		assert_that(resultado).is_true()
 	# Comprobar que si la respuesta es incorrecta el resultado es False
 	else:
