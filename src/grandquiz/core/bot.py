@@ -311,6 +311,31 @@ def responder_pregunta(call):
 		# Informar al usuario
 		bot.send_message(call.message.chat.id, respuesta, parse_mode = 'Markdown')
 
+# Obtener top 3 de estadísticas
+@bot.message_handler(commands=['top'])
+def obtener_top3(message):
+	try:
+		# Obtener top 3
+		top3 = controlador.obtener_top3(message.from_user.username)
+		# Se dividen los top3
+		top3_victorias = top3[0]
+		top3_amigos = top3[1]
+		top3_aciertos = top3[2]
+
+		# Se añaden top 3 de victorias
+		respuesta = f"\u2B50 GrandQuiz TOP \u2B50"
+		respuesta += f"\n\n\U0001f451 TOP 3 Victorias\U0001f451 \n\n \U0001f947 {top3_victorias[0].get('nombre_usuario')} \n \U0001f948 {top3_victorias[1].get('nombre_usuario')} \n \U0001f949 {top3_victorias[2].get('nombre_usuario')}"
+
+		respuesta += f"\n\n\U0001f451 TOP 3 Amigos \U0001f451 \n\n \U0001f947 {top3_amigos[0].get('nombre_usuario')} \n \U0001f948 {top3_amigos[1].get('nombre_usuario')} \n \U0001f949 {top3_amigos[2].get('nombre_usuario')}"
+
+		respuesta += f"\n\n\U0001f451 TOP 3 Aciertos \U0001f451 \n\n \U0001f947 {top3_aciertos[0].get('nombre_usuario')} \n \U0001f948 {top3_aciertos[1].get('nombre_usuario')} \n \U0001f949 {top3_aciertos[2].get('nombre_usuario')}"
+
+	except Exception as error:
+		# Se produce un error
+		respuesta = str(error)
+
+	# Informar al usuario
+	bot.send_message(message.chat.id, respuesta)
 
 # Launch bot
 bot.polling()
