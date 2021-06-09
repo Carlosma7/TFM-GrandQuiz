@@ -50,3 +50,56 @@ emojis_categorias = {
 	'Ciencia': "\U0001f9ea",
 	'Entretenimiento': "\u265F\uFE0F"
 }
+
+logros_victorias = {
+	1: 'Principiante: 10 victorias.',
+	2: 'Intelectual: 20 victorias.',
+	3: 'Premio Nobel: 50 victorias.',
+	4: 'GrandQuizzer: 100 victorias.'
+}
+
+logros_amigos = {
+	1: 'Lobo solitario: 1 amigo.',
+	2: 'Líder de pandilla: 5 amigos.',
+	3: 'Alcalde: 10 amigos.',
+	4: 'Presidente: 20 amigos.'
+}
+
+logros_categorias = {
+	'Deporte': {
+		1: 'Simone Biles: 5 aciertos.',
+		2: 'Pau Gasol: 15 aciertos.',
+		3: 'Serena Williams: 30 aciertos.',
+		4: 'Cristiano Ronaldo: 50 aciertos.'
+	},
+	'Geografía': {
+		1: 'Provincial: 5 aciertos.',
+		2: 'Nacional: 15 aciertos.',
+		3: 'Continental: 30 aciertos.',
+		4: 'Willy Fog: 50 aciertos.'
+	},
+	'Arte': {
+		1: 'Frida Kahlo: 5 aciertos.',
+		2: 'Cervantes: 15 aciertos.',
+		3: 'Picasso: 30 aciertos.',
+		4: 'Shakespeare: 50 aciertos.'
+	},
+	'Historia': {
+		1: 'Cleopatra: 5 aciertos.',
+		2: 'Napoleón: 15 aciertos.',
+		3: 'Cristóbal Colón: 30 aciertos.',
+		4: 'Julio César: 50 aciertos.'
+	},
+	'Ciencia': {
+		1: 'Pitágoras: 5 aciertos.',
+		2: 'Marie Curie: 15 aciertos.',
+		3: 'Newton: 30 aciertos.',
+		4: 'Einstein: 50 aciertos.'
+	},
+	'Entretenimiento': {
+		1: 'Zelda: 5 aciertos.',
+		2: 'Freddie Mercury: 15 aciertos.',
+		3: 'Marilyn Monroe: 30 aciertos.',
+		4: 'Pikachu: 50 aciertos.'
+	}
+}
