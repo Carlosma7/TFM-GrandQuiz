@@ -1,5 +1,6 @@
 from jugador import Jugador
 from estadistica import Estadistica
+from logros import Logro
 from equipo import Equipo
 from partida import Partida
 from pregunta import Pregunta
@@ -42,6 +43,10 @@ class Controlador():
 			estadistica = Estadistica(jugador.get_nombre_usuario())
 			# Se añade la estadistica
 			self.mongo.estadisticas.insert_one(estadistica.to_dict())
+			# Se crean los logros del jugador
+			logros = Logro(jugador.get_nombre_usuario())
+			# Se añade el logro
+			self.mongo.logros.insert_one(logros.to_dict())
 		else:
 			raise ValueError('Ya estás registrado.')
 
@@ -398,6 +403,15 @@ class Controlador():
 						# Se actualizan las estadisticas en BD
 						self.mongo.estadisticas.update({'nombre_usuario': jugador}, {'$set': est.to_dict()})
 
+						# Se obtienen los logros del jugador
+						log = self.mongo.logros.find_one({'nombre_usuario': jugador})
+						log = Logro.from_dict(log)
+						# Se actualizan los logros de aciertos en la categoría de la pregunta
+						log.update_logro_categorias(est.get_categorias().get(par.get_pregunta_actual().get_categoria()), par.get_pregunta_actual().get_categoria())
+						# Se actualizan los logros en BD
+						self.mongo.logros.update({'nombre_usuario': jugador}, {'$set': log.to_dict()})
+
+
 						return True
 					else:
 						par.fallar_pregunta(par.get_pregunta_actual().get_categoria())
@@ -559,16 +573,27 @@ class Controlador():
 		encontrado = (est != None)
 
 		if encontrado:
+			# Se obtienen los logros
+			log = self.mongo.logros.find_one({'nombre_usuario': jugador})
+			log = Logro.from_dict(log)
+
 			est = Estadistica.from_dict(est)
 
 			# Se comprueba si ha ganado
 			if ganador:
 				est.add_num_victorias()
+				# Se actualizan los logros de victorias
+				log.update_logro_victorias(est.get_num_victorias())
 			else:
 				est.add_num_derrotas()
 
+			# Se actualizan los logros de amigos
+			log.update_logro_amigos(len(est.get_amigos()))
+
 			# Se actualizan la estadisticas en BD
 			self.mongo.estadisticas.update({'nombre_usuario': jugador}, {'$set': est.to_dict()})
+			# Se actualizan los logros en BD
+			self.mongo.logros.update({'nombre_usuario': jugador}, {'$set': log.to_dict()})
 		else:
 			raise ValueError(f'El jugador con nick {jugador} no existe.')
 
