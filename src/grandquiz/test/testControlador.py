@@ -974,3 +974,24 @@ def test_add_amigos_controlador():
 	c.mongo.logros.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
+
+# Test de obtener logros de jugador
+def test_obtener_logros_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Test53", "Test")
+	# Crear jugador
+	c.registrar_jugador(j1)
+	# Obtener los logros
+	l1 = c.obtener_logros("Test53")
+	# Comprobar que e1 es un objeto de Estadistica
+	assert_that(l1).is_type_of(Logro)
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
