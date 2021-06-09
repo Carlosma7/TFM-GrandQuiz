@@ -638,3 +638,18 @@ class Controlador():
 			return [list(top3_victorias), list(top3_amigos), list(top3_aciertos)]
 		else:
 			raise ValueError(f'No estás registrado en GrandQuiz.')
+
+	# Obtener logros de un jugador
+	def obtener_logros(self, jugador: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		log = self.mongo.logros.find_one({'nombre_usuario': jugador})
+		encontrado = (log != None)
+
+		# Si existe
+		if encontrado:
+			# Se construyen los logros desde el objeto JSON
+			log = Logro.from_dict(log)
+			# Se obtienen los logros
+			return log
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
