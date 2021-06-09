@@ -26,6 +26,8 @@ def test_registrar_jugador_controlador():
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 
 # Test de cambiar avatar de jugador
 def test_cambiar_avatar_controlador():
@@ -47,6 +49,8 @@ def test_cambiar_avatar_controlador():
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 
 # Test de cambiar edad de jugador
 def test_cambiar_edad_controlador():
@@ -68,6 +72,8 @@ def test_cambiar_edad_controlador():
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 
 # Test de cambiar correo electrónico de jugador
 def test_cambiar_email_controlador():
@@ -89,6 +95,8 @@ def test_cambiar_email_controlador():
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 
 # Test de obtener jugador
 def test_obtener_estadisticas_controlador():
@@ -106,6 +114,8 @@ def test_obtener_estadisticas_controlador():
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 
 # Test de obtener estadisticas de jugador
 def test_obtener_estadisticas_controlador():
@@ -123,6 +133,8 @@ def test_obtener_estadisticas_controlador():
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 
 # Test de crear partida en GrandQuiz
 def test_crear_partida_controlador():
@@ -144,6 +156,8 @@ def test_crear_partida_controlador():
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
 
@@ -177,6 +191,8 @@ def test_add_jugador_controlador():
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
 
@@ -200,6 +216,8 @@ def test_obtener_equipos_controlador():
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
 
@@ -239,6 +257,10 @@ def test_obtener_equipos_disponibles_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
 
@@ -264,6 +286,8 @@ def test_listar_equipos_controlador():
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
 
@@ -325,6 +349,14 @@ def test_iniciar_partida_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
 
@@ -390,6 +422,14 @@ def test_responder_pregunta_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
 
@@ -445,6 +485,14 @@ def test_obtener_respuesta_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
 
@@ -504,6 +552,14 @@ def test_cambiar_turno_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
 
@@ -559,6 +615,14 @@ def test_comprobar_victoria_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
 
@@ -617,6 +681,14 @@ def test_obtener_jugadores_equipo_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
 
@@ -672,6 +744,14 @@ def test_comprobar_medalla_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
 
@@ -733,6 +813,14 @@ def test_terminar_partida_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
 
@@ -809,6 +897,14 @@ def test_add_estadisticas_partida_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
 
@@ -868,5 +964,13 @@ def test_add_amigos_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
 	# Borrar estadistica de test
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j3.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
