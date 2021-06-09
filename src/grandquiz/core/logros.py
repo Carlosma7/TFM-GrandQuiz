@@ -62,9 +62,9 @@ class Logro():
 			self.__logro_categorias[categoria] = 1
 		elif num_aciertos == 15:
 			self.__logro_categorias[categoria] = 2
-		elif num__aciertos == 30:
+		elif num_aciertos == 30:
 			self.__logro_categorias[categoria] = 3
-		elif num__aciertos == 50:
+		elif num_aciertos == 50:
 			self.__logro_categorias[categoria] = 4
 
 	# Override método equal
