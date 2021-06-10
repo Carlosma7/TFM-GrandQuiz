@@ -411,6 +411,24 @@ class Controlador():
 						# Se actualizan los logros en BD
 						self.mongo.logros.update({'nombre_usuario': jugador}, {'$set': log.to_dict()})
 
+						# Se añaden los quizzies si el jugador acierta 25 preguntas
+						if int(est.get_preguntas_acertadas()) % 25 == 0: 
+							jug.add_quizzies("1", 1)
+							jug.add_quizzies("2", 1)
+							jug.add_quizzies("3", 1)
+
+						# Se añaden los quizzies si el jugador 10 preguntas de categoría
+						if int(est.get_categorias().get(par.get_pregunta_actual().get_categoria())) % 10 == 0:
+							if par.get_pregunta_actual().get_categoria() == 'Arte' or par.get_pregunta_actual().get_categoria() == 'Historia':
+								jug.add_quizzies("3", 1)
+							elif par.get_pregunta_actual().get_categoria() == 'Deporte' or par.get_pregunta_actual().get_categoria() == 'Entretenimiento':
+								jug.add_quizzies("2", 1)
+							elif par.get_pregunta_actual().get_categoria() == 'Geografía' or par.get_pregunta_actual().get_categoria() == 'Ciencias':
+								jug.add_quizzies("1", 1)
+
+						# Se actualizan los jugadores en BD
+						self.mongo.jugadores.update({'nombre_usuario': jugador}, {'$set': jug.to_dict()})
+
 
 						return True
 					else:
@@ -584,6 +602,20 @@ class Controlador():
 				est.add_num_victorias()
 				# Se actualizan los logros de victorias
 				log.update_logro_victorias(est.get_num_victorias())
+
+				# Se obtienen los jugadores
+				jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+				jug = Jugador.from_dict(jug)
+
+				# Se añaden los quizzies si el jugador tiene 10 victorias
+				if int(est.get_num_victorias()) % 10 == 0: 
+					jug.add_quizzies("1", 3)
+					jug.add_quizzies("2", 3)
+					jug.add_quizzies("3", 3)
+
+				# Se actualizan los logros en BD
+				self.mongo.jugadores.update({'nombre_usuario': jugador}, {'$set': jug.to_dict()})
+
 			else:
 				est.add_num_derrotas()
 
