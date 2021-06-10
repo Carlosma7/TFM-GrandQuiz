@@ -685,3 +685,18 @@ class Controlador():
 			return log
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Obtener quizzies de un jugador
+	def obtener_quizzies(self, jugador: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		# Si existe
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Se obtienen los quizzies del jugador
+			return jug.get_quizzies()
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
