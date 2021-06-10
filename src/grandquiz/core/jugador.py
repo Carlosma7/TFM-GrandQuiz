@@ -6,6 +6,7 @@ class Jugador():
 		self.__edad = ""
 		self.__email = ""
 		self.__avatar = ""
+		self.__quizzies = {"1": 3, "2": 3, "3": 3}
 
 	# Constructor from_dict
 	@classmethod
@@ -14,6 +15,7 @@ class Jugador():
 		j.set_edad(data.get('edad'))
 		j.set_email(data.get('email'))
 		j.set_avatar(data.get('avatar'))
+		j.set_quizzies(data.get('quizzies'))
 		return j
 
 
@@ -42,10 +44,16 @@ class Jugador():
 	def set_avatar(self, avatar: str):
 		self.__avatar = avatar
 
+	def get_quizzies(self):
+		return self.__quizzies
+
+	def set_quizzies(self, quizzies: dict):
+		self.__quizzies = quizzies
+
 	# Override método equal
 	def __eq__(self, otra):
-		return (self.__nombre_usuario == otra.get_nombre_usuario()) and (self.__nombre == otra.get_nombre()) and (self.__edad == otra.get_edad()) and (self.__email == otra.get_email()) and (self.__avatar == otra.get_avatar())
+		return (self.__nombre_usuario == otra.get_nombre_usuario()) and (self.__nombre == otra.get_nombre()) and (self.__edad == otra.get_edad()) and (self.__email == otra.get_email()) and (self.__avatar == otra.get_avatar()) and (self.__quizzies == otra.get_quizzies())
 
 	# Método para transformar objeto en un dict
 	def to_dict(self):
-		return {'nombre_usuario': self.get_nombre_usuario(), 'nombre': self.get_nombre(), 'edad': self.get_edad(), 'email': self.get_email(), 'avatar': self.get_avatar()}
+		return {'nombre_usuario': self.get_nombre_usuario(), 'nombre': self.get_nombre(), 'edad': self.get_edad(), 'email': self.get_email(), 'avatar': self.get_avatar(), 'quizzies': self.get_quizzies()}
