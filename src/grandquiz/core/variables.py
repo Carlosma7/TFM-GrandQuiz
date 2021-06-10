@@ -103,3 +103,9 @@ logros_categorias = {
 		4: 'Pikachu: 50 aciertos.'
 	}
 }
+
+quizzies = {
+	'1': '50%',
+	'2': 'Pasar a compañero',
+	'3': 'Pasar pregunta'
+}

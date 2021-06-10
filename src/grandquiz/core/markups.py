@@ -72,3 +72,35 @@ def markup_respuestas(pregunta: Pregunta):
 
 	return markup
 
+# Markups Bot API para mostrar quizzies
+def markup_quizzies(quizzies_jugador: dict):
+	# Keyboard
+	markup = types.InlineKeyboardMarkup(row_width = 1)
+	# Buttons
+	bt1 = (types.InlineKeyboardButton(quizzies.get('1'), callback_data="qui1"))
+	bt2 = (types.InlineKeyboardButton(quizzies.get('2'), callback_data="qui2"))
+	bt3 = (types.InlineKeyboardButton(quizzies.get('3'), callback_data="qui3"))
+	# Comprobar los quizzies disponibles
+	if quizzies_jugador.get('1') != 0:
+		if quizzies_jugador.get('2') != 0:
+			if quizzies_jugador.get('3') != 0:
+				markup.add(bt1, bt2, bt3)
+			else:
+				markup.add(bt1, bt2)
+		else:
+			if quizzies_jugador.get('3') != 0:
+				markup.add(bt1, bt3)
+			else:
+				markup.add(bt1)
+	else:
+		if quizzies_jugador.get('2') != 0:
+			if quizzies_jugador.get('3') != 0:
+				markup.add(bt2, bt3)
+			else:
+				markup.add(bt2)
+		else:
+			if quizzies_jugador.get('3') != 0:
+				markup.add(bt3)
+
+	return markup
+

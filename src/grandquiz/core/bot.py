@@ -378,5 +378,32 @@ def obtener_logros(message):
 	# Informar al usuario
 	bot.send_message(message.chat.id, respuesta)
 
+# Obtener quizzies de un jugador
+@bot.message_handler(commands=['quizzies'])
+def obtener_quizzies(message):
+	# Comprobar que la conversación es en un grupo
+	if message.chat.type == 'group':
+		try:
+			# Obtener quizzies del jugador
+			qui = controlador.obtener_quizzies(message.from_user.username)
+			# Obtener jugador
+			jug = controlador.obtener_jugador(message.from_user.username)
+
+			respuesta = f"Los comodines de {jug.get_nombre()} {avatar.get(jug.get_avatar())} son:"
+			markup = markup_quizzies(qui)
+
+			# Informar al usuario
+			bot.send_message(message.chat.id, respuesta, reply_markup=markup)
+		except Exception as error:
+			# Se produce un error
+			respuesta = str(error)
+			# Informar al usuario
+			bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+	else:
+		# No es un grupo
+		respuesta = f"Los quizzies solo estan disponibles en partidas en grupo."
+		# Informar al usuario
+		bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+
 # Launch bot
 bot.polling()
