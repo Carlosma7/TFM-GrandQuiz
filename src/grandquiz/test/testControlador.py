@@ -993,5 +993,22 @@ def test_obtener_logros_controlador():
 	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar logros de test
 	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+
+# Test de obtener quizzies de jugador
+def test_obtener_quizzies_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Test54", "Test")
+	# Crear jugador
+	c.registrar_jugador(j1)
+	# Obtener los quizzies
+	quizzies = c.obtener_quizzies("Test54")
+	# Comprobar que quizzies es un objeto dict
+	assert_that(quizzies).is_type_of(dict)
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	# Borrar logros de test
 	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
