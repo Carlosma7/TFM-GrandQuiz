@@ -786,6 +786,12 @@ class Controlador():
 						# Se obtiene las respuestas disponibles
 						respuestas = ['1','2','3','4']
 
+					# Se resta el quizzie utilizado
+					jug.usar_quizzie(quizzie)
+
+					# Se actualiza el jugador en BD
+					self.mongo.jugadores.update({'nombre_usuario': jugador}, {'$set': jug.to_dict()})
+
 					# Se devuelve el jugador con el turno actual, su avatar, su equipo, la pregunta actual y la categoría 
 					return jug_turno, ava_jug_turno, equipo_turno, pregunta_actual, categoria_pregunta, respuestas
 
