@@ -123,6 +123,8 @@ class Partida():
 	def acertar_desafio(self, categoria: str):
 		# Se añade la medalla al equipo que la ha acertado
 		self.__equipos[self.__turno - 1].acertar_desafio(categoria)
+		# Se quita la medalla al equipo contrario
+		self.__equipos[self.__turno % 2].fallar_desafio(categoria)
 
 	# Fallar desafio
 	def fallar_desafio(self, categoria: str):
