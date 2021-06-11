@@ -876,3 +876,53 @@ class Controlador():
 				else:
 					# No tiene el desafío disponible
 					raise ValueError('Ya has usado el desafío en esta partida.')
+
+	# Responder desafio
+	def responder_desafio(self, partida: str, jugador: str, respuesta: int):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Comprobar que existe una partida en el chat indicado
+			par = self.mongo.partidas.find_one({'chat': partida})
+			encontrada = (par != None)
+
+			# Si existe una partida
+			if encontrada:
+				par = Partida.from_dict(par)
+
+				# Comprobar que responde el jugador del turno actual
+				if par.get_jugador_turno() == jugador:
+					# Responder el desafio
+					if par.responder_desafio(respuesta):
+						# Acierta el desafio, por lo tanto roba una medalla al equipo contrario aleatoria
+						medalla = par.get_equipos()[(par.get_turno() % 2) + 1].obtener_medalla()
+						if medalla:
+							par.acertar_desafio(medalla)
+							# Se actualiza la partida en BD
+							self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
+							return True, medalla, par.get_desafio_actual().get_justificacion()
+						else:
+							return True, False, par.get_desafio_actual().get_justificacion()
+					else:
+						# Pierde el desafio, por lo tanto pierde una medalla aleatoria
+						medalla = par.get_equipo_turno().obtener_medalla()
+						if medalla:
+							par.fallar_desafio(medalla)
+							# Se actualiza la partida en BD
+							self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
+
+							return False, medalla, par.get_desafio_actual().get_justificacion()
+						else:
+							return False, False, par.get_desafio_actual().get_justificacion()
+				else:
+					nombre_jugador_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
+					nombre_jugador_turno = nombre_jugador_turno.get('nombre')
+					raise ValueError(f'Es el turno de {nombre_jugador_turno}.')
+			else:
+				raise ValueError('No existe ninguna partida creada.')
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
