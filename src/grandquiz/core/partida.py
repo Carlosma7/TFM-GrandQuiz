@@ -14,6 +14,7 @@ class Partida():
 		self.__iniciada = False
 		self.__ganador = 0
 		self.__pregunta_actual = Pregunta("","",[""],0)
+		self.__mensaje_pregunta = 0
 
 	# Constructor from_dict
 	@classmethod
@@ -26,6 +27,7 @@ class Partida():
 		p.set_ganador(data.get('ganador'))
 		pregunta_actual = Pregunta.from_dict(data.get('pregunta_actual'))
 		p.set_pregunta_actual(pregunta_actual)
+		p.set_mensaje_pregunta(data.get('mensaje_pregunta'))
 		return p
 
 	# Métodos get/set
@@ -61,6 +63,12 @@ class Partida():
 
 	def set_pregunta_actual(self, pregunta_actual: Pregunta):
 		self.__pregunta_actual = pregunta_actual
+
+	def get_mensaje_pregunta(self):
+		return self.__mensaje_pregunta
+
+	def set_mensaje_pregunta(self, mensaje_pregunta: int):
+		self.__mensaje_pregunta = mensaje_pregunta
 
 	# Añadir un nuevo jugador
 	def add_jugador(self, jugador: str, equipo: int):
@@ -115,9 +123,9 @@ class Partida():
 
 	# Override método equal
 	def __eq__(self, otra):
-		return (self.__chat == otra.get_chat()) and (self.__equipos == otra.get_equipos()) and (self.__turno == otra.get_turno()) and (self.__iniciada == otra.get_iniciada()) and (self.__ganador == otra.get_ganador()) and (self.__pregunta_actual == otra.get_pregunta_actual())
+		return (self.__chat == otra.get_chat()) and (self.__equipos == otra.get_equipos()) and (self.__turno == otra.get_turno()) and (self.__iniciada == otra.get_iniciada()) and (self.__ganador == otra.get_ganador()) and (self.__pregunta_actual == otra.get_pregunta_actual()) and (self.__mensaje_pregunta == otra.get_mensaje_pregunta())
 
 	# Método para transformar objeto en un dict
 	def to_dict(self):
 		equipos = [equipo.to_dict() for equipo in self.get_equipos()]
-		return {'chat': self.get_chat(), 'equipos': equipos, 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': self.get_pregunta_actual().to_dict()}
+		return {'chat': self.get_chat(), 'equipos': equipos, 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': self.get_pregunta_actual().to_dict(), 'mensaje_pregunta': self.get_mensaje_pregunta()}
