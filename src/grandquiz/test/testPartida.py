@@ -199,3 +199,52 @@ def test_get_equipo_turno_partida():
 	assert_that(equi).is_type_of(Equipo)
 	# Comprobar que el jugador es el jugador 1 del equipo 1 o 2 (j1 o j3)
 	assert_that(p.get_equipos()).contains(equi)
+
+# Test de acertar desafio
+def test_acertar_desafio_partida():
+	# Creación de una partida
+	p = Partida('Test')
+	# Añadir cuatro jugadores
+	j1 = Jugador("Test", "Test")
+	j2 = Jugador("Test2", "Test2")
+	j3 = Jugador("Test3", "Test3")
+	j4 = Jugador("Test4", "Test4")
+	p.add_jugador(j1.get_nombre_usuario(), 1)
+	p.add_jugador(j2.get_nombre_usuario(), 1)
+	p.add_jugador(j3.get_nombre_usuario(), 2)
+	p.add_jugador(j4.get_nombre_usuario(), 2)
+	# Iniciar partida
+	p.iniciar_partida()
+	# Comprobar que ningún equipo tiene un jugador con un punto en la categoría "Deporte"
+	assert_that(p.get_equipos()[0].get_puntuaciones()[0].get('Deporte')).is_equal_to(0)
+	assert_that(p.get_equipos()[0].get_puntuaciones()[1].get('Deporte')).is_equal_to(0)
+	assert_that(p.get_equipos()[1].get_puntuaciones()[0].get('Deporte')).is_equal_to(0)
+	assert_that(p.get_equipos()[1].get_puntuaciones()[1].get('Deporte')).is_equal_to(0)
+	# Un jugador acierta una pregunta
+	p.acertar_desafio("Deporte")
+	# Comprobar que el jugador del turno actual tiene un punto en la categoría "Deporte"
+	assert_that(p.get_equipos()[p.get_turno() - 1].get_puntuaciones()[0].get('Deporte')).is_equal_to(1)
+
+# Test de fallar desafio
+def test_fallar_desafio_partida():
+	# Creación de una partida
+	p = Partida('Test')
+	# Añadir cuatro jugadores
+	j1 = Jugador("Test", "Test")
+	j2 = Jugador("Test2", "Test2")
+	j3 = Jugador("Test3", "Test3")
+	j4 = Jugador("Test4", "Test4")
+	p.add_jugador(j1.get_nombre_usuario(), 1)
+	p.add_jugador(j2.get_nombre_usuario(), 1)
+	p.add_jugador(j3.get_nombre_usuario(), 2)
+	p.add_jugador(j4.get_nombre_usuario(), 2)
+	# Iniciar partida
+	p.iniciar_partida()
+	# Un jugador acierta una pregunta de la categoría "Deporte"
+	p.acertar_desafio("Deporte")
+	# Comprobar que el jugador del turno actual tiene un punto en la categoría "Deporte"
+	assert_that(p.get_equipos()[p.get_turno() - 1].get_puntuaciones()[0].get('Deporte')).is_equal_to(1)
+	# El mismo jugador falla una pregunta de la categoría "Deporte"
+	p.fallar_desafio("Deporte")
+	# Comprobar que el jugador del turno actual ya no tiene un punto en la categoría "Deporte"
+	assert_that(p.get_equipos()[p.get_turno() - 1].get_puntuaciones()[0].get('Deporte')).is_equal_to(0)

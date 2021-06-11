@@ -10,6 +10,7 @@ class Equipo():
 		self.__turno = 1
 		self.__medallas = {"Arte":0, "Geografía":0, "Ciencia":0, "Historia":0, "Deporte":0, "Entretenimiento":0}
 		self.__puntuaciones = [{"Arte":0, "Geografía":0, "Ciencia":0, "Historia":0, "Deporte":0, "Entretenimiento":0}, {"Arte":0, "Geografía":0, "Ciencia":0, "Historia":0, "Deporte":0, "Entretenimiento":0}]
+		self.__desafios = [1, 1]
 
 	# Constructor from_dict
 	@classmethod
@@ -19,6 +20,7 @@ class Equipo():
 		e.set_turno(data.get('turno'))
 		e.set_medallas(data.get('medallas'))
 		e.set_puntuaciones(data.get('puntuaciones'))
+		e.set_desafios(data.get('desafios'))
 		return e
 
 	# Métodos get/set
@@ -48,6 +50,12 @@ class Equipo():
 
 	def set_puntuaciones(self, puntuaciones: List[dict]):
 		self.__puntuaciones = puntuaciones
+
+	def get_desafios(self):
+		return self.__desafios
+
+	def set_desafios(self, desafios: List[int]):
+		self.__desafios = desafios
 
 	# Añadir jugador al equipo
 	def add_jugador(self, jugador: str):
@@ -93,10 +101,40 @@ class Equipo():
 	def get_jugador_turno(self):
 		return self.__jugadores[self.__turno - 1]
 
+	# Utilizar un desafio
+	def usar_desafio(self):
+		self.__desafios[self.__turno - 1] -= 1
+
+	# Acertar un desafio
+	def acertar_desafio(self, categoria: str):
+		# Se anota el punto a ambos
+		self.__puntuaciones[self.__turno - 1][categoria] = 1
+		self.__puntuaciones[(self.__turno % 2) + 1 - 1][categoria] = 1
+		# Se anota la medalla del equipo
+		self.__medallas[categoria] = 1
+
+	# Fallar un desafio
+	def fallar_desafio(self, categoria: str):
+		# Se elimina el punto a ambos
+		self.__puntuaciones[self.__turno - 1][categoria] = 0
+		self.__puntuaciones[(self.__turno % 2) + 1 - 1][categoria] = 0
+		# Se elimina la medalla del equipo
+		self.__medallas[categoria] = 0
+
+	# Obtener aleatoriamente una medalla conseguida
+	def obtener_medalla(self):
+		# Obtener todas las categorias de las que se posee medalla
+		medallas_conseguidas = [cat for cat in self.__medallas if self.__medallas[cat] == 1]
+		# Escoger aleatoriamente una de las medallas
+		if len(medallas_conseguidas) > 0:
+			return choice(medallas_conseguidas)
+		else:
+			return False
+
 	# Override método equal
 	def __eq__(self, otra):
-		return (self.__jugadores == otra.get_jugadores()) and (self.__color == otra.get_color()) and (self.__turno == otra.get_turno()) and (self.__medallas == otra.get_medallas()) and (self.__puntuaciones == otra.get_puntuaciones())
+		return (self.__jugadores == otra.get_jugadores()) and (self.__color == otra.get_color()) and (self.__turno == otra.get_turno()) and (self.__medallas == otra.get_medallas()) and (self.__puntuaciones == otra.get_puntuaciones()) and (self.__desafios == otra.get_desafios())
 
 	# Método para transformar objeto en un dict
 	def to_dict(self):
-		return {'jugadores': self.get_jugadores(), 'color': self.get_color(), 'turno': self.get_turno(), 'medallas': self.get_medallas(), 'puntuaciones': self.get_puntuaciones()}
+		return {'jugadores': self.get_jugadores(), 'color': self.get_color(), 'turno': self.get_turno(), 'medallas': self.get_medallas(), 'puntuaciones': self.get_puntuaciones(), 'desafios': self.get_desafios()}

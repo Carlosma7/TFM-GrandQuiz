@@ -1,6 +1,7 @@
 from jugador import Jugador
 from equipo import Equipo
 from pregunta import Pregunta
+from desafio import Desafio
 
 from random import randint, choice
 from typing import List
@@ -14,6 +15,7 @@ class Partida():
 		self.__iniciada = False
 		self.__ganador = 0
 		self.__pregunta_actual = Pregunta("","",[""],0)
+		self.__desafio_actual = Desafio("","",[""],0,"")
 		self.__mensaje_pregunta = 0
 
 	# Constructor from_dict
@@ -27,6 +29,8 @@ class Partida():
 		p.set_ganador(data.get('ganador'))
 		pregunta_actual = Pregunta.from_dict(data.get('pregunta_actual'))
 		p.set_pregunta_actual(pregunta_actual)
+		desafio_actual = Desafio.from_dict(data.get('desafio_actual'))
+		p.set_desafio_actual(desafio_actual)
 		p.set_mensaje_pregunta(data.get('mensaje_pregunta'))
 		return p
 
@@ -63,6 +67,12 @@ class Partida():
 
 	def set_pregunta_actual(self, pregunta_actual: Pregunta):
 		self.__pregunta_actual = pregunta_actual
+
+	def get_desafio_actual(self):
+		return self.__desafio_actual
+
+	def set_desafio_actual(self, desafio_actual: Desafio):
+		self.__desafio_actual = desafio_actual
 
 	def get_mensaje_pregunta(self):
 		return self.__mensaje_pregunta
@@ -109,6 +119,20 @@ class Partida():
 	def responder_pregunta(self, respuesta: int):
 		return respuesta == int(self.__pregunta_actual.get_correcta())
 
+	# Acertar desafio
+	def acertar_desafio(self, categoria: str):
+		# Se añade la medalla al equipo que la ha acertado
+		self.__equipos[self.__turno - 1].acertar_desafio(categoria)
+
+	# Fallar desafio
+	def fallar_desafio(self, categoria: str):
+		# Se quita la medalla al equipo que la ha acertado
+		self.__equipos[self.__turno - 1].fallar_desafio(categoria)
+
+	# Responder un desafio
+	def responder_desafio(self, respuesta: int):
+		return respuesta == int(self.__desafio_actual.get_correcta())
+
 	# Comprobar victoria
 	def comprobar_victoria(self):
 		# Comprobar si un jugador ha llegado a 3 puntos
@@ -123,9 +147,9 @@ class Partida():
 
 	# Override método equal
 	def __eq__(self, otra):
-		return (self.__chat == otra.get_chat()) and (self.__equipos == otra.get_equipos()) and (self.__turno == otra.get_turno()) and (self.__iniciada == otra.get_iniciada()) and (self.__ganador == otra.get_ganador()) and (self.__pregunta_actual == otra.get_pregunta_actual()) and (self.__mensaje_pregunta == otra.get_mensaje_pregunta())
+		return (self.__chat == otra.get_chat()) and (self.__equipos == otra.get_equipos()) and (self.__turno == otra.get_turno()) and (self.__iniciada == otra.get_iniciada()) and (self.__ganador == otra.get_ganador()) and (self.__pregunta_actual == otra.get_pregunta_actual()) and (self.__desafio_actual == otra.get_desafio_actual()) and (self.__mensaje_pregunta == otra.get_mensaje_pregunta())
 
 	# Método para transformar objeto en un dict
 	def to_dict(self):
 		equipos = [equipo.to_dict() for equipo in self.get_equipos()]
-		return {'chat': self.get_chat(), 'equipos': equipos, 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': self.get_pregunta_actual().to_dict(), 'mensaje_pregunta': self.get_mensaje_pregunta()}
+		return {'chat': self.get_chat(), 'equipos': equipos, 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': self.get_pregunta_actual().to_dict(), 'desafio_actual': self.get_desafio_actual().to_dict(), 'mensaje_pregunta': self.get_mensaje_pregunta()}
