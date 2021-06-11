@@ -855,6 +855,9 @@ class Controlador():
 				# Comprobar que el jugador tiene el desafio disponible
 				if par.get_equipo_turno().get_desafios()[par.get_equipo_turno().get_turno() - 1] == 1:
 					# Tiene el desafío disponible
+
+					# Se gasta el desafío del jugador
+					par.get_equipo_turno().usar_desafio()
 					# Se obtiene un desafío aleatoriamente
 					desafio_actual = self.mongo.desafios.aggregate([{'$sample':{'size': 1}}])
 					desafio_actual = list(desafio_actual)
