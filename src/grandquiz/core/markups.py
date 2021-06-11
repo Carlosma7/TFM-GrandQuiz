@@ -1,5 +1,6 @@
 import telebot
 from variables import *
+from typing import List
 from telebot import types
 from pregunta import Pregunta
 
@@ -72,14 +73,29 @@ def markup_respuestas(pregunta: Pregunta):
 
 	return markup
 
+# Markups Bot API para responder a una pregunta
+def markup_respuestas_quizzies(pregunta: Pregunta, respuestas: List[str]):
+	if len(respuestas) == 4:
+		# Se usa el markup genérico
+		return markup_respuestas(pregunta)
+	else:
+		# Keyboard
+		markup = types.InlineKeyboardMarkup(row_width = 1)
+		# Buttons
+		bt1 = (types.InlineKeyboardButton(pregunta.get_respuestas()[int(respuestas[0]) - 1], callback_data=f"pr{respuestas[0]}"))
+		bt2 = (types.InlineKeyboardButton(pregunta.get_respuestas()[int(respuestas[1]) - 1], callback_data=f"pr{respuestas[1]}"))
+		markup.add(bt1, bt2)
+
+		return markup
+
 # Markups Bot API para mostrar quizzies
 def markup_quizzies(quizzies_jugador: dict):
 	# Keyboard
 	markup = types.InlineKeyboardMarkup(row_width = 1)
 	# Buttons
-	bt1 = (types.InlineKeyboardButton(quizzies.get('1'), callback_data="qui1"))
-	bt2 = (types.InlineKeyboardButton(quizzies.get('2'), callback_data="qui2"))
-	bt3 = (types.InlineKeyboardButton(quizzies.get('3'), callback_data="qui3"))
+	bt1 = (types.InlineKeyboardButton(f"{quizzies.get('1')} - {quizzies_jugador.get('1')}", callback_data="qui1"))
+	bt2 = (types.InlineKeyboardButton(f"{quizzies.get('2')} - {quizzies_jugador.get('2')}", callback_data="qui2"))
+	bt3 = (types.InlineKeyboardButton(f"{quizzies.get('3')} - {quizzies_jugador.get('3')}", callback_data="qui3"))
 	# Comprobar los quizzies disponibles
 	if quizzies_jugador.get('1') != 0:
 		if quizzies_jugador.get('2') != 0:

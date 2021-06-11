@@ -405,5 +405,32 @@ def obtener_quizzies(message):
 		# Informar al usuario
 		bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
 
+
+# Utilizar un quizzie
+@bot.callback_query_handler(lambda call: bool(re.match("qui[1-3]", call.data)))
+def responder_pregunta(call):
+	try:
+		# Obtener jugador que usa el quizzie
+		jug = controlador.obtener_jugador(call.from_user.username)
+		# Usar quizzie
+
+		jug_turno, avatar_jug, equipo_turno, pregunta, categoria, respuestas = controlador.usar_quizzie(call.message.chat.id, call.from_user.username, call.data[-1])
+		# Notificar uso de quizzie
+		bot.edit_message_text(f"{call.from_user.first_name.upper()} {avatar.get(jug.get_avatar())} ha usado el quizzie *{quizzies.get(call.data[-1])}*", call.message.chat.id, call.message.id, parse_mode = 'Markdown')
+		# Definir markup
+		markup = markup_respuestas_quizzies(pregunta, respuestas)
+		aviso = f"Turno del equipo {colores_equipos.get(equipo_turno)} responde {jug_turno.upper()} {avatar.get(avatar_jug)}\n\nPregunta sobre {categoria.upper()} {emojis_categorias.get(categoria)}:"
+		enunciado = f"\n\n\n\n{pregunta.get_enunciado()}"
+		# Eliminar mensaje de ultima pregunta
+		#bot.delete_message(call.message.chat.id, call.message.id - 2)
+		# Se envía la nueva pregunta
+		bot.send_message(call.message.chat.id, aviso + enunciado, reply_markup=markup)
+	except Exception as error:
+		# Se produce un error
+		respuesta = f"{call.from_user.first_name}: {str(error)}"
+		# Informar al usuario
+		bot.send_message(call.message.chat.id, respuesta, parse_mode = 'Markdown')
+
+
 # Launch bot
 bot.polling()
