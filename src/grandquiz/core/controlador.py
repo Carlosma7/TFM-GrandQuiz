@@ -803,3 +803,19 @@ class Controlador():
 				raise ValueError('No existe ninguna partida creada.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Almacenar mensaje de la ultima pregunta realizada
+	def almacenar_mensaje(self, partida: str, mensaje: int):
+		# Comprobar que existe una partida en el chat indicado
+		par = self.mongo.partidas.find_one({'chat': partida})
+		encontrada = (par != None)
+
+		if encontrada:
+			# Se construye el objeto partida
+			par = Partida.from_dict(par)
+			# Se almacena el mensaje nuevo de la última pregunta
+			par.set_mensaje_pregunta(mensaje)
+			# Se actualiza la BD
+			self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
+		else:
+			raise ValueError('No existe ninguna partida creada.')
