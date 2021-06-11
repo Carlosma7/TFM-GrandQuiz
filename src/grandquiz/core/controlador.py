@@ -819,3 +819,17 @@ class Controlador():
 			self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
 		else:
 			raise ValueError('No existe ninguna partida creada.')
+
+	# Obtener el mensaje asociado a la ultima pregunta realizada en la partida
+	def obtener_mensaje(self, partida: str):
+		# Comprobar que existe una partida en el chat indicado
+		par = self.mongo.partidas.find_one({'chat': partida})
+		encontrada = (par != None)
+
+		if encontrada:
+			# Se construye el objeto partida
+			par = Partida.from_dict(par)
+			# Se obtiene el mensaje de la última pregunta realizada
+			return par.get_mensaje_pregunta()
+		else:
+			raise ValueError('No existe ninguna partida creada.')
