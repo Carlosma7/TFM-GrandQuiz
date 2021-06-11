@@ -246,7 +246,9 @@ def iniciar_partida(message):
 			markup = markup_respuestas(pregunta)
 			aviso = f"Turno del equipo {colores_equipos.get(equipo_turno)} responde {jug_turno.upper()} {avatar.get(avatar_jug)}\n\nPregunta sobre {categoria.upper()} {emojis_categorias.get(categoria)}:"
 			enunciado = f"\n\n\n\n{pregunta.get_enunciado()}"
-			bot.send_message(message.chat.id, aviso + enunciado, reply_markup=markup)
+			ultima_pregunta = bot.send_message(message.chat.id, aviso + enunciado, reply_markup=markup)
+			# Se almacena
+			controlador.almacenar_mensaje(message.chat.id, ultima_pregunta.id)
 		except Exception as error:
 			# Se produce un error
 			respuesta = str(error)
@@ -296,7 +298,9 @@ def responder_pregunta(call):
 			markup = markup_respuestas(pregunta)
 			aviso = f"Turno del equipo {colores_equipos.get(equipo_turno)} responde {jug_turno.upper()} {avatar.get(avatar_jug)}\n\nPregunta sobre {categoria.upper()} {emojis_categorias.get(categoria)}:"
 			enunciado = f"\n\n\n\n{pregunta.get_enunciado()}"
-			bot.send_message(call.message.chat.id, aviso + enunciado, reply_markup=markup)
+			ultima_pregunta = bot.send_message(call.message.chat.id, aviso + enunciado, reply_markup=markup)
+			# Se almacena
+			controlador.almacenar_mensaje(call.message.chat.id, ultima_pregunta.id)
 		else:
 			# Hay un equipo ganador
 			# Obtener jugadores
@@ -408,7 +412,7 @@ def obtener_quizzies(message):
 
 # Utilizar un quizzie
 @bot.callback_query_handler(lambda call: bool(re.match("qui[1-3]", call.data)))
-def responder_pregunta(call):
+def usar_quizzie(call):
 	try:
 		# Obtener jugador que usa el quizzie
 		jug = controlador.obtener_jugador(call.from_user.username)
@@ -422,7 +426,7 @@ def responder_pregunta(call):
 		aviso = f"Turno del equipo {colores_equipos.get(equipo_turno)} responde {jug_turno.upper()} {avatar.get(avatar_jug)}\n\nPregunta sobre {categoria.upper()} {emojis_categorias.get(categoria)}:"
 		enunciado = f"\n\n\n\n{pregunta.get_enunciado()}"
 		# Eliminar mensaje de ultima pregunta
-		#bot.delete_message(call.message.chat.id, call.message.id - 2)
+		bot.delete_message(call.message.chat.id, int(controlador.obtener_mensaje(call.message.chat.id)))
 		# Se envía la nueva pregunta
 		bot.send_message(call.message.chat.id, aviso + enunciado, reply_markup=markup)
 	except Exception as error:
