@@ -1324,7 +1324,7 @@ def test_responder_desafio_controlador():
 	# Obtener jugador del turno
 	jug_turno = partida.get_jugador_turno()
 	# Responder desafio
-	resultado, medalla, justificacion = c.responder_desafio(p.get_chat(), jug_turno, 1)
+	resultado, medalla, justificacion, color = c.responder_desafio(p.get_chat(), jug_turno, 1)
 	# Comprobar que si la respuesta es correcta el resultado es True
 	if partida.get_desafio_actual().get_correcta() == "1":
 		assert_that(resultado).is_true()
