@@ -902,14 +902,14 @@ class Controlador():
 					# Responder el desafio
 					if par.responder_desafio(respuesta):
 						# Acierta el desafio, por lo tanto roba una medalla al equipo contrario aleatoria
-						medalla = par.get_equipos()[(par.get_turno() % 2) + 1].obtener_medalla()
+						medalla = par.get_equipos()[par.get_turno() % 2].obtener_medalla()
 						if medalla:
 							par.acertar_desafio(medalla)
 							# Se actualiza la partida en BD
 							self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
-							return True, medalla, par.get_desafio_actual().get_justificacion()
+							return True, medalla, par.get_desafio_actual().get_justificacion(), par.get_equipo_turno().get_color()
 						else:
-							return True, False, par.get_desafio_actual().get_justificacion()
+							return True, False, par.get_desafio_actual().get_justificacion(), par.get_equipo_turno().get_color()
 					else:
 						# Pierde el desafio, por lo tanto pierde una medalla aleatoria
 						medalla = par.get_equipo_turno().obtener_medalla()
@@ -918,9 +918,9 @@ class Controlador():
 							# Se actualiza la partida en BD
 							self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
 
-							return False, medalla, par.get_desafio_actual().get_justificacion()
+							return False, medalla, par.get_desafio_actual().get_justificacion(), par.get_equipo_turno().get_color()
 						else:
-							return False, False, par.get_desafio_actual().get_justificacion()
+							return False, False, par.get_desafio_actual().get_justificacion(), par.get_equipo_turno().get_color()
 				else:
 					nombre_jugador_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
 					nombre_jugador_turno = nombre_jugador_turno.get('nombre')
