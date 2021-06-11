@@ -435,6 +435,100 @@ def usar_quizzie(call):
 		# Informar al usuario
 		bot.send_message(call.message.chat.id, respuesta, parse_mode = 'Markdown')
 
+# Utilizar un desafio
+@bot.message_handler(commands=['desafio'])
+def usar_desafio(message):
+	# Comprobar que la conversación es en un grupo
+	if message.chat.type == 'group':
+		try:
+			# Utilizar el desafío
+			jug_turno, avatar_jug, equipo_turno, desafio = controlador.usar_desafio(message.chat.id, message.from_user.username)
+			# Eliminar mensaje de ultima pregunta
+			bot.delete_message(message.chat.id, int(controlador.obtener_mensaje(message.chat.id)))
+			# Enviar foto del desafío
+			bot.send_photo(message.chat.id, photo=f"https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/challenges/{desafio.get_titulo()}.png?raw=true")
+			# Definir markup
+			markup = markup_desafio(desafio)
+			aviso = f"\U0001f4aa DESAFÍO \U0001f4aa \n\nTurno del equipo {colores_equipos.get(equipo_turno)} responde {jug_turno.upper()} {avatar.get(avatar_jug)}."
+			enunciado = f"\n\n\n\n{desafio.get_enunciado()}"
+			bot.send_message(message.chat.id, aviso + enunciado, reply_markup=markup)
+		except Exception as error:
+			# Se produce un error
+			respuesta = str(error)
+			# Informar al usuario
+			bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+	else:
+		# No es un grupo
+		respuesta = f"Solo se puede lanzar un desafío en partidas en grupo."
+		# Informar al usuario
+		bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+
+# Responder desafio y continuar partida
+@bot.callback_query_handler(lambda call: bool(re.match("des[1-4]", call.data)))
+def responder_desafio(call):
+	try:
+		# Responder desafio
+		resultado, medalla, justificacion, equipo_resp = controlador.responder_desafio(call.message.chat.id, call.from_user.username, int(call.data[-1]))
+		# Comprobar si la pregunta se ha acertado
+		if resultado:
+			# Se ha acertado
+			respuesta = f"\u2705 ¡SÍ, HAS ACERTADO! \n\n*{justificacion}*"
+		else:
+			# Se ha fallado
+			respuesta = f"\u274C Noooooo, esa no era la respuesta correcta. \n\n*{justificacion}*"
+
+		# Editar texto con respuesta
+		respuesta = f"{call.message.text}\n\n{respuesta}"
+		bot.edit_message_text(respuesta, call.message.chat.id, call.message.id, parse_mode = 'Markdown')
+
+		if resultado:
+			if medalla:
+				# Han conseguido la medalla
+				respuesta = f"\n\n¡Enhorabuena! El equipo {colores_equipos.get(equipo_resp)} ha robado la medalla de {medalla} {emojis_categorias.get(medalla)}"
+				# Informar al usuario
+				if medalla == "Geografía":
+					medalla = "Geografia"
+				bot.send_photo(call.message.chat.id, photo=f"https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/game/{medalla}.jpg?raw=true")
+			else:
+				# Han acertado pero no han conseguido la medalla
+				respuesta = f"\n\n¡Oh que pena! El equipo {colores_equipos.get(equipo_resp)} ha acertado el desafío pero al no tener medallas el equipo contrario no ha podido robar nada."
+		else:
+			if medalla:
+				# Han perdido una medalla
+				respuesta = f"\n\n¡NOOOOOOO! El equipo {colores_equipos.get(equipo_resp)} ha fallado y ha perdido la medalla de {medalla} {emojis_categorias.get(medalla)}"
+			else:
+				# No pierden medalla porque no tienen
+				respuesta = f"\n\n¡Oh que pena! El equipo {colores_equipos.get(equipo_resp)} ha fallado el desafío pero al no tener medallas no ha perdido nada."
+
+		bot.send_message(call.message.chat.id, respuesta, parse_mode = 'Markdown')
+
+		# Comprobar si ha ganado un equipo
+		victoria, equipo_ganador = controlador.comprobar_victoria(call.message.chat.id)
+		if not victoria:
+			# No ha ganado todavía ningún equipo
+			# Cambiar turno al siguiente equipo
+			jug_turno, avatar_jug, equipo_turno, pregunta, categoria = controlador.cambiar_turno(call.message.chat.id)
+			# Definir markup
+			markup = markup_respuestas(pregunta)
+			aviso = f"Turno del equipo {colores_equipos.get(equipo_turno)} responde {jug_turno.upper()} {avatar.get(avatar_jug)}\n\nPregunta sobre {categoria.upper()} {emojis_categorias.get(categoria)}:"
+			enunciado = f"\n\n\n\n{pregunta.get_enunciado()}"
+			ultima_pregunta = bot.send_message(call.message.chat.id, aviso + enunciado, reply_markup=markup)
+			# Se almacena
+			controlador.almacenar_mensaje(call.message.chat.id, ultima_pregunta.id)
+		else:
+			# Hay un equipo ganador
+			# Obtener jugadores
+			jugador_1, jugador_2 = controlador.obtener_jugadores_equipo(equipo_ganador)
+			# Informar al usuario
+			bot.send_photo(call.message.chat.id, photo="https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/game/ganador.jpg?raw=true", caption=f"\u2B50\U0001f3c6 ¡ENHORABUENA! EL EQUIPO {colores_equipos.get(equipo_ganador.get_color())} ES EL CAMPEÓN DE GRANDQUIZ. \U0001f3c6\u2B50 \n\n¡{jugador_1.upper()} y {jugador_2.upper()} son los ganadores!", parse_mode = 'Markdown')
+			# Eliminar partida de BD
+			controlador.terminar_partida(call.message.chat.id)
+	except Exception as error:
+		# Se produce un error
+		respuesta = f"{call.from_user.first_name}: {str(error)}"
+		# Informar al usuario
+		bot.send_message(call.message.chat.id, respuesta, parse_mode = 'Markdown')
+
 
 # Launch bot
 bot.polling()

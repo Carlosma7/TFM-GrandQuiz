@@ -3,6 +3,7 @@ from variables import *
 from typing import List
 from telebot import types
 from pregunta import Pregunta
+from desafio import Desafio
 
 # Markups Bot API para elegir avatar
 def markup_avatar():
@@ -120,3 +121,15 @@ def markup_quizzies(quizzies_jugador: dict):
 
 	return markup
 
+# Markups Bot API para responder a un desafío
+def markup_desafio(desafio: Desafio):
+	# Keyboard
+	markup = types.InlineKeyboardMarkup(row_width = 1)
+	# Buttons
+	bt1 = (types.InlineKeyboardButton(desafio.get_respuestas()[0], callback_data="des1"))
+	bt2 = (types.InlineKeyboardButton(desafio.get_respuestas()[1], callback_data="des2"))
+	bt3 = (types.InlineKeyboardButton(desafio.get_respuestas()[2], callback_data="des3"))
+	bt4 = (types.InlineKeyboardButton(desafio.get_respuestas()[3], callback_data="des4"))
+	markup.add(bt1, bt2, bt3, bt4)
+
+	return markup
