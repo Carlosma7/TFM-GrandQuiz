@@ -53,6 +53,9 @@ class Jugador():
 	def add_quizzies(self, tipo: str, cantidad: int):
 		self.__quizzies[tipo] +=  cantidad
 
+	def usar_quizzie(self, tipo: str):
+		self.__quizzies[tipo] -= 1
+
 	# Override método equal
 	def __eq__(self, otra):
 		return (self.__nombre_usuario == otra.get_nombre_usuario()) and (self.__nombre == otra.get_nombre()) and (self.__edad == otra.get_edad()) and (self.__email == otra.get_email()) and (self.__avatar == otra.get_avatar()) and (self.__quizzies == otra.get_quizzies())
