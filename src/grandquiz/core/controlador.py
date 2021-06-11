@@ -4,6 +4,7 @@ from logros import Logro
 from equipo import Equipo
 from partida import Partida
 from pregunta import Pregunta
+from desafio import Desafio
 from variables import *
 
 import os
@@ -833,3 +834,45 @@ class Controlador():
 			return par.get_mensaje_pregunta()
 		else:
 			raise ValueError('No existe ninguna partida creada.')
+
+	# Utilizar un desafio en la partida
+	def usar_desafio(self, partida: str, jugador: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Comprobar que existe una partida en el chat indicado
+			par = self.mongo.partidas.find_one({'chat': partida})
+			encontrada = (par != None)
+
+			# Si existe una partida
+			if encontrada:
+				# Se construye la partida desde el objeto JSON
+				par = Partida.from_dict(par)
+				# Comprobar que el jugador tiene el desafio disponible
+				if par.get_equipo_turno().get_desafios()[par.get_equipo_turno().get_turno() - 1] == 1:
+					# Tiene el desafío disponible
+					# Se obtiene un desafío aleatoriamente
+					desafio_actual = self.mongo.desafios.aggregate([{'$sample':{'size': 1}}])
+					desafio_actual = list(desafio_actual)
+					desafio_actual = Desafio.from_dict(desafio_actual[0])
+					# Se almacena el desafio como actual
+					par.set_desafio_actual(desafio_actual)
+					# Se actualiza la partida en BD
+					self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
+					# Se obtiene el jugador con el nombre de usuario
+					jug_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
+					# Se obtiene el avatar del jugador
+					ava_jug_turno = jug_turno.get('avatar')
+					# Se obtiene el nombre del jugador
+					jug_turno = jug_turno.get('nombre')
+					# Se obtiene el equipo del turno
+					equipo_turno = par.get_equipo_turno().get_color()
+					# Se devuelve el jugador con el turno actual, su avatar, su equipo y el desafio actual
+					return jug_turno, ava_jug_turno, equipo_turno, desafio_actual
+				else:
+					# No tiene el desafío disponible
+					raise ValueError('Ya has usado el desafío en esta partida.')
