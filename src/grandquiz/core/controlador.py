@@ -852,33 +852,40 @@ class Controlador():
 			if encontrada:
 				# Se construye la partida desde el objeto JSON
 				par = Partida.from_dict(par)
-				# Comprobar que el jugador tiene el desafio disponible
-				if par.get_equipo_turno().get_desafios()[par.get_equipo_turno().get_turno() - 1] == 1:
-					# Tiene el desafío disponible
+				# Comprobar que lo solicita el jugador del turno actual
+				if par.get_jugador_turno() == jugador:
+					# Comprobar que el jugador tiene el desafio disponible
+					if par.get_equipo_turno().get_desafios()[par.get_equipo_turno().get_turno() - 1] == 1:
+						# Tiene el desafío disponible
 
-					# Se gasta el desafío del jugador
-					par.get_equipo_turno().usar_desafio()
-					# Se obtiene un desafío aleatoriamente
-					desafio_actual = self.mongo.desafios.aggregate([{'$sample':{'size': 1}}])
-					desafio_actual = list(desafio_actual)
-					desafio_actual = Desafio.from_dict(desafio_actual[0])
-					# Se almacena el desafio como actual
-					par.set_desafio_actual(desafio_actual)
-					# Se actualiza la partida en BD
-					self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
-					# Se obtiene el jugador con el nombre de usuario
-					jug_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
-					# Se obtiene el avatar del jugador
-					ava_jug_turno = jug_turno.get('avatar')
-					# Se obtiene el nombre del jugador
-					jug_turno = jug_turno.get('nombre')
-					# Se obtiene el equipo del turno
-					equipo_turno = par.get_equipo_turno().get_color()
-					# Se devuelve el jugador con el turno actual, su avatar, su equipo y el desafio actual
-					return jug_turno, ava_jug_turno, equipo_turno, desafio_actual
+						# Se gasta el desafío del jugador
+						par.get_equipo_turno().usar_desafio()
+						# Se obtiene un desafío aleatoriamente
+						desafio_actual = self.mongo.desafios.aggregate([{'$sample':{'size': 1}}])
+						desafio_actual = list(desafio_actual)
+						desafio_actual = Desafio.from_dict(desafio_actual[0])
+						# Se almacena el desafio como actual
+						par.set_desafio_actual(desafio_actual)
+						# Se actualiza la partida en BD
+						self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
+						# Se obtiene el jugador con el nombre de usuario
+						jug_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
+						# Se obtiene el avatar del jugador
+						ava_jug_turno = jug_turno.get('avatar')
+						# Se obtiene el nombre del jugador
+						jug_turno = jug_turno.get('nombre')
+						# Se obtiene el equipo del turno
+						equipo_turno = par.get_equipo_turno().get_color()
+						# Se devuelve el jugador con el turno actual, su avatar, su equipo y el desafio actual
+						return jug_turno, ava_jug_turno, equipo_turno, desafio_actual
+					else:
+						# No tiene el desafío disponible
+						raise ValueError('Ya has usado el desafío en esta partida.')
 				else:
-					# No tiene el desafío disponible
-					raise ValueError('Ya has usado el desafío en esta partida.')
+					nombre_jugador_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
+					nombre_jugador_turno = nombre_jugador_turno.get('nombre')
+					raise ValueError(f'Es el turno de {nombre_jugador_turno}.')
+
 
 	# Responder desafio
 	def responder_desafio(self, partida: str, jugador: str, respuesta: int):
