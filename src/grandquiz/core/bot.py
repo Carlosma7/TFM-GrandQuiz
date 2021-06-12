@@ -328,11 +328,11 @@ def obtener_top3(message):
 
 		# Se añaden top 3 de victorias
 		respuesta = f"\u2B50 GrandQuiz TOP \u2B50"
-		respuesta += f"\n\n\U0001f451 TOP 3 Victorias\U0001f451 \n\n \U0001f947 {top3_victorias[0].get('nombre_usuario')} \n \U0001f948 {top3_victorias[1].get('nombre_usuario')} \n \U0001f949 {top3_victorias[2].get('nombre_usuario')}"
+		respuesta += f"\n\n\U0001f451 TOP 3 Victorias\U0001f451 \n\n \U0001f947 {top3_victorias[0].get('nombre_usuario')} - {top3_victorias[0].get('num_victorias')} \n \U0001f948 {top3_victorias[1].get('nombre_usuario')} - {top3_victorias[1].get('num_victorias')} \n \U0001f949 {top3_victorias[2].get('nombre_usuario')} - {top3_victorias[2].get('num_victorias')}"
 
-		respuesta += f"\n\n\U0001f451 TOP 3 Amigos \U0001f451 \n\n \U0001f947 {top3_amigos[0].get('nombre_usuario')} \n \U0001f948 {top3_amigos[1].get('nombre_usuario')} \n \U0001f949 {top3_amigos[2].get('nombre_usuario')}"
+		respuesta += f"\n\n\U0001f451 TOP 3 Amigos \U0001f451 \n\n \U0001f947 {top3_amigos[0].get('nombre_usuario')} - {top3_amigos[0].get('num_amigos')} \n \U0001f948 {top3_amigos[1].get('nombre_usuario')} - {top3_amigos[1].get('num_amigos')} \n \U0001f949 {top3_amigos[2].get('nombre_usuario')} - {top3_amigos[2].get('num_amigos')}"
 
-		respuesta += f"\n\n\U0001f451 TOP 3 Aciertos \U0001f451 \n\n \U0001f947 {top3_aciertos[0].get('nombre_usuario')} \n \U0001f948 {top3_aciertos[1].get('nombre_usuario')} \n \U0001f949 {top3_aciertos[2].get('nombre_usuario')}"
+		respuesta += f"\n\n\U0001f451 TOP 3 Aciertos \U0001f451 \n\n \U0001f947 {top3_aciertos[0].get('nombre_usuario')} - {top3_aciertos[0].get('preguntas_acertadas')} \n \U0001f948 {top3_aciertos[1].get('nombre_usuario')} - {top3_aciertos[1].get('preguntas_acertadas')} \n \U0001f949 {top3_aciertos[2].get('nombre_usuario')} - {top3_aciertos[2].get('preguntas_acertadas')}"
 
 	except Exception as error:
 		# Se produce un error
