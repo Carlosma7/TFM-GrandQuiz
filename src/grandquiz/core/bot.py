@@ -560,5 +560,42 @@ def estado_partida(message):
 		# Informar al usuario
 		bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
 
+# Crear duelo de GrandQuiz
+@bot.message_handler(commands=['nuevo_duelo'])
+def nueva_partida(message):
+	# Comprobar que la conversación es en privado
+	if message.chat.type == 'private':
+		# Crear una partida con el id del chat del grupo
+		duelo = Duelo(message.chat.id, message.from_user.username)
+		try:
+			# Crear duelo en controlador
+			jug_turno, avatar_jug, pregunta, categoria, chat1, chat2 = controlador.crear_duelo(duelo, message.from_user.username)
+			# Se guarda mensaje de éxito
+			if not pregunta:
+				respuesta = f"¡Bien! Has creado un duelo, solo queda esperar a que se una otro jugador para empezar."
+				# Informar al usuario
+				bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+			else:
+				respuesta = f"¡Bien! Ya hay suficientes jugadores para la partida. Hora de \U0001f64c juuuuuugaaaaaaaaarrrrrrrr \U0001f64c"
+				# Informar al usuario
+				bot.send_message(chat1, respuesta, parse_mode = 'Markdown')
+				bot.send_message(chat2, respuesta, parse_mode = 'Markdown')
+				# Definir markup
+				markup = markup_respuestas(pregunta)
+				aviso = f"Turno de {jug_turno.upper()} {avatar.get(avatar_jug)}\n\nPregunta sobre {categoria.upper()} {emojis_categorias.get(categoria)}:"
+				enunciado = f"\n\n\n\n{pregunta.get_enunciado()}"
+				bot.send_message(chat1, aviso + enunciado, reply_markup=markup)
+				bot.send_message(chat2, aviso + enunciado, reply_markup=markup)
+		except Exception as error:
+			# Se produce un error
+			respuesta = str(error)
+			# Informar al usuario
+			bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+	else:
+		# No es un grupo
+		respuesta = f"Para crear un duelo tienes que estar hablar en privado con GrandQuizBot."
+		# Informar al usuario
+		bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+
 # Launch bot
 bot.polling()
