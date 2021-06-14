@@ -1421,3 +1421,36 @@ def test_estado_partida_controlador():
 	c.mongo.logros.delete_one({'nombre_usuario':j4.get_nombre_usuario()})
 	# Borrar partida de test
 	c.mongo.partidas.delete_one({'chat':p.get_chat()})
+
+# Test de crear duelo en GrandQuiz
+def test_crear_duelo_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objeto jugador
+	j1 = Jugador("Test79", "Test79")
+	j2 = Jugador("Test80", "Test80")
+	# Crear jugador
+	c.registrar_jugador(j1)
+	c.registrar_jugador(j2)
+	# Crear objeto duelo
+	d1 = Duelo("Test", j1.get_nombre_usuario())
+	d2 = Duelo("Test2", j2.get_nombre_usuario())
+	# Comprobar que no existe el duelo en BD
+	assert_that(c.mongo.duelos.find({'chat':d1.get_chat()}).count()).is_equal_to(0)
+	# Crear duelo
+	c.crear_duelo(d1, j1.get_nombre_usuario())
+	c.crear_duelo(d2, j2.get_nombre_usuario())
+	# Comprobar que existe el duelo en BD
+	assert_that(c.mongo.duelos.find({'chat':d1.get_chat()}).count()).is_equal_to(1)
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.jugadores.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar duelo de test
+	c.mongo.duelos.delete_one({'chat':d1.get_chat()})
+	c.mongo.duelos.delete_one({'chat':d2.get_chat()})
