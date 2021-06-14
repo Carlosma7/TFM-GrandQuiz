@@ -11,11 +11,11 @@ from assertpy import assert_that
 # Test comparación duelo
 def test_compare_duelo():
 	# Creación de dos duelos idénticos
-	d1 = Duelo('Test')
-	d2 = Duelo('Test')
+	d1 = Duelo('Test', 'Test')
+	d2 = Duelo('Test', 'Test')
 	# Creación de un duelo distinto
 	j1 = Jugador("Test", "Test")
-	d3 = Duelo('Test')
+	d3 = Duelo('Test', 'Test')
 	d3.set_chat2('Test2')
 	# Comprobar que un duelo es igual a otro si tienen la misma información
 	assert_that(d1).is_equal_to(d2) # Pasa test
@@ -25,7 +25,7 @@ def test_compare_duelo():
 # Test de iniciar duelo
 def test_iniciar_duelo():
 	# Creación de un duelo
-	d = Duelo('Test')
+	d = Duelo('Test', 'Test')
 	# Añadir cuatro jugadores
 	j1 = Jugador("Test", "Test")
 	j2 = Jugador("Test2", "Test2")
@@ -43,7 +43,7 @@ def test_iniciar_duelo():
 # Test de acertar pregunta
 def test_acertar_pregunta_duelo():
 	# Creación de un duelo
-	d = Duelo('Test')
+	d = Duelo('Test', 'Test')
 	# Añadir cuatro jugadores
 	j1 = Jugador("Test", "Test")
 	j2 = Jugador("Test2", "Test2")
@@ -60,7 +60,7 @@ def test_acertar_pregunta_duelo():
 # Test de fallar pregunta
 def test_fallar_pregunta_duelo():
 	# Creación de un duelo
-	d = Duelo('Test')
+	d = Duelo('Test', 'Test')
 	# Añadir cuatro jugadores
 	j1 = Jugador("Test", "Test")
 	j2 = Jugador("Test2", "Test2")
@@ -77,7 +77,7 @@ def test_fallar_pregunta_duelo():
 # Test de pasar turno
 def test_pasar_turno_duelo():
 	# Creación de un duelo
-	d = Duelo('Test')
+	d = Duelo('Test', 'Test')
 	# Añadir cuatro jugadores
 	j1 = Jugador("Test", "Test")
 	j2 = Jugador("Test2", "Test2")
@@ -97,7 +97,7 @@ def test_pasar_turno_duelo():
 # Test de comprobar victoria
 def test_comprobar_victoria_duelo():
 	# Creación de un duelo
-	d = Duelo('Test')
+	d = Duelo('Test', 'Test')
 	# Añadir cuatro jugadores
 	j1 = Jugador("Test", "Test")
 	j2 = Jugador("Test2", "Test2")
@@ -113,7 +113,7 @@ def test_comprobar_victoria_duelo():
 # Test de obtener jugador del turno
 def test_get_jugador_turno_duelo():
 	# Creación de un duelo
-	d = Duelo('Test')
+	d = Duelo('Test', 'Test')
 	# Añadir cuatro jugadores
 	j1 = Jugador("Test", "Test")
 	j2 = Jugador("Test2", "Test2")
