@@ -529,6 +529,36 @@ def responder_desafio(call):
 		# Informar al usuario
 		bot.send_message(call.message.chat.id, respuesta, parse_mode = 'Markdown')
 
+# Utilizar un desafio
+@bot.message_handler(commands=['estado'])
+def estado_partida(message):
+	# Comprobar que la conversación es en un grupo
+	if message.chat.type == 'group':
+		try:
+			# Comprobar el estado de la partida
+			eq1, eq2 = controlador.estado_partida(message.chat.id, message.from_user.username)
+			# Conformar respuesta
+			respuesta = f"Equipo {colores_equipos.get('rojo')}:\n"
+			# Medallas equipo rojo
+			for med in eq1:
+				if eq1[med] == 1:
+					respuesta += f"{emojis_categorias.get(med)} {med}\n"
+			respuesta += f"\nEquipo {colores_equipos.get('azul')}:\n"
+			for med in eq2:
+				if eq2[med] == 1:
+					respuesta += f"{emojis_categorias.get(med)} {med}\n"
+			# Utilizar el desafío
+			bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+		except Exception as error:
+			# Se produce un error
+			respuesta = str(error)
+			# Informar al usuario
+			bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+	else:
+		# No es un grupo
+		respuesta = f"Para ver una partida tienes que estar en un grupo."
+		# Informar al usuario
+		bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
 
 # Launch bot
 bot.polling()
