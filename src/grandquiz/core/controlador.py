@@ -3,6 +3,7 @@ from estadistica import Estadistica
 from logros import Logro
 from equipo import Equipo
 from partida import Partida
+from duelo import Duelo
 from pregunta import Pregunta
 from desafio import Desafio
 from variables import *
@@ -961,5 +962,65 @@ class Controlador():
 					raise ValueError('No existe ninguna partida iniciada.')
 			else:
 				raise ValueError('No existe ninguna partida creada.')
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Crear duelo
+	def crear_duelo(self, duelo: Duelo, jugador: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Comprobar que existe un duelo
+			due = self.mongo.duelos.find_one({'iniciada': False})
+			duelo_propio = self.mongo.duelos.find_one({'chat': duelo.get_chat()})
+			no_encontrada = (due == None)
+
+			# Si no existe
+			if no_encontrada:
+				# Se almacena el duelo
+				self.mongo.duelos.insert_one(duelo.to_dict())
+				# Se obtiene el jugador con el nombre de usuario
+				jug_turno = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+				# Se obtiene el avatar del jugador
+				ava_jug_turno = jug_turno.get('avatar')
+				# Se obtiene el nombre del jugador
+				jug_turno = jug_turno.get('nombre')
+				return jug_turno, ava_jug_turno, False, False, False, False
+			else:
+				no_duelo_propio = (duelo_propio == None)
+				if no_duelo_propio:
+					# Se une al duelo existente
+					due = Duelo.from_dict(due)
+					# Se guarda el chat del jugador
+					due.set_chat2(duelo.get_chat())
+					due.add_jugador(duelo.get_jugadores()[0])
+					# Se inicia el duelo
+					due.iniciar_duelo()
+
+					# Se obtienen una de las categorías disponibles del jugador
+					categoria_pregunta = due.obtener_categoria()
+					#pregunta_actual = self.mongo.preguntas.aggregate([{ $sample: {size: 1} }, { $match:  {"categoria": categoria_pregunta} }])
+					pregunta_actual = self.mongo.preguntas.aggregate([{'$match':{'categoria': categoria_pregunta}}, {'$sample':{'size': 1}}])
+					pregunta_actual = list(pregunta_actual)
+					pregunta_actual = Pregunta.from_dict(pregunta_actual[0])
+					# Se almacena la pregunta como actual
+					due.set_pregunta_actual(pregunta_actual)
+					# Se actualiza el duelo en BD
+					self.mongo.duelos.update({'chat': due.get_chat()}, {'$set': due.to_dict()})
+					# Se obtiene el jugador con el nombre de usuario
+					jug_turno = self.mongo.jugadores.find_one({'nombre_usuario': due.get_jugador_turno()})
+					# Se obtiene el avatar del jugador
+					ava_jug_turno = jug_turno.get('avatar')
+					# Se obtiene el nombre del jugador
+					jug_turno = jug_turno.get('nombre')
+
+					# Se devuelve el jugador con el turno actual, su avatar, la pregunta actual y la categoría 
+					return jug_turno, ava_jug_turno, pregunta_actual, categoria_pregunta, due.get_chat(), due.get_chat2()
+				else:
+					raise ValueError('Ya estás jugando un duelo.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
