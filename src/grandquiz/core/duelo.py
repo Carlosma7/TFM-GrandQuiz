@@ -6,10 +6,10 @@ from typing import List
 
 # Clase de duelo
 class Duelo():
-	def __init__(self, chat: str):
+	def __init__(self, chat: str, jugador: str):
 		self.__chat = chat
 		self.__chat2 = ""
-		self.__jugadores = []
+		self.__jugadores = [jugador]
 		self.__turno = 0
 		self.__iniciada = False
 		self.__ganador = 0
@@ -20,13 +20,15 @@ class Duelo():
 	# Constructor from_dict
 	@classmethod
 	def from_dict(cls, data: dict):
-		d = cls(data.get('chat'))
+		d = cls(data.get('chat'), data.get('jugadores')[0])
 		d.set_chat2('chat2')
 		d.set_turno(data.get('turno'))
 		d.set_iniciada(data.get('iniciada'))
 		d.set_ganador(data.get('ganador'))
 		pregunta_actual = Pregunta.from_dict(data.get('pregunta_actual'))
 		d.set_pregunta_actual(pregunta_actual)
+		d.set_medallas(data.get('medallas'))
+		d.set_puntuaciones(data.get('puntuaciones'))
 		return d
 
 	# Métodos get/set
@@ -146,5 +148,4 @@ class Duelo():
 
 	# Método para transformar objeto en un dict
 	def to_dict(self):
-		equipos = [equipo.to_dict() for equipo in self.get_equipos()]
 		return {'chat': self.get_chat(), 'chat2': self.get_chat2(), 'jugadores': self.get_jugadores(), 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': self.get_pregunta_actual().to_dict(), 'medallas': self.get_medallas(), 'puntuaciones': self.get_puntuaciones()}
