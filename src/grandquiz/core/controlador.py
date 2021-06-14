@@ -936,3 +936,30 @@ class Controlador():
 				raise ValueError('No existe ninguna partida creada.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Comprobar estado de la partida
+	def estado_partida(self, partida: str, jugador: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Comprobar que existe una partida en el chat indicado
+			par = self.mongo.partidas.find_one({'chat': partida})
+			encontrada = (par != None)
+
+			# Si existe una partida
+			if encontrada:
+				par = Partida.from_dict(par)
+				if par.get_iniciada():
+					# Obtener equipos
+					equipos = par.get_equipos()
+					return equipos[0].get_medallas(), equipos[1].get_medallas()
+				else:
+					raise ValueError('No existe ninguna partida iniciada.')
+			else:
+				raise ValueError('No existe ninguna partida creada.')
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
