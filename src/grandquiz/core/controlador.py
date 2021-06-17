@@ -977,6 +977,7 @@ class Controlador():
 			# Comprobar que existe un duelo
 			due = self.mongo.duelos.find_one({'iniciada': False})
 			duelo_propio = self.mongo.duelos.find_one({'chat': duelo.get_chat()})
+			duelo_ajeno = self.mongo.duelos.find_one({'chat2': duelo.get_chat()})
 			no_encontrada = (due == None)
 
 			# Si no existe
@@ -992,7 +993,8 @@ class Controlador():
 				return jug_turno, ava_jug_turno, False, False, False, False
 			else:
 				no_duelo_propio = (duelo_propio == None)
-				if no_duelo_propio:
+				no_duelo_ajeno = (duelo_ajeno == None)
+				if no_duelo_propio and no_duelo_ajeno:
 					# Se une al duelo existente
 					due = Duelo.from_dict(due)
 					# Se guarda el chat del jugador
@@ -1022,5 +1024,85 @@ class Controlador():
 					return jug_turno, ava_jug_turno, pregunta_actual, categoria_pregunta, due.get_chat(), due.get_chat2()
 				else:
 					raise ValueError('Ya estás jugando un duelo.')
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Responder pregunta en un duelo
+	def responder_pregunta_duelo(self, duelo: str, jugador: str, respuesta: int):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Comprobar que existe un duelo en el chat indicado
+			due = self.mongo.duelos.find_one({'chat': duelo})
+			due2 = self.mongo.duelos.find_one({'chat2': duelo})
+			encontrada = (due != None)
+			encontrada2 = (due2 != None)
+			
+			# Comprobar tambien por si es chat 2
+			if encontrada2:
+				due = due2
+				encontrada = encontrada2
+
+			# Si existe una partida
+			if encontrada:
+				due = Duelo.from_dict(due)
+
+				# Se obtienen las estadisticas del jugador
+				est = self.mongo.estadisticas.find_one({'nombre_usuario': jugador})
+				est = Estadistica.from_dict(est)
+
+				# Comprobar que responde el jugador del turno actual
+				if due.get_jugador_turno() == jugador:
+					# Responder la pregunta
+					if due.responder_pregunta(respuesta):
+						due.acertar_pregunta(due.get_pregunta_actual().get_categoria())
+						# Se actualiza el duelo en BD
+						if encontrada2:
+							self.mongo.duelos.update({'chat2': duelo}, {'$set': due.to_dict()})
+						else:
+							self.mongo.duelos.update({'chat': duelo}, {'$set': due.to_dict()})
+
+						# Se actualizan las estadisticas de categoria y numero de preguntas acertadas del jugador
+						est.add_acierto(due.get_pregunta_actual().get_categoria())
+						# Se actualizan las estadisticas en BD
+						self.mongo.estadisticas.update({'nombre_usuario': jugador}, {'$set': est.to_dict()})
+
+						# Se obtienen los logros del jugador
+						log = self.mongo.logros.find_one({'nombre_usuario': jugador})
+						log = Logro.from_dict(log)
+						# Se actualizan los logros de aciertos en la categoría de la pregunta
+						log.update_logro_categorias(est.get_categorias().get(due.get_pregunta_actual().get_categoria()), due.get_pregunta_actual().get_categoria())
+						# Se actualizan los logros en BD
+						self.mongo.logros.update({'nombre_usuario': jugador}, {'$set': log.to_dict()})
+
+						# Se actualizan los jugadores en BD
+						self.mongo.jugadores.update({'nombre_usuario': jugador}, {'$set': jug.to_dict()})
+
+
+						return True, due.get_chat(), due.get_chat2()
+					else:
+						due.fallar_pregunta(due.get_pregunta_actual().get_categoria())
+						# Se actualiza el duelo en BD
+						if encontrada2:
+							self.mongo.duelos.update({'chat2': duelo}, {'$set': due.to_dict()})
+						else:
+							self.mongo.duelos.update({'chat': duelo}, {'$set': due.to_dict()})
+
+						# Se actualiza la estadistica de numero de preguntas falladas del jugador
+						est.add_fallo()
+						# Se actualizan las estadisticas en BD
+						self.mongo.estadisticas.update({'nombre_usuario': jugador}, {'$set': est.to_dict()})
+
+						return False, due.get_chat(), due.get_chat2()
+				else:
+					nombre_jugador_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
+					nombre_jugador_turno = nombre_jugador_turno.get('nombre')
+					raise ValueError(f'Es el turno de {nombre_jugador_turno}.')
+			else:
+				raise ValueError('No existe ninguna partida creada.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
