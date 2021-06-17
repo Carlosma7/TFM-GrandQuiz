@@ -1509,9 +1509,9 @@ def test_obtener_respuesta_duelo_controlador():
 	# Crear controlador
 	c = Controlador()
 	# Crear objetos jugador
-	j1 = Jugador("Test83", "Test81")
+	j1 = Jugador("Test83", "Test83")
 	j1.set_edad("edad0")
-	j2 = Jugador("Test84", "Test82")
+	j2 = Jugador("Test84", "Test84")
 	j2.set_edad("edad1")
 	# Crear jugadores
 	c.registrar_jugador(j1)
@@ -1526,6 +1526,43 @@ def test_obtener_respuesta_duelo_controlador():
 	respuesta = c.obtener_respuesta_duelo(chat1)
 	# Se comprueba que la respuesta y la correcta de la pregunta coinciden
 	assert_that(pregunta.get_respuesta()).is_equal_to(respuesta)
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.jugadores.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar duelo de test
+	c.mongo.duelos.delete_one({'chat':d1.get_chat()})
+	c.mongo.duelos.delete_one({'chat':d2.get_chat()})
+
+# Test de cambiar turno en duelo
+def test_cambiar_turno_duelo_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objetos jugador
+	j1 = Jugador("Test85", "Test85")
+	j1.set_edad("edad0")
+	j2 = Jugador("Test86", "Test86")
+	j2.set_edad("edad1")
+	# Crear jugadores
+	c.registrar_jugador(j1)
+	c.registrar_jugador(j2)
+	# Crear objeto duelo
+	d1 = Duelo("Test7", j1.get_nombre_usuario())
+	d2 = Duelo("Test8", j2.get_nombre_usuario())
+	# Crear duelo
+	c.crear_duelo(d1, j1.get_nombre_usuario())
+	turno, ava_turno, pregunta, categoria, chat1, chat2 = c.crear_duelo(d2, j2.get_nombre_usuario())
+	# Cambiar el turno
+	turno_nuevo, ava_turno, pregunta_nueva, categoria, chat1, chat2 = c.cambiar_turno_duelo(chat1)
+	# Comprobar que el jugador del turno no coincide
+	assert_that(turno).is_not_equal_to(turno_nuevo)
+	# Comprobar que la pregunta no coincide
+	assert_that(pregunta).is_not_equal_to(pregunta_nueva)
 	# Borrar jugador de test
 	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
 	c.mongo.jugadores.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
