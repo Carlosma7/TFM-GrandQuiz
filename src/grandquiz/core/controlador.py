@@ -1118,3 +1118,37 @@ class Controlador():
 			return due.get_pregunta_actual().get_respuesta()
 		else:
 			raise ValueError('No existe ningún duelo creado.')
+
+	# Pasar el turno de un duelo al siguiente jugador
+	def cambiar_turno_duelo(self, duelo: str):
+		# Comprobar que existe un duelo en el chat indicado
+		due = self.mongo.duelos.find_one({'chat': duelo})
+		encontrada = (due != None)
+
+		if encontrada:
+			due = Duelo.from_dict(due)
+			
+			# Cambiar de turno de la partida
+			due.pasar_turno()
+
+			# Se obtienen una de las categorías disponibles del jugador
+			categoria_pregunta = due.obtener_categoria()
+			#pregunta_actual = self.mongo.preguntas.aggregate([{ $sample: {size: 1} }, { $match:  {"categoria": categoria_pregunta} }])
+			pregunta_actual = self.mongo.preguntas.aggregate([{'$match':{'categoria': categoria_pregunta}}, {'$sample':{'size': 1}}])
+			pregunta_actual = list(pregunta_actual)
+			pregunta_actual = Pregunta.from_dict(pregunta_actual[0])
+			# Se almacena la pregunta como actual
+			due.set_pregunta_actual(pregunta_actual)
+			# Se actualiza el duelo en BD
+			self.mongo.duelos.update({'chat': due.get_chat()}, {'$set': due.to_dict()})
+			# Se obtiene el jugador con el nombre de usuario
+			jug_turno = self.mongo.jugadores.find_one({'nombre_usuario': due.get_jugador_turno()})
+			# Se obtiene el avatar del jugador
+			ava_jug_turno = jug_turno.get('avatar')
+			# Se obtiene el nombre del jugador
+			jug_turno = jug_turno.get('nombre')
+
+			# Se devuelve el jugador con el turno actual, su avatar, la pregunta actual y la categoría 
+			return jug_turno, ava_jug_turno, pregunta_actual, categoria_pregunta, due.get_chat(), due.get_chat2()
+		else:
+			raise ValueError('Ya estás jugando un duelo.')
