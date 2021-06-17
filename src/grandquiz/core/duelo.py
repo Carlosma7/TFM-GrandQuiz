@@ -21,7 +21,9 @@ class Duelo():
 	@classmethod
 	def from_dict(cls, data: dict):
 		d = cls(data.get('chat'), data.get('jugadores')[0])
-		d.set_chat2('chat2')
+		if len(data.get('jugadores')) == 2:
+			d.add_jugador(data.get('jugadores')[1])
+		d.set_chat2(data.get('chat2'))
 		d.set_turno(data.get('turno'))
 		d.set_iniciada(data.get('iniciada'))
 		d.set_ganador(data.get('ganador'))
