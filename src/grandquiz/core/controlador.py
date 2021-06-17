@@ -1228,3 +1228,15 @@ class Controlador():
 				return False, categoria
 		else:
 			raise ValueError('No existe ningún duelo creado.')
+
+	# Terminar duelo eliminándola de BD
+	def terminar_duelo(self, duelo: str):
+		# Comprobar que existe un duelo en el chat indicado
+		due = self.mongo.duelos.find_one({'chat': duelo})
+		encontrada = (due != None)
+
+		if encontrada:
+			# Eliminar duelo de BD
+			self.mongo.duelos.remove({'chat': duelo})
+		else:
+			raise ValueError('No existe ningún duelo creado.')
