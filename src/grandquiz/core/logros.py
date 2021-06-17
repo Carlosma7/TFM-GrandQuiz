@@ -5,6 +5,7 @@ class Logro():
 		self.__logro_victorias = 0
 		self.__logro_amigos = 0
 		self.__logro_categorias = {"Arte":0, "Geografía":0, "Ciencia":0, "Historia":0, "Deporte":0, "Entretenimiento":0}
+		self.__logro_duelos = 0
 
 	# Constructor from_dict
 	@classmethod
@@ -13,6 +14,7 @@ class Logro():
 		l.set_logro_victorias(data.get('logro_victorias'))
 		l.set_logro_amigos(data.get('logro_amigos'))
 		l.set_logro_categorias(data.get('logro_categorias'))
+		l.set_logro_duelos(data.get('logro_duelos'))
 		return l
 
 	# Métodos get/set
@@ -36,6 +38,12 @@ class Logro():
 
 	def set_logro_categorias(self, logro_categorias: dict):
 		self.__logro_categorias = logro_categorias
+
+	def get_logro_duelos(self):
+		return self.__logro_duelos
+
+	def set_logro_duelos(self, logro_duelos: int):
+		self.__logro_duelos = logro_duelos
 
 	def update_logro_victorias(self, num_victorias: int):
 		if num_victorias == 10:
@@ -67,10 +75,21 @@ class Logro():
 		elif num_aciertos == 50:
 			self.__logro_categorias[categoria] = 4
 
+	def update_logro_duelos(self, num_duelos: int):
+		if num_duelos == 10:
+			self.__logro_duelos = 1
+		elif num_duelos == 20:
+			self.__logro_duelos = 2
+		elif num_duelos == 50:
+			self.__logro_duelos = 3
+		elif num_duelos == 100:
+			self.__logro_duelos = 4
+
+
 	# Override método equal
 	def __eq__(self, otra):
-		return (self.__nombre_usuario == otra.get_nombre_usuario()) and (self.__logro_victorias == otra.get_logro_victorias()) and (self.__logro_amigos == otra.get_logro_amigos()) and (self.__logro_categorias == otra.get_logro_categorias())
+		return (self.__nombre_usuario == otra.get_nombre_usuario()) and (self.__logro_victorias == otra.get_logro_victorias()) and (self.__logro_amigos == otra.get_logro_amigos()) and (self.__logro_categorias == otra.get_logro_categorias()) and (self.__logro_duelos == otra.get_logro_duelos())
 
 	# Método para transformar objeto en un dict
 	def to_dict(self):
-		return {'nombre_usuario': self.get_nombre_usuario(), 'logro_victorias': self.get_logro_victorias(), 'logro_amigos': self.get_logro_amigos(), 'logro_categorias': self.get_logro_categorias()}
+		return {'nombre_usuario': self.get_nombre_usuario(), 'logro_victorias': self.get_logro_victorias(), 'logro_amigos': self.get_logro_amigos(), 'logro_categorias': self.get_logro_categorias(), 'logro_duelos': self.get_logro_duelos()}
