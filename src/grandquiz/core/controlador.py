@@ -1041,7 +1041,7 @@ class Controlador():
 			due2 = self.mongo.duelos.find_one({'chat2': duelo})
 			encontrada = (due != None)
 			encontrada2 = (due2 != None)
-			
+
 			# Comprobar tambien por si es chat 2
 			if encontrada2:
 				due = due2
@@ -1103,6 +1103,18 @@ class Controlador():
 					nombre_jugador_turno = nombre_jugador_turno.get('nombre')
 					raise ValueError(f'Es el turno de {nombre_jugador_turno}.')
 			else:
-				raise ValueError('No existe ninguna partida creada.')
+				raise ValueError('No existe ningún duelo creado.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Obtener la respuesta de la pregunta actual del duelo
+	def obtener_respuesta_duelo(self, duelo: str):
+		# Comprobar que existe un duelo en el chat indicado
+		due = self.mongo.duelos.find_one({'chat': duelo})
+		encontrada = (due != None)
+
+		if encontrada:
+			due = Duelo.from_dict(due)
+			return due.get_pregunta_actual().get_respuesta()
+		else:
+			raise ValueError('No existe ningún duelo creado.')
