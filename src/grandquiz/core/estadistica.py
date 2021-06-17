@@ -8,6 +8,7 @@ class Estadistica():
 		self.__categorias = {"Arte":0, "Geografía":0, "Ciencia":0, "Historia":0, "Deporte":0, "Entretenimiento":0}
 		self.__preguntas_acertadas = 0
 		self.__preguntas_falladas = 0
+		self.__num_duelos = 0
 
 	# Constructor from_dict
 	@classmethod
@@ -19,6 +20,7 @@ class Estadistica():
 		e.set_categorias(data.get('categorias'))
 		e.set_preguntas_acertadas(data.get('preguntas_acertadas'))
 		e.set_preguntas_falladas(data.get('preguntas_falladas'))
+		e.set_num_duelos(data.get('num_duelos'))
 		return e
 
 	# Métodos get/set
@@ -60,6 +62,12 @@ class Estadistica():
 
 	def set_preguntas_falladas(self, preguntas_falladas: int):
 		self.__preguntas_falladas = preguntas_falladas
+
+	def get_num_duelos(self):
+		return self.__num_duelos
+
+	def set_num_duelos(self, num_duelos: int):
+		self.__num_duelos = num_duelos
 
 	# Obtener mejor amigo
 	def get_mejor_amigo(self):
@@ -109,10 +117,15 @@ class Estadistica():
 		# Se añade al número total de fallos
 		self.__preguntas_falladas += 1
 
+	# Añadir un duelo ganado
+	def add_duelo(self):
+		# Se añade un duelo ganado al total
+		self.__num_duelos += 1
+
 	# Override método equal
 	def __eq__(self, otra):
-		return (self.__nombre_usuario == otra.get_nombre_usuario()) and (self.__num_victorias == otra.get_num_victorias()) and (self.__num_partidas == otra.get_num_partidas()) and (self.__amigos == otra.get_amigos()) and (self.__categorias == otra.get_categorias()) and (self.__preguntas_acertadas == otra.get_preguntas_acertadas()) and (self.__preguntas_falladas == otra.get_preguntas_falladas())
+		return (self.__nombre_usuario == otra.get_nombre_usuario()) and (self.__num_victorias == otra.get_num_victorias()) and (self.__num_partidas == otra.get_num_partidas()) and (self.__amigos == otra.get_amigos()) and (self.__categorias == otra.get_categorias()) and (self.__preguntas_acertadas == otra.get_preguntas_acertadas()) and (self.__preguntas_falladas == otra.get_preguntas_falladas()) and (self.__num_duelos == otra.get_num_duelos())
 
 	# Método para transformar objeto en un dict
 	def to_dict(self):
-		return {'nombre_usuario': self.get_nombre_usuario(), 'num_victorias': self.get_num_victorias(), 'num_partidas': self.get_num_partidas(), 'amigos': self.get_amigos(), 'categorias': self.get_categorias(), 'preguntas_acertadas': self.get_preguntas_acertadas(), 'preguntas_falladas': self.get_preguntas_falladas()}
+		return {'nombre_usuario': self.get_nombre_usuario(), 'num_victorias': self.get_num_victorias(), 'num_partidas': self.get_num_partidas(), 'amigos': self.get_amigos(), 'categorias': self.get_categorias(), 'preguntas_acertadas': self.get_preguntas_acertadas(), 'preguntas_falladas': self.get_preguntas_falladas(), 'num_duelos': self.get_num_duelos()}
