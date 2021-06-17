@@ -1503,3 +1503,38 @@ def test_responder_pregunta_duelo_controlador():
 	# Borrar duelo de test
 	c.mongo.duelos.delete_one({'chat':d1.get_chat()})
 	c.mongo.duelos.delete_one({'chat':d2.get_chat()})
+
+# Test de obtener respuesta en duelo
+def test_obtener_respuesta_duelo_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objetos jugador
+	j1 = Jugador("Test83", "Test81")
+	j1.set_edad("edad0")
+	j2 = Jugador("Test84", "Test82")
+	j2.set_edad("edad1")
+	# Crear jugadores
+	c.registrar_jugador(j1)
+	c.registrar_jugador(j2)
+	# Crear objeto duelo
+	d1 = Duelo("Test5", j1.get_nombre_usuario())
+	d2 = Duelo("Test6", j2.get_nombre_usuario())
+	# Crear duelo
+	c.crear_duelo(d1, j1.get_nombre_usuario())
+	turno, ava_turno, pregunta, categoria, chat1, chat2 = c.crear_duelo(d2, j2.get_nombre_usuario())
+	# Se obtiene la respuesta de la pregunta
+	respuesta = c.obtener_respuesta_duelo(chat1)
+	# Se comprueba que la respuesta y la correcta de la pregunta coinciden
+	assert_that(pregunta.get_respuesta()).is_equal_to(respuesta)
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.jugadores.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar duelo de test
+	c.mongo.duelos.delete_one({'chat':d1.get_chat()})
+	c.mongo.duelos.delete_one({'chat':d2.get_chat()})
