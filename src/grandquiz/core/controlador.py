@@ -518,11 +518,11 @@ class Controlador():
 				self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
 
 				# Se añade una partida y una victoria al equipo ganador
-				self.add_estadisticas_partida(par.get_equipos()[0].get_jugadores()[0], True)
-				self.add_estadisticas_partida(par.get_equipos()[0].get_jugadores()[1], True)
+				self.add_estadisticas_partida(par.get_equipos()[par.get_ganador() - 1].get_jugadores()[0], True)
+				self.add_estadisticas_partida(par.get_equipos()[par.get_ganador() - 1].get_jugadores()[1], True)
 				# Se añade una partida al equipo perdedor
-				self.add_estadisticas_partida(par.get_equipos()[1].get_jugadores()[0], False)
-				self.add_estadisticas_partida(par.get_equipos()[1].get_jugadores()[1], False)
+				self.add_estadisticas_partida(par.get_equipos()[par.get_ganador() % 2].get_jugadores()[0], False)
+				self.add_estadisticas_partida(par.get_equipos()[par.get_ganador() % 2].get_jugadores()[1], False)
 				return True, equipo_ganador
 			else:
 				return False, None
@@ -1152,3 +1152,54 @@ class Controlador():
 			return jug_turno, ava_jug_turno, pregunta_actual, categoria_pregunta, due.get_chat(), due.get_chat2()
 		else:
 			raise ValueError('Ya estás jugando un duelo.')
+
+	# Comprobar si un jugador ha ganado el duelo y en caso positivo devolver el jugador ganador
+	def comprobar_victoria_duelo(self, duelo: str):
+		# Comprobar que existe una partida en el chat indicado
+		due = self.mongo.duelos.find_one({'chat': duelo})
+		encontrada = (due != None)
+
+		if encontrada:
+			due = Duelo.from_dict(due)
+			
+			if due.comprobar_victoria():
+				# Obtener jugador ganador
+				jug_ganador = due.get_ganador()
+				# Se actualiza la partida en BD
+				self.mongo.duelos.update({'chat': duelo}, {'$set': due.to_dict()})
+
+				# Se añade un duelo y una victoria al jugador ganador
+				self.add_estadisticas_duelo(due.get_jugadores()[due.get_ganador() - 1], True)
+				# Se añade un duelo al jugador perdedor
+				self.add_estadisticas_duelo(due.get_jugadores()[due.get_ganador() % 2], False)
+				return True, jug_ganador
+			else:
+				return False, None
+		else:
+			raise ValueError('No existe ningún duelo creado.')
+
+	# Añadir estadisticas de duelo a un jugador
+	def add_estadisticas_duelo(self, jugador: str, ganador: bool):
+		# Comprobar que existe el jugador 1
+		est = self.mongo.estadisticas.find_one({'nombre_usuario': jugador})
+		encontrado = (est != None)
+
+		if encontrado:
+			# Se obtienen los logros
+			log = self.mongo.logros.find_one({'nombre_usuario': jugador})
+			log = Logro.from_dict(log)
+
+			est = Estadistica.from_dict(est)
+
+			# Se comprueba si ha ganado el duelo
+			if ganador:
+				est.add_duelo()
+				# Se actualizan los logros de victorias
+				log.update_logro_duelos(est.get_num_duelos())
+
+			# Se actualizan la estadisticas en BD
+			self.mongo.estadisticas.update({'nombre_usuario': jugador}, {'$set': est.to_dict()})
+			# Se actualizan los logros en BD
+			self.mongo.logros.update({'nombre_usuario': jugador}, {'$set': log.to_dict()})
+		else:
+			raise ValueError(f'El jugador con nick {jugador} no existe.')
