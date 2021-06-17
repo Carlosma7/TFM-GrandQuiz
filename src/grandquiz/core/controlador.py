@@ -1203,3 +1203,28 @@ class Controlador():
 			self.mongo.logros.update({'nombre_usuario': jugador}, {'$set': log.to_dict()})
 		else:
 			raise ValueError(f'El jugador con nick {jugador} no existe.')
+
+	# Comprobar si un jugador posee una medalla en un duelo tras responder a la categoría
+	def comprobar_medalla_duelo(self, duelo: str):
+		# Comprobar que existe un duelo en el chat indicado
+		due = self.mongo.duelos.find_one({'chat': duelo})
+		encontrada = (due != None)
+
+		if encontrada:
+			due = Duelo.from_dict(due)
+			
+			# Obtener el jugador actual
+			jugador = due.get_jugador_turno()
+			# Obtener categoría de la pregunta actual
+			categoria = due.get_pregunta_actual().get_categoria()
+
+			# Comprobar si el equipo tiene la medalla de la categoria
+			medalla = due.get_medallas()[due.get_turno() - 1].get(categoria)
+
+			# Si la tiene
+			if medalla == 1:
+				return True, categoria
+			else:
+				return False, categoria
+		else:
+			raise ValueError('No existe ningún duelo creado.')
