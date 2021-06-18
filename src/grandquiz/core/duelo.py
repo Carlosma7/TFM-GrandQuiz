@@ -119,7 +119,7 @@ class Duelo():
 	# Fallar pregunta
 	def fallar_pregunta(self, categoria: str):
 		# Se quita el punto
-		if self.__puntuaciones[self.__turno - 1][categoria] > 1:
+		if self.__puntuaciones[self.__turno - 1][categoria] > 0:
 			self.__puntuaciones[self.__turno - 1][categoria] -= 1
 
 	# Pasar turno del equipo
