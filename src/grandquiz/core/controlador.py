@@ -1322,16 +1322,23 @@ class Controlador():
 			encontrada2 = (due2 != None)
 
 			# Comprobar tambien por si es chat 2
+			jugador1 = True
 			if encontrada2:
 				due = due2
 				encontrada = encontrada2
+				jugador1 = False
 
 			# Si existe una partida
 			if encontrada:
 				due = Duelo.from_dict(due)
 				if due.get_iniciada():
-					# Obtener medallas de jugadores
-					return due.get_medallas()
+					if jugador1:
+						# Obtener medallas de jugadores
+						return due.get_medallas()
+					else:
+						medallas = due.get_medallas()
+						medallas.reverse()
+						return medallas
 				else:
 					raise ValueError('No existe ningún duelo iniciado.')
 			else:
