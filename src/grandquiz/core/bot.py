@@ -491,7 +491,9 @@ def usar_quizzie(call):
 		# Eliminar mensaje de ultima pregunta
 		bot.delete_message(call.message.chat.id, int(controlador.obtener_mensaje(call.message.chat.id)))
 		# Se envía la nueva pregunta
-		bot.send_message(call.message.chat.id, aviso + enunciado, reply_markup=markup)
+		ultima_pregunta = bot.send_message(call.message.chat.id, aviso + enunciado, reply_markup=markup)
+		# Se almacena
+		controlador.almacenar_mensaje(call.message.chat.id, ultima_pregunta.id)
 	except Exception as error:
 		# Se produce un error
 		respuesta = f"{call.from_user.first_name}: {str(error)}"
