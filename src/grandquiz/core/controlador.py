@@ -1267,3 +1267,40 @@ class Controlador():
 				raise ValueError('No existe ningún duelo creado.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Almacenar mensaje de la ultima pregunta realizada en duelo
+	def almacenar_mensaje_duelo(self, duelo: str, mensaje: int, chat: int):
+		# Comprobar que existe un duelo en el chat indicado
+		due = self.mongo.duelos.find_one({'chat': duelo})
+		encontrada = (due != None)
+
+		if encontrada:
+			# Se construye el objeto duelo
+			due = Duelo.from_dict(due)
+			if chat == 1:
+				# Se almacena el mensaje nuevo de la última pregunta
+				due.set_mensaje_pregunta1(mensaje)
+			else:
+				due.set_mensaje_pregunta2(mensaje)
+			# Se actualiza la BD
+			self.mongo.duelos.update({'chat': duelo}, {'$set': due.to_dict()})
+		else:
+			raise ValueError('No existe ningún duelo creado.')
+
+	# Obtener el mensaje asociado a la ultima pregunta realizada en el duelo
+	def obtener_mensaje_duelo(self, duelo: str, chat: int):
+		# Comprobar que existe un duelo en el chat indicado
+		due = self.mongo.duelos.find_one({'chat': duelo})
+		encontrada = (due != None)
+
+		if encontrada:
+			# Se construye el objeto partida
+			due = Duelo.from_dict(due)
+			if chat == 1:
+				# Se obtiene el mensaje de la última pregunta realizada
+				return due.get_mensaje_pregunta1()
+			else:
+				# Se obtiene el mensaje de la última pregunta realizada
+				return due.get_mensaje_pregunta2()
+		else:
+			raise ValueError('No existe ninguna partida creada.')
