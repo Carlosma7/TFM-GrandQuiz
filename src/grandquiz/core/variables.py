@@ -27,7 +27,8 @@ emojis_estadisticas = {
 	'Historia': "\U0001f4f0",
 	'Deporte': "\U0001f3c0",
 	'Entretenimiento': "\u265F\uFE0F",
-	'porcentaje': "\u2705"
+	'porcentaje': "\u2705",
+	'duelos': "\u2694\uFE0F"
 }
 
 colores_equipos = {
