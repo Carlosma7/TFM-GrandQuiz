@@ -424,15 +424,15 @@ def obtener_logros(message):
 			respuesta += f"\u2694\uFE0F {logros_duelos.get(log.get_logro_duelos())}\n\n"
 		# Comprobar logros de categorías
 		if log.get_logro_categorias().get('Deporte') != 0:
-			respuesta += f"{emojis_categorias.get('Deporte')} {logros_categorias.get('Deporte').get(log.get_logro_categorias().get('Deporte'))}"
+			respuesta += f"{emojis_categorias.get('Deporte')} {logros_categorias.get('Deporte').get(log.get_logro_categorias().get('Deporte'))}\n"
 		if log.get_logro_categorias().get('Geografía') != 0:
-			respuesta += f"{emojis_categorias.get('Geografía')} {logros_categorias.get('Geografía').get(log.get_logro_categorias().get('Geografía'))}"
+			respuesta += f"{emojis_categorias.get('Geografía')} {logros_categorias.get('Geografía').get(log.get_logro_categorias().get('Geografía'))}\n"
 		if log.get_logro_categorias().get('Arte') != 0:
-			respuesta += f"{emojis_categorias.get('Arte')} {logros_categorias.get('Arte').get(log.get_logro_categorias().get('Arte'))}"
+			respuesta += f"{emojis_categorias.get('Arte')} {logros_categorias.get('Arte').get(log.get_logro_categorias().get('Arte'))}\n"
 		if log.get_logro_categorias().get('Historia') != 0:
-			respuesta += f"{emojis_categorias.get('Historia')} {logros_categorias.get('Historia').get(log.get_logro_categorias().get('Historia'))}"
+			respuesta += f"{emojis_categorias.get('Historia')} {logros_categorias.get('Historia').get(log.get_logro_categorias().get('Historia'))}\n"
 		if log.get_logro_categorias().get('Ciencia') != 0:
-			respuesta += f"{emojis_categorias.get('Ciencia')} {logros_categorias.get('Ciencia').get(log.get_logro_categorias().get('Ciencia'))}"
+			respuesta += f"{emojis_categorias.get('Ciencia')} {logros_categorias.get('Ciencia').get(log.get_logro_categorias().get('Ciencia'))}\n"
 		if log.get_logro_categorias().get('Entretenimiento') != 0:
 			respuesta += f"{emojis_categorias.get('Entretenimiento')} {logros_categorias.get('Entretenimiento').get(log.get_logro_categorias().get('Entretenimiento'))}"
 	except Exception as error:
