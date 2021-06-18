@@ -1099,7 +1099,7 @@ class Controlador():
 
 						return False, due.get_chat(), due.get_chat2()
 				else:
-					nombre_jugador_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
+					nombre_jugador_turno = self.mongo.jugadores.find_one({'nombre_usuario': due.get_jugador_turno()})
 					nombre_jugador_turno = nombre_jugador_turno.get('nombre')
 					raise ValueError(f'Es el turno de {nombre_jugador_turno}.')
 			else:
@@ -1165,6 +1165,7 @@ class Controlador():
 			if due.comprobar_victoria():
 				# Obtener jugador ganador
 				jug_ganador = due.get_ganador()
+				jug_ganador = due.get_jugadores()[jug_ganador - 1]
 				# Se actualiza la partida en BD
 				self.mongo.duelos.update({'chat': duelo}, {'$set': due.to_dict()})
 
@@ -1303,4 +1304,4 @@ class Controlador():
 				# Se obtiene el mensaje de la última pregunta realizada
 				return due.get_mensaje_pregunta2()
 		else:
-			raise ValueError('No existe ninguna partida creada.')
+			raise ValueError('No existe ningún duelo creado.')
