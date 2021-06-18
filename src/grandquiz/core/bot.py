@@ -263,57 +263,114 @@ def iniciar_partida(message):
 # Responder pregunta y continuar partida
 @bot.callback_query_handler(lambda call: bool(re.match("pr[1-4]", call.data)))
 def responder_pregunta(call):
-	try:
-		# Responder pregunta
-		resultado = controlador.responder_pregunta(call.message.chat.id, call.from_user.username, int(call.data[-1]))
-		# Comprobar si la pregunta se ha acertado
-		if resultado:
-			# Se ha acertado
-			respuesta = f"\u2705 ¡SÍ, HAS ACERTADO! Efectivamente era:\n\n*{controlador.obtener_respuesta(call.message.chat.id)}*"
-		else:
-			# Se ha fallado
-			respuesta = f"\u274C Noooooo, esa no era la respuesta correcta, la respuesta correcta era:\n\n*{controlador.obtener_respuesta(call.message.chat.id)}*"
+	# Comprobar que la conversación es en un grupo
+	if call.message.chat.type == 'group':
+		try:
+			# Responder pregunta
+			resultado = controlador.responder_pregunta(call.message.chat.id, call.from_user.username, int(call.data[-1]))
+			# Comprobar si la pregunta se ha acertado
+			if resultado:
+				# Se ha acertado
+				respuesta = f"\u2705 ¡SÍ, HAS ACERTADO! Efectivamente era:\n\n*{controlador.obtener_respuesta(call.message.chat.id)}*"
+			else:
+				# Se ha fallado
+				respuesta = f"\u274C Noooooo, esa no era la respuesta correcta, la respuesta correcta era:\n\n*{controlador.obtener_respuesta(call.message.chat.id)}*"
 
-		# Editar texto con respuesta
-		respuesta = f"{call.message.text}\n\n{respuesta}"
-		bot.edit_message_text(respuesta, call.message.chat.id, call.message.id, parse_mode = 'Markdown')
+			# Editar texto con respuesta
+			respuesta = f"{call.message.text}\n\n{respuesta}"
+			bot.edit_message_text(respuesta, call.message.chat.id, call.message.id, parse_mode = 'Markdown')
 
-		# Comprobar si el equipo ha conseguido la medalla
-		medalla, categoria_medalla, equipo_resp = controlador.comprobar_medalla(call.message.chat.id)
-		if medalla:
-			# Han conseguido la medalla
-			respuesta = f"\n\n¡Enhorabuena! El equipo {colores_equipos.get(equipo_resp)} ha conseguido la medalla de {categoria_medalla} {emojis_categorias.get(categoria_medalla)}"
+			# Comprobar si el equipo ha conseguido la medalla
+			medalla, categoria_medalla, equipo_resp = controlador.comprobar_medalla(call.message.chat.id)
+			if medalla:
+				# Han conseguido la medalla
+				respuesta = f"\n\n¡Enhorabuena! El equipo {colores_equipos.get(equipo_resp)} ha conseguido la medalla de {categoria_medalla} {emojis_categorias.get(categoria_medalla)}"
+				# Informar al usuario
+				if categoria_medalla == "Geografía":
+					categoria_medalla = "Geografia"
+				bot.send_photo(call.message.chat.id, photo=f"https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/game/{categoria_medalla}.jpg?raw=true", caption=respuesta, parse_mode = 'Markdown')
+
+			# Comprobar si ha ganado un equipo
+			victoria, equipo_ganador = controlador.comprobar_victoria(call.message.chat.id)
+			if not victoria:
+				# No ha ganado todavía ningún equipo
+				# Cambiar turno al siguiente equipo
+				jug_turno, avatar_jug, equipo_turno, pregunta, categoria = controlador.cambiar_turno(call.message.chat.id)
+				# Definir markup
+				markup = markup_respuestas(pregunta)
+				aviso = f"Turno del equipo {colores_equipos.get(equipo_turno)} responde {jug_turno.upper()} {avatar.get(avatar_jug)}\n\nPregunta sobre {categoria.upper()} {emojis_categorias.get(categoria)}:"
+				enunciado = f"\n\n\n\n{pregunta.get_enunciado()}"
+				ultima_pregunta = bot.send_message(call.message.chat.id, aviso + enunciado, reply_markup=markup)
+				# Se almacena
+				controlador.almacenar_mensaje(call.message.chat.id, ultima_pregunta.id)
+			else:
+				# Hay un equipo ganador
+				# Obtener jugadores
+				jugador_1, jugador_2 = controlador.obtener_jugadores_equipo(equipo_ganador)
+				# Informar al usuario
+				bot.send_photo(call.message.chat.id, photo="https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/game/ganador.jpg?raw=true", caption=f"\u2B50\U0001f3c6 ¡ENHORABUENA! EL EQUIPO {colores_equipos.get(equipo_ganador.get_color())} ES EL CAMPEÓN DE GRANDQUIZ. \U0001f3c6\u2B50 \n\n¡{jugador_1.upper()} y {jugador_2.upper()} son los ganadores!", parse_mode = 'Markdown')
+				# Eliminar partida de BD
+				controlador.terminar_partida(call.message.chat.id)
+		except Exception as error:
+			# Se produce un error
+			respuesta = f"{call.from_user.first_name}: {str(error)}"
 			# Informar al usuario
-			if categoria_medalla == "Geografía":
-				categoria_medalla = "Geografia"
-			bot.send_photo(call.message.chat.id, photo=f"https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/game/{categoria_medalla}.jpg?raw=true", caption=respuesta, parse_mode = 'Markdown')
+			bot.send_message(call.message.chat.id, respuesta, parse_mode = 'Markdown')
+	elif call.message.chat.type == 'private':
+		try:
+			# Responder pregunta
+			resultado, chat1, chat2 = controlador.responder_pregunta_duelo(call.message.chat.id, call.from_user.username, int(call.data[-1]))
+			# Comprobar si la pregunta se ha acertado
+			if resultado:
+				# Se ha acertado
+				respuesta = f"\u2705 ¡SÍ, HAS ACERTADO! Efectivamente era:\n\n*{controlador.obtener_respuesta_duelo(chat1)}*"
+			else:
+				# Se ha fallado
+				respuesta = f"\u274C Noooooo, esa no era la respuesta correcta, la respuesta correcta era:\n\n*{controlador.obtener_respuesta_duelo(chat1)}*"
 
-		# Comprobar si ha ganado un equipo
-		victoria, equipo_ganador = controlador.comprobar_victoria(call.message.chat.id)
-		if not victoria:
-			# No ha ganado todavía ningún equipo
-			# Cambiar turno al siguiente equipo
-			jug_turno, avatar_jug, equipo_turno, pregunta, categoria = controlador.cambiar_turno(call.message.chat.id)
-			# Definir markup
-			markup = markup_respuestas(pregunta)
-			aviso = f"Turno del equipo {colores_equipos.get(equipo_turno)} responde {jug_turno.upper()} {avatar.get(avatar_jug)}\n\nPregunta sobre {categoria.upper()} {emojis_categorias.get(categoria)}:"
-			enunciado = f"\n\n\n\n{pregunta.get_enunciado()}"
-			ultima_pregunta = bot.send_message(call.message.chat.id, aviso + enunciado, reply_markup=markup)
-			# Se almacena
-			controlador.almacenar_mensaje(call.message.chat.id, ultima_pregunta.id)
-		else:
-			# Hay un equipo ganador
-			# Obtener jugadores
-			jugador_1, jugador_2 = controlador.obtener_jugadores_equipo(equipo_ganador)
+			# Editar texto con respuesta
+			respuesta = f"{call.message.text}\n\n{respuesta}"
+			ultima_pregunta1 = int(controlador.obtener_mensaje_duelo(chat1, 1))
+			ultima_pregunta2 = int(controlador.obtener_mensaje_duelo(chat1, 2))
+			bot.edit_message_text(respuesta, chat1, ultima_pregunta1, parse_mode = 'Markdown')
+			bot.edit_message_text(respuesta, chat2, ultima_pregunta2, parse_mode = 'Markdown')
+
+			# Comprobar si el equipo ha conseguido la medalla
+			medalla, categoria_medalla = controlador.comprobar_medalla_duelo(chat1)
+			if medalla:
+				# Han conseguido la medalla
+				respuesta = f"\n\n¡Enhorabuena! {call.from_user.first_name} ha conseguido la medalla de {categoria_medalla} {emojis_categorias.get(categoria_medalla)}"
+				# Informar al usuario
+				bot.send_message(chat1, respuesta, parse_mode = 'Markdown')
+				bot.send_message(chat2, respuesta, parse_mode = 'Markdown')
+
+			# Comprobar si ha ganado un jugador
+			victoria, jugador_ganador = controlador.comprobar_victoria_duelo(chat1)
+			if not victoria:
+				# No ha ganado todavía ningún jugador
+				# Cambiar turno al siguiente jugador
+				jug_turno, avatar_jug, pregunta, categoria, chat1, chat2 = controlador.cambiar_turno_duelo(chat1)
+				# Definir markup
+				markup = markup_respuestas(pregunta)
+				aviso = f"Turno de {jug_turno.upper()} {avatar.get(avatar_jug)}\n\nPregunta sobre {categoria.upper()} {emojis_categorias.get(categoria)}:"
+				enunciado = f"\n\n\n\n{pregunta.get_enunciado()}"
+				ultima_pregunta1 = bot.send_message(chat1, aviso + enunciado, reply_markup=markup)
+				ultima_pregunta2 = bot.send_message(chat2, aviso + enunciado, reply_markup=markup)
+				# Se almacenan
+				controlador.almacenar_mensaje_duelo(chat1, ultima_pregunta1.id, 1)
+				controlador.almacenar_mensaje_duelo(chat1, ultima_pregunta2.id, 2)
+			else:
+				# Hay un jugador ganador
+				# Informar al usuario
+				bot.send_photo(chat1, photo="https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/game/ganador.jpg?raw=true", caption=f"\u2B50\U0001f3c6 ¡ENHORABUENA! {jugador_ganador.upper()} ES EL CAMPEÓN DE GRANDQUIZ. \U0001f3c6\u2B50", parse_mode = 'Markdown')
+				bot.send_photo(chat2, photo="https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/game/ganador.jpg?raw=true", caption=f"\u2B50\U0001f3c6 ¡ENHORABUENA! {jugador_ganador.upper()} ES EL CAMPEÓN DE GRANDQUIZ. \U0001f3c6\u2B50", parse_mode = 'Markdown')
+				# Eliminar duelo de BD
+				controlador.terminar_duelo(chat1)
+		except Exception as error:
+			# Se produce un error
+			respuesta = f"{call.from_user.first_name}: {str(error)}"
 			# Informar al usuario
-			bot.send_photo(call.message.chat.id, photo="https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/game/ganador.jpg?raw=true", caption=f"\u2B50\U0001f3c6 ¡ENHORABUENA! EL EQUIPO {colores_equipos.get(equipo_ganador.get_color())} ES EL CAMPEÓN DE GRANDQUIZ. \U0001f3c6\u2B50 \n\n¡{jugador_1.upper()} y {jugador_2.upper()} son los ganadores!", parse_mode = 'Markdown')
-			# Eliminar partida de BD
-			controlador.terminar_partida(call.message.chat.id)
-	except Exception as error:
-		# Se produce un error
-		respuesta = f"{call.from_user.first_name}: {str(error)}"
-		# Informar al usuario
-		bot.send_message(call.message.chat.id, respuesta, parse_mode = 'Markdown')
+			bot.send_message(call.message.chat.id, respuesta, parse_mode = 'Markdown')
 
 # Obtener top 3 de estadísticas
 @bot.message_handler(commands=['top'])
@@ -562,7 +619,7 @@ def estado_partida(message):
 
 # Crear duelo de GrandQuiz
 @bot.message_handler(commands=['nuevo_duelo'])
-def nueva_partida(message):
+def nuevo_duelo(message):
 	# Comprobar que la conversación es en privado
 	if message.chat.type == 'private':
 		# Crear una partida con el id del chat del grupo
@@ -584,8 +641,11 @@ def nueva_partida(message):
 				markup = markup_respuestas(pregunta)
 				aviso = f"Turno de {jug_turno.upper()} {avatar.get(avatar_jug)}\n\nPregunta sobre {categoria.upper()} {emojis_categorias.get(categoria)}:"
 				enunciado = f"\n\n\n\n{pregunta.get_enunciado()}"
-				bot.send_message(chat1, aviso + enunciado, reply_markup=markup)
-				bot.send_message(chat2, aviso + enunciado, reply_markup=markup)
+				ultima_pregunta1 = bot.send_message(chat1, aviso + enunciado, reply_markup=markup)
+				ultima_pregunta2 = bot.send_message(chat2, aviso + enunciado, reply_markup=markup)
+				# Se almacena
+				controlador.almacenar_mensaje_duelo(chat1, ultima_pregunta1.id, 1)
+				controlador.almacenar_mensaje_duelo(chat1, ultima_pregunta2.id, 2)
 		except Exception as error:
 			# Se produce un error
 			respuesta = str(error)
