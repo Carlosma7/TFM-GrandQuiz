@@ -1305,3 +1305,36 @@ class Controlador():
 				return due.get_mensaje_pregunta2()
 		else:
 			raise ValueError('No existe ningún duelo creado.')
+
+	# Comprobar estado del duelo
+	def estado_duelo(self, duelo: str, jugador: str):
+		# Comprobar que existe un jugador con el mismo nick de Telegram
+		jug = self.mongo.jugadores.find_one({'nombre_usuario': jugador})
+		encontrado = (jug != None)
+
+		if encontrado:
+			# Se construye el jugador desde el objeto JSON
+			jug = Jugador.from_dict(jug)
+			# Comprobar que existe un duelo en el chat indicado
+			due = self.mongo.duelos.find_one({'chat': duelo})
+			due2 = self.mongo.duelos.find_one({'chat2': duelo})
+			encontrada = (due != None)
+			encontrada2 = (due2 != None)
+
+			# Comprobar tambien por si es chat 2
+			if encontrada2:
+				due = due2
+				encontrada = encontrada2
+
+			# Si existe una partida
+			if encontrada:
+				due = Duelo.from_dict(due)
+				if due.get_iniciada():
+					# Obtener medallas de jugadores
+					return due.get_medallas()
+				else:
+					raise ValueError('No existe ningún duelo iniciado.')
+			else:
+				raise ValueError('No existe ningún duelo creado.')
+		else:
+			raise ValueError('No estás registrado en GrandQuiz.')
