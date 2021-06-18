@@ -669,7 +669,8 @@ class Controlador():
 			top3_victorias = self.mongo.estadisticas.aggregate([{'$sort':{'num_victorias': -1}}, {'$limit': 3}])
 			top3_amigos = self.mongo.estadisticas.aggregate([{'$project': {'nombre_usuario': 1, 'num_amigos': {'$size': {"$objectToArray": "$amigos"}}}}, {'$sort':{'num_amigos': -1}}, {'$limit': 4}])
 			top3_aciertos = self.mongo.estadisticas.aggregate([{'$sort':{'preguntas_acertadas': -1}}, {'$limit': 3}])
-			return [list(top3_victorias), list(top3_amigos), list(top3_aciertos)]
+			top3_duelos = self.mongo.estadisticas.aggregate([{'$sort':{'num_duelos': -1}}, {'$limit': 3}])
+			return [list(top3_victorias), list(top3_amigos), list(top3_aciertos), list(top3_duelos)]
 		else:
 			raise ValueError(f'No estás registrado en GrandQuiz.')
 
