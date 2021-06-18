@@ -66,6 +66,13 @@ logros_amigos = {
 	4: 'Presidente: 20 amigos.'
 }
 
+logros_duelos = {
+	1: 'Otto Von Bismarck: 10 duelos ganados.',
+	2: 'Billy el niño: 20 duelos ganados.',
+	3: 'Rey Arturo: 50 duelos ganados.',
+	4: 'El Cid: 100 duelos ganados.'
+}
+
 logros_categorias = {
 	'Deporte': {
 		1: 'Simone Biles: 5 aciertos.',

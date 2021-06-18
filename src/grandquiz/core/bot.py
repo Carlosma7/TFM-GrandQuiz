@@ -419,6 +419,9 @@ def obtener_logros(message):
 		# Comprobar logros de amigos
 		if log.get_logro_amigos() != 0:
 			respuesta += f"\U0001f46b {logros_amigos.get(log.get_logro_amigos())}\n\n"
+		# Comprobar logros de duelos
+		if log.get_logro_duelos() != 0:
+			respuesta += f"\u2694\uFE0F {logros_duelos.get(log.get_logro_duelos())}\n\n"
 		# Comprobar logros de categorías
 		if log.get_logro_categorias().get('Deporte') != 0:
 			respuesta += f"{emojis_categorias.get('Deporte')} {logros_categorias.get('Deporte').get(log.get_logro_categorias().get('Deporte'))}"
