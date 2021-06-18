@@ -16,6 +16,8 @@ class Duelo():
 		self.__pregunta_actual = Pregunta("","",[""],0)
 		self.__medallas = [{"Arte":0, "Geografía":0, "Ciencia":0, "Historia":0, "Deporte":0, "Entretenimiento":0}, {"Arte":0, "Geografía":0, "Ciencia":0, "Historia":0, "Deporte":0, "Entretenimiento":0}]
 		self.__puntuaciones = [{"Arte":0, "Geografía":0, "Ciencia":0, "Historia":0, "Deporte":0, "Entretenimiento":0}, {"Arte":0, "Geografía":0, "Ciencia":0, "Historia":0, "Deporte":0, "Entretenimiento":0}]
+		self.__mensaje_pregunta1 = 0
+		self.__mensaje_pregunta2 = 0
 
 	# Constructor from_dict
 	@classmethod
@@ -31,6 +33,8 @@ class Duelo():
 		d.set_pregunta_actual(pregunta_actual)
 		d.set_medallas(data.get('medallas'))
 		d.set_puntuaciones(data.get('puntuaciones'))
+		d.set_mensaje_pregunta1(data.get('mensaje_pregunta1'))
+		d.set_mensaje_pregunta2(data.get('mensaje_pregunta2'))
 		return d
 
 	# Métodos get/set
@@ -84,6 +88,18 @@ class Duelo():
 
 	def set_puntuaciones(self, puntuaciones: List[dict]):
 		self.__puntuaciones = puntuaciones
+
+	def get_mensaje_pregunta1(self):
+		return self.__mensaje_pregunta1
+
+	def set_mensaje_pregunta1(self, mensaje_pregunta1: int):
+		self.__mensaje_pregunta1 = mensaje_pregunta1
+
+	def get_mensaje_pregunta2(self):
+		return self.__mensaje_pregunta2
+
+	def set_mensaje_pregunta2(self, mensaje_pregunta2: int):
+		self.__mensaje_pregunta2 = mensaje_pregunta2
 
 	# Iniciar duelo
 	def iniciar_duelo(self):
@@ -146,8 +162,8 @@ class Duelo():
 
 	# Override método equal
 	def __eq__(self, otra):
-		return (self.__chat == otra.get_chat()) and (self.__chat2 == otra.get_chat2()) and (self.__jugadores == otra.get_jugadores()) and (self.__turno == otra.get_turno()) and (self.__iniciada == otra.get_iniciada()) and (self.__ganador == otra.get_ganador()) and (self.__pregunta_actual == otra.get_pregunta_actual()) and (self.__medallas == otra.get_medallas()) and (self.__puntuaciones == otra.get_puntuaciones())
+		return (self.__chat == otra.get_chat()) and (self.__chat2 == otra.get_chat2()) and (self.__jugadores == otra.get_jugadores()) and (self.__turno == otra.get_turno()) and (self.__iniciada == otra.get_iniciada()) and (self.__ganador == otra.get_ganador()) and (self.__pregunta_actual == otra.get_pregunta_actual()) and (self.__medallas == otra.get_medallas()) and (self.__puntuaciones == otra.get_puntuaciones()) and (self.__mensaje_pregunta1 == otra.get_mensaje_pregunta1()) and (self.__mensaje_pregunta2 == otra.get_mensaje_pregunta2())
 
 	# Método para transformar objeto en un dict
 	def to_dict(self):
-		return {'chat': self.get_chat(), 'chat2': self.get_chat2(), 'jugadores': self.get_jugadores(), 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': self.get_pregunta_actual().to_dict(), 'medallas': self.get_medallas(), 'puntuaciones': self.get_puntuaciones()}
+		return {'chat': self.get_chat(), 'chat2': self.get_chat2(), 'jugadores': self.get_jugadores(), 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': self.get_pregunta_actual().to_dict(), 'medallas': self.get_medallas(), 'puntuaciones': self.get_puntuaciones(), 'mensaje_pregunta1': self.get_mensaje_pregunta1(), 'mensaje_pregunta2': self.get_mensaje_pregunta2()}
