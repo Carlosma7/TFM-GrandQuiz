@@ -614,11 +614,27 @@ def estado_partida(message):
 			respuesta = str(error)
 			# Informar al usuario
 			bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
-	else:
-		# No es un grupo
-		respuesta = f"Para ver una partida tienes que estar en un grupo."
-		# Informar al usuario
-		bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+	elif message.chat.type == 'private':
+		try:
+			# Comprobar el estado del duelo
+			med1, med2 = controlador.estado_duelo(message.chat.id, message.from_user.username)
+			# Conformar respuesta
+			respuesta = f"Mis medallas:\n"
+			# Medallas equipo rojo
+			for med in med1:
+				if med1[med] == 1:
+					respuesta += f"{emojis_categorias.get(med)} {med}\n"
+			respuesta += f"\nMedallas del rival:\n"
+			for med in med2:
+				if med2[med] == 1:
+					respuesta += f"{emojis_categorias.get(med)} {med}\n"
+			# Utilizar el desafío
+			bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+		except Exception as error:
+			# Se produce un error
+			respuesta = str(error)
+			# Informar al usuario
+			bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
 
 # Crear duelo de GrandQuiz
 @bot.message_handler(commands=['nuevo_duelo'])
