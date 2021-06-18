@@ -1774,3 +1774,81 @@ def test_estado_duelo_controlador():
 	# Borrar duelo de test
 	c.mongo.duelos.delete_one({'chat':d1.get_chat()})
 	c.mongo.duelos.delete_one({'chat':d2.get_chat()})
+
+# Test de almacenar mensaje de pregunta del duelo
+def test_almacenar_mensaje_duelo_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objetos jugador
+	j1 = Jugador("Test97", "Test97")
+	j1.set_edad("edad0")
+	j2 = Jugador("Test98", "Test98")
+	j2.set_edad("edad1")
+	# Crear jugadores
+	c.registrar_jugador(j1)
+	c.registrar_jugador(j2)
+	# Crear objeto duelo
+	d1 = Duelo("Test17", j1.get_nombre_usuario())
+	d2 = Duelo("Test18", j2.get_nombre_usuario())
+	# Crear duelo
+	c.crear_duelo(d1, j1.get_nombre_usuario())
+	turno, ava_turno, pregunta, categoria, chat1, chat2 = c.crear_duelo(d2, j2.get_nombre_usuario())
+	# Obtener duelo de la BD
+	duelo = c.mongo.duelos.find_one({'chat': chat1})
+	duelo = Duelo.from_dict(duelo)
+	# Obtener el mensaje del duelo
+	mensaje_inicial = duelo.get_mensaje_pregunta1()
+	# Cambiar el mensaje de la pregunta
+	duelo.set_mensaje_pregunta1(9999)
+	# Comprobar que el mensaje de la partida ha cambiado
+	assert_that(mensaje_inicial).is_not_equal_to(duelo.get_mensaje_pregunta1())
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.jugadores.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar duelo de test
+	c.mongo.duelos.delete_one({'chat':d1.get_chat()})
+	c.mongo.duelos.delete_one({'chat':d2.get_chat()})
+
+# Test de obtener mensaje de pregunta del duelo
+def test_obtener_mensaje_duelo_controlador():
+	# Crear controlador
+	c = Controlador()
+	# Crear objetos jugador
+	j1 = Jugador("Test99", "Test99")
+	j1.set_edad("edad0")
+	j2 = Jugador("Test100", "Test100")
+	j2.set_edad("edad1")
+	# Crear jugadores
+	c.registrar_jugador(j1)
+	c.registrar_jugador(j2)
+	# Crear objeto duelo
+	d1 = Duelo("Test19", j1.get_nombre_usuario())
+	d2 = Duelo("Test20", j2.get_nombre_usuario())
+	# Crear duelo
+	c.crear_duelo(d1, j1.get_nombre_usuario())
+	turno, ava_turno, pregunta, categoria, chat1, chat2 = c.crear_duelo(d2, j2.get_nombre_usuario())
+	# Obtener duelo de la BD
+	duelo = c.mongo.duelos.find_one({'chat': chat1})
+	duelo = Duelo.from_dict(duelo)
+	# Obtener el mensaje del duelo
+	mensaje_inicial = duelo.get_mensaje_pregunta1()
+	# Comprobar que se obtiene un entero
+	assert_that(mensaje_inicial).is_type_of(int)
+	# Borrar jugador de test
+	c.mongo.jugadores.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.jugadores.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar estadistica de test
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.estadisticas.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar logros de test
+	c.mongo.logros.delete_one({'nombre_usuario':j1.get_nombre_usuario()})
+	c.mongo.logros.delete_one({'nombre_usuario':j2.get_nombre_usuario()})
+	# Borrar duelo de test
+	c.mongo.duelos.delete_one({'chat':d1.get_chat()})
+	c.mongo.duelos.delete_one({'chat':d2.get_chat()})
