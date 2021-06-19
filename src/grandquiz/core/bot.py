@@ -7,6 +7,7 @@ from telebot import types
 from dotenv import load_dotenv
 import os
 import re
+import threading, time
 
 # Telegram Bot Token from BotFather
 # Obtener información de .env
@@ -19,6 +20,24 @@ bot = telebot.TeleBot(TOKEN)
 
 # Controlador juego
 controlador = Controlador()
+
+class TareaBackground(threading.Thread):
+	def run(self,*args,**kwargs):
+		while True:
+			self.comprobar_tiempo_partidas()
+			time.sleep(60*60)
+
+	def comprobar_tiempo_partidas(self):
+		chats, jugadores, equipos = controlador.comprobar_tiempo_partidas()
+
+		if len(chats) > 0:
+			for i in range(0, len(chats)):
+				bot.send_message(chats[i], f"La partida ha finalizado, el equipo {colores_equipos.get(equipos[i])} ha ganado porque {jugadores[i]} no ha contestado tras 48 horas.", parse_mode = 'Markdown')
+				# Eliminar partida de BD
+				controlador.terminar_partida(chats[i])
+
+t = TareaBackground()
+t.start()
 
 # Bienvenida al bot
 @bot.message_handler(commands=['start'])
