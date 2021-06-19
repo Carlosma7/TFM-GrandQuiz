@@ -133,3 +133,14 @@ def markup_desafio(desafio: Desafio):
 	markup.add(bt1, bt2, bt3, bt4)
 
 	return markup
+
+# Markups Bot API para confirmar baja
+def markup_baja():
+	# Keyboard
+	markup = types.InlineKeyboardMarkup(row_width = 1)
+	# Buttons
+	bt1 = (types.InlineKeyboardButton("Sí", callback_data="baja0"))
+	bt2 = (types.InlineKeyboardButton("No", callback_data="baja1"))
+	markup.add(bt1, bt2)
+
+	return markup

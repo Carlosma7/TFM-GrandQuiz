@@ -700,5 +700,41 @@ def nuevo_duelo(message):
 		# Informar al usuario
 		bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
 
+# Registrar baja de un jugador
+@bot.message_handler(commands=['baja'])
+def baja_jugador(message):
+	# Comprobar que la conversación es en privado
+	if message.chat.type != 'group':
+		respuesta = f"¿Estás seguro de que quieres darte de baja de GrandQuiz?"
+		markup = markup_baja()
+		bot.send_message(message.chat.id, respuesta, reply_markup=markup)
+	else:
+		respuesta = f"No puedes darte de baja en un grupo, por favor escríbeme en privado en @GrandQuizBot."
+		# Informar al usuario
+		bot.send_message(message.chat.id, respuesta)
+
+# Confirmar baja
+@bot.callback_query_handler(lambda call: bool(re.match("baja[0-1]", call.data)))
+def confirmar_baja(call):
+	try:
+		# Eliminar mensaje informativo previo
+		bot.delete_message(call.message.chat.id, call.message.id)
+		if int(call.data[-1]) == 0:
+			# Se da de baja al jugador
+			print(call.from_user.username)
+			controlador.baja_jugador(call.from_user.username)
+			# Confirma que quiere darse de baja
+			respuesta = f"Lo sentimos {call.from_user.first_name}, lamentamos que hayas decidido poner fin a esta aventura. ¡Esperamos que vuelvas pronto!"
+			bot.send_photo(call.message.chat.id, photo="https://github.com/Carlosma7/TFM-GrandQuiz/blob/main/doc/img/game/despedida.jpg?raw=true", caption=respuesta, parse_mode = 'Markdown')
+		else:
+			# Se arrepiente de la baja
+			respuesta = f"¡BIEN! Nos alegramos un montón de que decidas permanecer en la familia de GrandQuiz, espero que sigas disfrutando con nosotros."
+			bot.send_message(call.message.chat.id, respuesta)
+	except Exception as error:
+		# Se produce un error
+		respuesta = str(error)
+		# Informar al usuario
+		bot.send_message(call.message.chat.id, respuesta)
+
 # Launch bot
 bot.polling()
