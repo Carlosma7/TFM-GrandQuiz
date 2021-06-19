@@ -1385,3 +1385,10 @@ class Controlador():
 				equipos.append(equipo_ganador)
 
 		return chats, jugadores, equipos
+
+	# Dar de baja a un jugador
+	def baja_jugador(self, jugador: str):
+		# Se elimina de BD
+		self.mongo.jugadores.delete_one({'nombre_usuario': jugador})
+		self.mongo.logros.delete_one({'nombre_usuario': jugador})
+		self.mongo.estadisticas.delete_one({'nombre_usuario': jugador})
