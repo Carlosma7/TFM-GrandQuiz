@@ -5,6 +5,5 @@ telebot
 python-dotenv
 pymongo
 dnspython
-smtplib
 ssl
 email
