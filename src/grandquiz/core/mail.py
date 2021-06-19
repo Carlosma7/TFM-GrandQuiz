@@ -19,23 +19,28 @@ class Mail():
   # Métodos
   def set_mail(self, jugador: str, tipo: int):
     if tipo == 1:
-      # El correo es de registro
-      self.__message = MIMEMultipart("alternative")
+    # El correo es de registro
+    self.__message = MIMEMultipart("alternative")
+    self.__message["From"] = self.__emisor
+    self.__message["To"] = self.__destinatario
+
+    if tipo == 1:
       self.__message["Subject"] = "Bienvenida a GrandQuiz"
-      self.__message["From"] = self.__emisor
-      self.__message["To"] = self.__destinatario
-
       html = open("src/grandquiz/core/registro.html")
-      html = html.read()
-      html = html.replace("Jugador", jugador)
+    else:
+      self.__message["Subject"] = "Notificación inactividad en GrandQuiz"
+      html = open("src/grandquiz/core/inactividad.html")
 
-      cuerpo = MIMEText(html, "html")
-      self.__message.attach(cuerpo)
+    html = html.read()
+    html = html.replace("Jugador", jugador)
 
-      # Create secure connection with server and send email
-      context = ssl.create_default_context()
-      with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-          server.login(self.__emisor, PASS_GMAIL)
-          server.sendmail(
-              self.__emisor, self.__destinatario, self.__message.as_string()
-          )
+    cuerpo = MIMEText(html, "html")
+    self.__message.attach(cuerpo)
+
+    # Create secure connection with server and send email
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(self.__emisor, PASS_GMAIL)
+        server.sendmail(
+            self.__emisor, self.__destinatario, self.__message.as_string()
+        )
