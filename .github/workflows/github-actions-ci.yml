@@ -23,6 +23,7 @@ jobs:
         uses: SpicyPizza/create-envfile@v1
         with:
          envkey_MONGO: ${{ secrets.MONGO_KEY }}
+         envkey_PASS_GMAIL: ${{ secrets.PASS_GMAIL }}
          directory: ./
          file_name: .env
 
