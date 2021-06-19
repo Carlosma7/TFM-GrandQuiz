@@ -19,6 +19,7 @@ class Partida():
 		self.__desafio_actual = Desafio("","",[""],0,"")
 		self.__mensaje_pregunta = 0
 		self.__date = datetime.datetime.utcnow()
+		self.__notificado = ""
 
 	# Constructor from_dict
 	@classmethod
@@ -35,6 +36,7 @@ class Partida():
 		p.set_desafio_actual(desafio_actual)
 		p.set_mensaje_pregunta(data.get('mensaje_pregunta'))
 		p.set_date(data.get('date'))
+		p.set_notificado(data.get('notificado'))
 		return p
 
 	# Métodos get/set
@@ -89,6 +91,12 @@ class Partida():
 	def set_date(self, date: datetime.datetime):
 		self.__date = date
 
+	def get_notificado(self):
+		return self.__notificado
+
+	def set_notificado(self, notificado: str):
+		self.__notificado = notificado
+
 	# Añadir un nuevo jugador
 	def add_jugador(self, jugador: str, equipo: int):
 		# Añade jugador al equipo
@@ -126,6 +134,7 @@ class Partida():
 
 	# Responder una pregunta
 	def responder_pregunta(self, respuesta: int):
+		self.__date = datetime.datetime.utcnow()
 		return respuesta == int(self.__pregunta_actual.get_correcta())
 
 	# Acertar desafio
@@ -158,9 +167,9 @@ class Partida():
 
 	# Override método equal
 	def __eq__(self, otra):
-		return (self.__chat == otra.get_chat()) and (self.__equipos == otra.get_equipos()) and (self.__turno == otra.get_turno()) and (self.__iniciada == otra.get_iniciada()) and (self.__ganador == otra.get_ganador()) and (self.__pregunta_actual == otra.get_pregunta_actual()) and (self.__desafio_actual == otra.get_desafio_actual()) and (self.__mensaje_pregunta == otra.get_mensaje_pregunta())
+		return (self.__chat == otra.get_chat()) and (self.__equipos == otra.get_equipos()) and (self.__turno == otra.get_turno()) and (self.__iniciada == otra.get_iniciada()) and (self.__ganador == otra.get_ganador()) and (self.__pregunta_actual == otra.get_pregunta_actual()) and (self.__desafio_actual == otra.get_desafio_actual()) and (self.__mensaje_pregunta == otra.get_mensaje_pregunta()) and (self.__notificado == otra.get_notificado())
 
 	# Método para transformar objeto en un dict
 	def to_dict(self):
 		equipos = [equipo.to_dict() for equipo in self.get_equipos()]
-		return {'chat': self.get_chat(), 'equipos': equipos, 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': self.get_pregunta_actual().to_dict(), 'desafio_actual': self.get_desafio_actual().to_dict(), 'mensaje_pregunta': self.get_mensaje_pregunta(), 'date': self.get_date()}
+		return {'chat': self.get_chat(), 'equipos': equipos, 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': self.get_pregunta_actual().to_dict(), 'desafio_actual': self.get_desafio_actual().to_dict(), 'mensaje_pregunta': self.get_mensaje_pregunta(), 'date': self.get_date(), 'notificado': self.get_notificado()}
