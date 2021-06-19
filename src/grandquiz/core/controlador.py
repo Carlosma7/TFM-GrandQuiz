@@ -6,6 +6,7 @@ from partida import Partida
 from duelo import Duelo
 from pregunta import Pregunta
 from desafio import Desafio
+from mail import Mail
 from variables import *
 
 import os
@@ -103,6 +104,10 @@ class Controlador():
 				raise ValueError('El email proporcionado no es válido')
 			# Se actualiza en BD
 			self.mongo.jugadores.update({'nombre_usuario': jugador}, {'$set': jug.to_dict()})
+			# Enviar mail de notificacion
+			mail = Mail(email)
+			# Configurar mail
+			mail.set_mail(jug.get_nombre(), 1)
 		else:
 			raise ValueError('No estás registrado.')
 
