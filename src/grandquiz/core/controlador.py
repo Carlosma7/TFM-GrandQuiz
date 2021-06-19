@@ -15,6 +15,7 @@ import pymongo
 import re
 from random import choice, randint
 from typing import List
+import datetime
 
 # Obtener información de .env
 load_dotenv(dotenv_path = '.env')
@@ -1324,3 +1325,63 @@ class Controlador():
 				raise ValueError('No existe ningún duelo creado.')
 		else:
 			raise ValueError('No estás registrado en GrandQuiz.')
+
+	# Comprobar partidas inactivas
+	def comprobar_tiempo_partidas(self):
+		# Obtener las partidas inactivas de GrandQuiz
+		partidas_inactivas = self.mongo.partidas.find({'date': {'$lt': datetime.datetime.utcnow() - datetime.timedelta(hours=23, minutes=59)}})
+		partidas_inactivas = list(partidas_inactivas)
+
+		for partida in partidas_inactivas:
+			partida = Partida.from_dict(partida)
+
+			# Comprobar que la partida está iniciada
+			if partida.get_iniciada():
+				if partida.get_notificado() != partida.get_jugador_turno():
+					jug_turno = self.mongo.jugadores.find_one({'nombre_usuario': partida.get_jugador_turno()})
+					jug_turno = Jugador.from_dict(jug_turno)
+					email = jug_turno.get_email()
+					# Enviar mail de notificacion
+					mail = Mail(email)
+					# Configurar mail
+					mail.set_mail(jug_turno.get_nombre(), 2)
+					# Se guarda el registro de notificación al jugador
+					partida.set_notificado(partida.get_jugador_turno())
+
+		partidas_terminadas = self.mongo.partidas.find({'date': {'$lt': datetime.datetime.utcnow() - datetime.timedelta(hours=47, minutes=59)}})
+		partidas_terminadas = list(partidas_terminadas)
+		chats = []
+		jugadores = []
+		equipos = []
+
+		for partida in partidas_terminadas:
+			partida = Partida.from_dict(partida)
+
+			# Comprobar que la partida está iniciada
+			if partida.get_iniciada():
+				jug_turno = self.mongo.jugadores.find_one({'nombre_usuario': partida.get_jugador_turno()})
+				jug_turno = Jugador.from_dict(jug_turno)
+				jug_turno = jug_turno.get_nombre()
+				equipo_ganador = partida.get_equipos()[partida.get_turno() % 2].get_color()
+
+				# Establecer equipo ganador
+				partida.set_ganador((partida.get_turno() % 2) + 1)
+
+				# Se actualiza la partida en BD
+				self.mongo.partidas.update({'chat': partida.get_chat()}, {'$set': partida.to_dict()})
+
+				# Se añade una partida y una victoria al equipo ganador
+				self.add_estadisticas_partida(partida.get_equipos()[partida.get_ganador() - 1].get_jugadores()[0], True)
+				self.add_estadisticas_partida(partida.get_equipos()[partida.get_ganador() - 1].get_jugadores()[1], True)
+				# Se añade una partida al equipo perdedor
+				self.add_estadisticas_partida(partida.get_equipos()[partida.get_ganador() % 2].get_jugadores()[0], False)
+				self.add_estadisticas_partida(partida.get_equipos()[partida.get_ganador() % 2].get_jugadores()[1], False)
+
+				# Guardar chat de la partida
+				chats.append(partida.get_chat())
+				# Guardar jugador que ocasiona derrota de la partida
+				jugadores.append(jug_turno)
+				# Guardar equipo ganador
+				equipos.append(equipo_ganador)
+
+		return chats, jugadores, equipos
