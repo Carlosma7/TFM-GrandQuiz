@@ -5,6 +5,7 @@ from desafio import Desafio
 
 from random import randint, choice
 from typing import List
+import datetime
 
 # Clase de partida
 class Partida():
@@ -17,6 +18,7 @@ class Partida():
 		self.__pregunta_actual = Pregunta("","",[""],0)
 		self.__desafio_actual = Desafio("","",[""],0,"")
 		self.__mensaje_pregunta = 0
+		self.__date = datetime.datetime.utcnow()
 
 	# Constructor from_dict
 	@classmethod
@@ -32,6 +34,7 @@ class Partida():
 		desafio_actual = Desafio.from_dict(data.get('desafio_actual'))
 		p.set_desafio_actual(desafio_actual)
 		p.set_mensaje_pregunta(data.get('mensaje_pregunta'))
+		p.set_date(data.get('date'))
 		return p
 
 	# Métodos get/set
@@ -79,6 +82,12 @@ class Partida():
 
 	def set_mensaje_pregunta(self, mensaje_pregunta: int):
 		self.__mensaje_pregunta = mensaje_pregunta
+
+	def get_date(self):
+		return self.__date
+
+	def set_date(self, date: datetime.datetime):
+		self.__date = date
 
 	# Añadir un nuevo jugador
 	def add_jugador(self, jugador: str, equipo: int):
@@ -154,4 +163,4 @@ class Partida():
 	# Método para transformar objeto en un dict
 	def to_dict(self):
 		equipos = [equipo.to_dict() for equipo in self.get_equipos()]
-		return {'chat': self.get_chat(), 'equipos': equipos, 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': self.get_pregunta_actual().to_dict(), 'desafio_actual': self.get_desafio_actual().to_dict(), 'mensaje_pregunta': self.get_mensaje_pregunta()}
+		return {'chat': self.get_chat(), 'equipos': equipos, 'turno': self.get_turno(), 'iniciada': self.get_iniciada(), 'ganador': self.get_ganador(), 'pregunta_actual': self.get_pregunta_actual().to_dict(), 'desafio_actual': self.get_desafio_actual().to_dict(), 'mensaje_pregunta': self.get_mensaje_pregunta(), 'date': self.get_date()}
