@@ -736,5 +736,12 @@ def confirmar_baja(call):
 		# Informar al usuario
 		bot.send_message(call.message.chat.id, respuesta)
 
+# Ofrecer ayuda
+@bot.message_handler(commands=['help', 'ayuda'])
+def ayuda(message):
+	# Conformar respuesta y enviar hiperlink
+	respuesta = f"Puedes ver la lista de comandos y su explicación en la [Página oficial de GrandQuiz](https://grandquizbot.wixsite.com/grandquiz/c%C3%B3mo-jugar)."
+	bot.send_message(message.chat.id, respuesta, parse_mode = 'Markdown')
+
 # Launch bot
 bot.polling()
