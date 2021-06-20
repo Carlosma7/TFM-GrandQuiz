@@ -1,3 +1,4 @@
+
 # TFM-GrandQuiz
 ---
 
@@ -39,12 +40,37 @@
 
 ## Descripción y contexto
 ---
-GrandQuiz, juego mediante Chatbots para el Trabajo Final de Máster del Máster Profesional de Ingeniería Informática en la UGR.
+
+### Proyecto
+
+**GrandQuiz**, juego mediante Chatbots para el Trabajo Final de Máster del Máster Profesional de Ingeniería Informática en la UGR. Este proyecto aborda la utilización de un sistema mediante chatbots para realizar un juego social e intergeneracional como alternativa al desarrollo de juegos tradicional.
+
+**GrandQuiz** ofrece un enfoque diferente frente a juegos tradicionales, aprovechando las herramientas que ofrece una plataforma de mensajería como **Telegram**, aprovechando la API que ofrece y mediante el uso de frameworks como [Telebot](https://github.com/eternnoir/pyTelegramBotAPI).
+
+Este proyecto a su vez utiliza un despliegue haciendo uso de IaaS en [Digital Ocean](https://www.digitalocean.com/), por lo que se trata de una solución cloud que se ofrece a los jugadores como SaaS abstraído bajo la interfaz de Telegram.
+
+### Descripción
+
+En la [Página Oficial de GrandQuiz](https://grandquizbot.wixsite.com/grandquiz) se puede observar una explicación profunda del juego, destacando los siguientes conceptos:
+
+* **GrandQuiz** se basa en tres pilares fundamentales: **Diversión**, **Colaboración** y **Competición**. A diferencia de otros juegos del sector, nos distinguimos por aportar un enfoque intergeneracional, donde se incluyen diferentes rangos de edad a la hora de formar equipos y donde las preguntas están orientadas al conocimiento general y beneficio de diferentes rangos con el fin de valorar a todos los jugadores independientemente de su edad.
+* **GrandQuiz** posee un sistema de partidas dinámicas por equipos, donde estos están conformados por jugadores de diferentes grupos de edad. Estas partidas incluyen preguntas, medallas, desafíos, *quizzies* y algunos elementos que hacen de la partida una experiencia competitiva y colaborativa a la par que mantiene la diversión como principal objetivo.
+* **GrandQuiz** posee además un sistema individual de partidas denominado duelos, donde el jugador conecta con otro jugador aleatorio y juegan a una partida sencilla de **GrandQuiz** y gana aquel que acierte más preguntas rápidamente. Este modo está orientado a aquellos jugadores más competitivos e impacientes con ganas de deslumbrar.
+* El principal componente de **GrandQuiz**, cuyo objetivo es conectar gente de todos los rangos de edades para jugar, divertirse y compartir, manteniendo sistemas de logros, estadísticas y otros elementos que permitan interactuar con otros jugadores de forma competitiva y colaborativa.
 
 ## Guía de usuario
 ---
 
-En proceso.
+**GrandQuiz** es un sistema cuyo despliegue es sencillo, para ello se necesita definir un fichero **.env** donde se recojan los siguientes elementos:
+* **Token** del bot definido en Telegram.
+* **Mongo** token de conexión al cluster en Mongo Atlas.
+* **Pass Gmail** del correo definido para poder trabajar con el sistema de gestión de emails.
+
+A continuación, mediante el uso de **Invoke** la ejecución del proyecto es tan sencilla como ejecutar:
+
+```shell
+invoke execute
+```
  	
 ## Guía de instalación
 ---
