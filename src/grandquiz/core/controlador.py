@@ -8,6 +8,7 @@ from pregunta import Pregunta
 from desafio import Desafio
 from mail import Mail
 from variables import *
+from excepciones import *
 
 import os
 from dotenv import load_dotenv
@@ -52,7 +53,7 @@ class Controlador():
 			# Se añade el logro
 			self.mongo.logros.insert_one(logros.to_dict())
 		else:
-			raise ValueError('Ya estás registrado.')
+			raise PlayerRegisteredError('Ya estás registrado.')
 
 	# Cambiar avatar jugador
 	def cambiar_avatar(self, jugador: str, avatar: str):
@@ -69,7 +70,7 @@ class Controlador():
 			# Se actualiza en BD
 			self.mongo.jugadores.update({'nombre_usuario': jugador}, {'$set': jug.to_dict()})
 		else:
-			raise ValueError('No estás registrado.')
+			raise PlayerNotRegisteredError('No estás registrado.')
 
 	# Cambiar grupo edad jugador
 	def cambiar_edad(self, jugador: str, edad: str):
@@ -86,7 +87,7 @@ class Controlador():
 			# Se actualiza en BD
 			self.mongo.jugadores.update({'nombre_usuario': jugador}, {'$set': jug.to_dict()})
 		else:
-			raise ValueError('No estás registrado.')
+			raise PlayerNotRegisteredError('No estás registrado.')
 
 	# Cambiar correo electrónico jugador
 	def cambiar_email(self, jugador: str, email: str):
@@ -102,7 +103,7 @@ class Controlador():
 				# Se cambia el email
 				jug.set_email(email)
 			else:
-				raise ValueError('El email proporcionado no es válido')
+				raise EmailNotValidError('El email proporcionado no es válido')
 			# Se actualiza en BD
 			self.mongo.jugadores.update({'nombre_usuario': jugador}, {'$set': jug.to_dict()})
 			# Enviar mail de notificacion
@@ -110,7 +111,7 @@ class Controlador():
 			# Configurar mail
 			mail.set_mail(jug.get_nombre(), 1)
 		else:
-			raise ValueError('No estás registrado.')
+			raise PlayerNotRegisteredError('No estás registrado.')
 
 	# Obtener jugador
 	def obtener_jugador(self, jugador: str):
@@ -125,7 +126,7 @@ class Controlador():
 			# Se obtienen las estadisticas
 			return jug
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Obtener estadísticas de un jugador
 	def obtener_estadisticas(self, jugador: str):
@@ -140,7 +141,7 @@ class Controlador():
 			# Se obtienen las estadisticas
 			return est
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Crear partida
 	def crear_partida(self, partida: Partida, jugador: str):
@@ -160,9 +161,9 @@ class Controlador():
 				# Se almacena la partida
 				self.mongo.partidas.insert_one(partida.to_dict())
 			else:
-				raise ValueError('Ya existe una partida en este grupo.')
+				raise ExistingGameError('Ya existe una partida en este grupo.')
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Añadir jugador a partida
 	def add_jugador(self, partida: str, jugador: str, equipo: int):
@@ -214,15 +215,15 @@ class Controlador():
 							# Se actualiza la partida en BD
 							self.mongo.partidas.update({'chat': par.get_chat()}, {'$set': par.to_dict()})
 						else:
-							raise ValueError('Existe otro jugador de tu grupo de edad en el equipo indicado.')
+							raise AgeNotValidError('Existe otro jugador de tu grupo de edad en el equipo indicado.')
 					else:
-						raise ValueError('Ya hay dos jugadores inscritos en el equipo para la partida.')
+						raise TeamFullError('Ya hay dos jugadores inscritos en el equipo para la partida.')
 				else:
-					raise ValueError('Ya estás apuntado en la partida.')
+					raise PlayerInGameError('Ya estás apuntado en la partida.')
 			else:
-				raise ValueError('No existe ninguna partida creada.')
+				raise GameNotFoundError('No existe ninguna partida creada.')
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Obtener equipos de una partida
 	def obtener_equipos(self, partida: str, jugador: str):
@@ -244,9 +245,9 @@ class Controlador():
 				# Se obtienen los equipos
 				return par.get_equipos()
 			else:
-				raise ValueError('No existe ninguna partida en este grupo.')
+				raise GameNotFoundError('No existe ninguna partida en este grupo.')
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Obtener equipos con plazas disponibles
 	def obtener_equipos_disponibles(self, partida: str, jugador: str):
@@ -272,9 +273,9 @@ class Controlador():
 				
 				return equipos_disponibles
 			else:
-				raise ValueError('No existe ninguna partida en este grupo.')
+				raise GameNotFoundError('No existe ninguna partida en este grupo.')
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Obtener una lista de los equipos con los jugadores que los conforman
 	def listar_equipos(self, partida:str, jugador: str):
@@ -317,9 +318,9 @@ class Controlador():
 
 				return lista, completa
 			else:
-				raise ValueError('No existe ninguna partida en este grupo.')
+				raise GameNotFoundError('No existe ninguna partida en este grupo.')
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Iniciar una partida existente comprobando que los equipos esten completos
 	def iniciar_partida(self, partida: str, jugador: str):
@@ -369,13 +370,13 @@ class Controlador():
 						# Se devuelve el jugador con el turno actual, su avatar, su equipo, la pregunta actual y la categoría 
 						return jug_turno, ava_jug_turno, equipo_turno, pregunta_actual, categoria_pregunta
 					else:
-						raise ValueError('Ya hay una partida iniciada en este grupo.')
+						raise GameStartedError('Ya hay una partida iniciada en este grupo.')
 				else:
-					raise ValueError('Uno de los dos equipos aún no está completo.')
+					raise NotEnoughPlayersError('Uno de los dos equipos aún no está completo.')
 			else:
-				raise ValueError('No existe ninguna partida en este grupo.')
+				raise GameNotFoundError('No existe ninguna partida en este grupo.')
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Responder pregunta
 	def responder_pregunta(self, partida: str, jugador: str, respuesta: int):
@@ -453,11 +454,11 @@ class Controlador():
 				else:
 					nombre_jugador_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
 					nombre_jugador_turno = nombre_jugador_turno.get('nombre')
-					raise ValueError(f'Es el turno de {nombre_jugador_turno}.')
+					raise WrongTurnError(f'Es el turno de {nombre_jugador_turno}.')
 			else:
-				raise ValueError('No existe ninguna partida creada.')
+				raise GameNotFoundError('No existe ninguna partida creada.')
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Obtener la respuesta de la pregunta actual de la partida
 	def obtener_respuesta(self, partida: str):
@@ -469,7 +470,7 @@ class Controlador():
 			par = Partida.from_dict(par)
 			return par.get_pregunta_actual().get_respuesta()
 		else:
-			raise ValueError('No existe ninguna partida creada.')
+			raise GameNotFoundError('No existe ninguna partida creada.')
 
 	# Pasar el turno de una partida al siguiente jugador
 	def cambiar_turno(self, partida: str):
@@ -506,7 +507,7 @@ class Controlador():
 			# Se devuelve el jugador con el turno actual, su avatar, su equipo, la pregunta actual y la categoría 
 			return jug_turno, ava_jug_turno, equipo_turno, pregunta_actual, categoria_pregunta
 		else:
-			raise ValueError('No existe ninguna partida creada.')
+			raise GameNotFoundError('No existe ninguna partida creada.')
 
 	# Comprobar si un equipo ha ganado la partida y en caso positivo devolver el equipo ganador
 	def comprobar_victoria(self, partida: str):
@@ -533,7 +534,7 @@ class Controlador():
 			else:
 				return False, None
 		else:
-			raise ValueError('No existe ninguna partida creada.')
+			raise GameNotFoundError('No existe ninguna partida creada.')
 
 	# Obtener nombres de jugadores de un equipo indicado
 	def obtener_jugadores_equipo(self, equipo: Equipo):
@@ -550,10 +551,10 @@ class Controlador():
 			return jug1.get('nombre'), jug2.get('nombre')
 		elif not encontrado1:
 			# Se notifica que no existe el jugador 1
-			raise ValueError(f'El jugador con nick {equipo.get_jugadores()[0]} no existe.')
+			raise PlayerNotRegisteredError(f'El jugador con nick {equipo.get_jugadores()[0]} no existe.')
 		else:
 			# Se notifica que no existe el jugador 2
-			raise ValueError(f'El jugador con nick {equipo.get_jugadores()[1]} no existe.')
+			raise PlayerNotRegisteredError(f'El jugador con nick {equipo.get_jugadores()[1]} no existe.')
 
 	# Comprobar si un equipo posee una medalla tras responder a la categoría
 	def comprobar_medalla(self, partida: str):
@@ -578,7 +579,7 @@ class Controlador():
 			else:
 				return False, categoria, equipo.get_color()
 		else:
-			raise ValueError('No existe ninguna partida creada.')
+			raise GameNotFoundError('No existe ninguna partida creada.')
 
 	# Terminar partida eliminándola de BD
 	def terminar_partida(self, partida: str):
@@ -590,7 +591,7 @@ class Controlador():
 			# Eliminar partida de BD
 			self.mongo.partidas.remove({'chat': partida})
 		else:
-			raise ValueError('No existe ninguna partida creada.')
+			raise GameNotFoundError('No existe ninguna partida creada.')
 
 	# Añadir estadisticas de partida a un jugador
 	def add_estadisticas_partida(self, jugador: str, ganador: bool):
@@ -635,7 +636,7 @@ class Controlador():
 			# Se actualizan los logros en BD
 			self.mongo.logros.update({'nombre_usuario': jugador}, {'$set': log.to_dict()})
 		else:
-			raise ValueError(f'El jugador con nick {jugador} no existe.')
+			raise PlayerNotRegisteredError(f'El jugador con nick {jugador} no existe.')
 
 	# Añadir a un jugador como amigo
 	def add_amigos(self, jugadores: List[str]):
@@ -661,9 +662,9 @@ class Controlador():
 				self.mongo.estadisticas.update({'nombre_usuario': jugadores[0]}, {'$set': est1.to_dict()})
 				self.mongo.estadisticas.update({'nombre_usuario': jugadores[1]}, {'$set': est2.to_dict()})
 			else:
-				raise ValueError(f'El jugador con nick {jugadores[1]} no existe.')
+				raise PlayerNotRegisteredError(f'El jugador con nick {jugadores[1]} no existe.')
 		else:
-			raise ValueError(f'El jugador con nick {jugadores[0]} no existe.')
+			raise PlayerNotRegisteredError(f'El jugador con nick {jugadores[0]} no existe.')
 
 	# Definir top 3 de características estadística
 	def obtener_top3(self, jugador: str):
@@ -678,7 +679,7 @@ class Controlador():
 			top3_duelos = self.mongo.estadisticas.aggregate([{'$sort':{'num_duelos': -1}}, {'$limit': 3}])
 			return [list(top3_victorias), list(top3_amigos), list(top3_aciertos), list(top3_duelos)]
 		else:
-			raise ValueError(f'No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError(f'No estás registrado en GrandQuiz.')
 
 	# Obtener logros de un jugador
 	def obtener_logros(self, jugador: str):
@@ -693,7 +694,7 @@ class Controlador():
 			# Se obtienen los logros
 			return log
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Obtener quizzies de un jugador
 	def obtener_quizzies(self, jugador: str):
@@ -708,7 +709,7 @@ class Controlador():
 			# Se obtienen los quizzies del jugador
 			return jug.get_quizzies()
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Utilizar un quizzie en la partida
 	def usar_quizzie(self, partida: str, jugador: str, quizzie: str):
@@ -807,11 +808,11 @@ class Controlador():
 				else:
 					nombre_jugador_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
 					nombre_jugador_turno = nombre_jugador_turno.get('nombre')
-					raise ValueError(f'Es el turno de {nombre_jugador_turno}.')
+					raise WrongTurnError(f'Es el turno de {nombre_jugador_turno}.')
 			else:
-				raise ValueError('No existe ninguna partida creada.')
+				raise GameNotFoundError('No existe ninguna partida creada.')
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Almacenar mensaje de la ultima pregunta realizada
 	def almacenar_mensaje(self, partida: str, mensaje: int):
@@ -827,7 +828,7 @@ class Controlador():
 			# Se actualiza la BD
 			self.mongo.partidas.update({'chat': partida}, {'$set': par.to_dict()})
 		else:
-			raise ValueError('No existe ninguna partida creada.')
+			raise GameNotFoundError('No existe ninguna partida creada.')
 
 	# Obtener el mensaje asociado a la ultima pregunta realizada en la partida
 	def obtener_mensaje(self, partida: str):
@@ -841,7 +842,7 @@ class Controlador():
 			# Se obtiene el mensaje de la última pregunta realizada
 			return par.get_mensaje_pregunta()
 		else:
-			raise ValueError('No existe ninguna partida creada.')
+			raise GameNotFoundError('No existe ninguna partida creada.')
 
 	# Utilizar un desafio en la partida
 	def usar_desafio(self, partida: str, jugador: str):
@@ -888,11 +889,11 @@ class Controlador():
 						return jug_turno, ava_jug_turno, equipo_turno, desafio_actual
 					else:
 						# No tiene el desafío disponible
-						raise ValueError('Ya has usado el desafío en esta partida.')
+						raise ChallengeAlreadyUsed('Ya has usado el desafío en esta partida.')
 				else:
 					nombre_jugador_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
 					nombre_jugador_turno = nombre_jugador_turno.get('nombre')
-					raise ValueError(f'Es el turno de {nombre_jugador_turno}.')
+					raise WrongTurnError(f'Es el turno de {nombre_jugador_turno}.')
 
 
 	# Responder desafio
@@ -939,11 +940,11 @@ class Controlador():
 				else:
 					nombre_jugador_turno = self.mongo.jugadores.find_one({'nombre_usuario': par.get_jugador_turno()})
 					nombre_jugador_turno = nombre_jugador_turno.get('nombre')
-					raise ValueError(f'Es el turno de {nombre_jugador_turno}.')
+					raise WrongTurnError(f'Es el turno de {nombre_jugador_turno}.')
 			else:
-				raise ValueError('No existe ninguna partida creada.')
+				raise GameNotFoundError('No existe ninguna partida creada.')
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Comprobar estado de la partida
 	def estado_partida(self, partida: str, jugador: str):
@@ -966,11 +967,11 @@ class Controlador():
 					equipos = par.get_equipos()
 					return equipos[0].get_medallas(), equipos[1].get_medallas()
 				else:
-					raise ValueError('No existe ninguna partida iniciada.')
+					raise GameNotStartedError('No existe ninguna partida iniciada.')
 			else:
-				raise ValueError('No existe ninguna partida creada.')
+				raise GameNotFoundError('No existe ninguna partida creada.')
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Crear duelo
 	def crear_duelo(self, duelo: Duelo, jugador: str):
@@ -1030,9 +1031,9 @@ class Controlador():
 					# Se devuelve el jugador con el turno actual, su avatar, la pregunta actual y la categoría 
 					return jug_turno, ava_jug_turno, pregunta_actual, categoria_pregunta, due.get_chat(), due.get_chat2()
 				else:
-					raise ValueError('Ya estás jugando un duelo.')
+					raise ExistingDuelError('Ya estás jugando un duelo.')
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Responder pregunta en un duelo
 	def responder_pregunta_duelo(self, duelo: str, jugador: str, respuesta: int):
@@ -1108,11 +1109,11 @@ class Controlador():
 				else:
 					nombre_jugador_turno = self.mongo.jugadores.find_one({'nombre_usuario': due.get_jugador_turno()})
 					nombre_jugador_turno = nombre_jugador_turno.get('nombre')
-					raise ValueError(f'Es el turno de {nombre_jugador_turno}.')
+					raise WrongTurnError(f'Es el turno de {nombre_jugador_turno}.')
 			else:
-				raise ValueError('No existe ningún duelo creado.')
+				raise DuelNotFoundError('No existe ningún duelo creado.')
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Obtener la respuesta de la pregunta actual del duelo
 	def obtener_respuesta_duelo(self, duelo: str):
@@ -1124,7 +1125,7 @@ class Controlador():
 			due = Duelo.from_dict(due)
 			return due.get_pregunta_actual().get_respuesta()
 		else:
-			raise ValueError('No existe ningún duelo creado.')
+			raise DuelNotFoundError('No existe ningún duelo creado.')
 
 	# Pasar el turno de un duelo al siguiente jugador
 	def cambiar_turno_duelo(self, duelo: str):
@@ -1158,7 +1159,7 @@ class Controlador():
 			# Se devuelve el jugador con el turno actual, su avatar, la pregunta actual y la categoría 
 			return jug_turno, ava_jug_turno, pregunta_actual, categoria_pregunta, due.get_chat(), due.get_chat2()
 		else:
-			raise ValueError('Ya estás jugando un duelo.')
+			raise ExistingDuelError('Ya estás jugando un duelo.')
 
 	# Comprobar si un jugador ha ganado el duelo y en caso positivo devolver el jugador ganador
 	def comprobar_victoria_duelo(self, duelo: str):
@@ -1184,7 +1185,7 @@ class Controlador():
 			else:
 				return False, None
 		else:
-			raise ValueError('No existe ningún duelo creado.')
+			raise DuelNotFoundError('No existe ningún duelo creado.')
 
 	# Añadir estadisticas de duelo a un jugador
 	def add_estadisticas_duelo(self, jugador: str, ganador: bool):
@@ -1210,7 +1211,7 @@ class Controlador():
 			# Se actualizan los logros en BD
 			self.mongo.logros.update({'nombre_usuario': jugador}, {'$set': log.to_dict()})
 		else:
-			raise ValueError(f'El jugador con nick {jugador} no existe.')
+			raise PlayerNotRegisteredError(f'El jugador con nick {jugador} no existe.')
 
 	# Comprobar si un jugador posee una medalla en un duelo tras responder a la categoría
 	def comprobar_medalla_duelo(self, duelo: str):
@@ -1235,7 +1236,7 @@ class Controlador():
 			else:
 				return False, categoria
 		else:
-			raise ValueError('No existe ningún duelo creado.')
+			raise DuelNotFoundError('No existe ningún duelo creado.')
 
 	# Terminar duelo eliminándola de BD
 	def terminar_duelo(self, duelo: str):
@@ -1247,7 +1248,7 @@ class Controlador():
 			# Eliminar duelo de BD
 			self.mongo.duelos.remove({'chat': duelo})
 		else:
-			raise ValueError('No existe ningún duelo creado.')
+			raise DuelNotFoundError('No existe ningún duelo creado.')
 
 	# Almacenar mensaje de la ultima pregunta realizada en duelo
 	def almacenar_mensaje_duelo(self, duelo: str, mensaje: int, chat: int):
@@ -1266,7 +1267,7 @@ class Controlador():
 			# Se actualiza la BD
 			self.mongo.duelos.update({'chat': duelo}, {'$set': due.to_dict()})
 		else:
-			raise ValueError('No existe ningún duelo creado.')
+			raise DuelNotFoundError('No existe ningún duelo creado.')
 
 	# Obtener el mensaje asociado a la ultima pregunta realizada en el duelo
 	def obtener_mensaje_duelo(self, duelo: str, chat: int):
@@ -1284,7 +1285,7 @@ class Controlador():
 				# Se obtiene el mensaje de la última pregunta realizada
 				return due.get_mensaje_pregunta2()
 		else:
-			raise ValueError('No existe ningún duelo creado.')
+			raise DuelNotFoundError('No existe ningún duelo creado.')
 
 	# Comprobar estado del duelo
 	def estado_duelo(self, duelo: str, jugador: str):
@@ -1320,11 +1321,11 @@ class Controlador():
 						medallas.reverse()
 						return medallas
 				else:
-					raise ValueError('No existe ningún duelo iniciado.')
+					raise DuelNotStartedError('No existe ningún duelo iniciado.')
 			else:
-				raise ValueError('No existe ningún duelo creado.')
+				raise DuelNotFoundError('No existe ningún duelo creado.')
 		else:
-			raise ValueError('No estás registrado en GrandQuiz.')
+			raise PlayerNotRegisteredError('No estás registrado en GrandQuiz.')
 
 	# Comprobar partidas inactivas
 	def comprobar_tiempo_partidas(self):
