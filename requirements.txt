@@ -1,7 +1,7 @@
 invoke
 pytest
 assertpy
-telebot
+PyTelegramBotAPI==3.7.6
 python-dotenv
 pymongo
 dnspython
