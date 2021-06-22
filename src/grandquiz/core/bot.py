@@ -3,7 +3,6 @@ from markups import *
 from variables import *
 
 import telebot
-from telebot import types
 from dotenv import load_dotenv
 import os
 import re
