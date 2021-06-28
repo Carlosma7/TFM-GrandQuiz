@@ -105,8 +105,6 @@ Para instalar las dependecias simplemente se necesita ejecutar:
 pip3 install -r requirements.txt
 ```
 
-    Puedes usar este estilo de letra diferenciar los comandos de instalación.
-
 ## Cómo contribuir
 ---
 Actualmente el proyecto es un **Trabajo Final de Máster** para la **Universidad de Granada** por lo que no se aceptan colaboraciones directas aunque sí admito sugerencias y referencias a posibles mejoras tanto a nivel personal como en *issues* del proyecto. En un futuro se establecerá un nuevo criterio y código de conducta referente al proyecto.
